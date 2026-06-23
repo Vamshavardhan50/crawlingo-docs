@@ -2,16 +2,20 @@
   "title": "Documentation",
   "pages": [
     "index",
+    "---Getting Started---",
     "getting-started",
-    "architecture",
     "features",
-    "api-reference",
+    "demo",
+    "---Core Reference---",
+    "architecture",
     "sdk",
+    "api-reference",
+    "---Advanced Guides---",
     "integrations",
     "advanced",
     "troubleshooting",
+    "---Development Log---",
     "changelog",
-    "roadmap",
-    "demo"
+    "roadmap"
   ]
 }
