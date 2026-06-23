@@ -1,0 +1,17 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "index",
+    "getting-started",
+    "architecture",
+    "features",
+    "api-reference",
+    "sdk",
+    "integrations",
+    "advanced",
+    "troubleshooting",
+    "changelog",
+    "roadmap",
+    "demo"
+  ]
+}
