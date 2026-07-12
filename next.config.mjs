@@ -20,7 +20,7 @@ export default {
       },
       {
         protocol: "https",
-        hostname: "crawlingo.dev",
+        hostname: "crawlingo-docs.vercel.app",
         pathname: "/**",
       },
       {

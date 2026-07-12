@@ -1,6 +1,6 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 
-const SITE_URL = 'https://crawlingo.dev';
+const SITE_URL = 'https://crawlingo-docs.vercel.app';
 const SITE_NAME = 'Crawlingo';
 const SITE_DESC = 'Crawlingo is a Rust-powered, self-healing web scraping framework with Python, Node.js, and Rust SDKs. Achieve 3,500+ req/s with auto-repairing selectors, stealth TLS, proxy rotation, and AI-ready data extraction.';
 const OG_IMAGE = `${SITE_URL}/og-image.png`;

@@ -21,7 +21,7 @@ const ROADMAP = {
   inProgress: [
     { title: 'MCP Server', desc: 'Model Context Protocol server for AI agent integration', priority: 'high' },
     { title: 'Go SDK', desc: 'CGo bindings to Rust core for Go developers', priority: 'medium' },
-    { title: 'Documentation website', desc: 'Full docs site at crawlingo.dev', priority: 'high' },
+    { title: 'Documentation website', desc: 'Full docs site at crawlingo-docs.vercel.app', priority: 'high' },
     { title: 'GitHub Actions CI', desc: 'Automated wheel builds and publish pipeline', priority: 'high' },
   ],
   planned: [

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://crawlingo.dev/sitemap.xml
+Sitemap: https://crawlingo-docs.vercel.app/sitemap.xml
