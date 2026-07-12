@@ -1,16 +1,110 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-/* ═══════════════════════════════════════════════════════════════
-   CRAWLINGO DESIGN SYSTEM — v2.0
-   Brand: Navy #0B1220 | Orange #FF6B35 | Indigo #6366F1 | Violet #8B5CF6
-   ═══════════════════════════════════════════════════════════════ */
+@theme {
+  /* Fonts */
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
 
-/* Google Fonts */
+  /* Brand Palette */
+  --color-brand-navy:        #0B1220;
+  --color-brand-orange:      #FF6B35;
+  --color-brand-orange-light:#FF8A5C;
+  --color-brand-orange-dark: #E8541A;
+  --color-brand-indigo:      #6366F1;
+  --color-brand-violet:      #8B5CF6;
+  --color-brand-teal:        #14B8A6;
 
+  /* Semantic Colors */
+  --color-success:     #10B981;
+  --color-warning:     #F59E0B;
+  --color-error:       #EF4444;
+  --color-info:        #3B82F6;
+
+  /* Interface Palette mapping from root variables */
+  --color-background:  var(--background);
+  --color-foreground:  var(--foreground);
+  --color-border:      var(--border);
+  --color-input:       var(--input);
+  --color-ring:        var(--ring);
+  --color-card:        var(--card);
+  --color-surface:     var(--surface);
+  --color-surface-raised: var(--surface-raised);
+
+  /* Spacing */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-88: 22rem;
+  --spacing-128: 32rem;
+
+  /* Border Radii */
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+
+  /* Shadows */
+  --shadow-xs:  var(--shadow-xs);
+  --shadow-sm:  var(--shadow-sm);
+  --shadow-md:  var(--shadow-md);
+  --shadow-lg:  var(--shadow-lg);
+  --shadow-xl:  var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+  --shadow-orange: var(--shadow-orange);
+  --shadow-indigo: var(--shadow-indigo);
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-slide-up: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-slide-in-right: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-spin-slow: spin-slow 8s linear infinite;
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-caret-blink: caret-blink 1.2s ease-out infinite;
+  /* Gradients */
+  --background-image-gradient-orange: linear-gradient(135deg, #FF6B35 0%, #FF8A5C 100%);
+  --background-image-gradient-brand:  linear-gradient(135deg, #FF6B35 0%, #6366F1 100%);
+  --background-image-gradient-subtle: linear-gradient(135deg, rgba(99,102,241,0.06) 0%, rgba(255,107,53,0.05) 100%);
+  --background-image-gradient-card:   linear-gradient(145deg, var(--card) 0%, var(--surface) 100%);
+
+  /* Max Widths */
+  --max-width-docs: 720px;
+  --max-width-prose: 65ch;
+  --max-width-8xl: 88rem;
+
+  /* Font Sizes */
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 1rem;
+  --text-3xs: 0.5rem;
+  --text-3xs--line-height: 0.75rem;
+  --text-display-2xl: 4.5rem;
+  --text-display-2xl--line-height: 1.1;
+  --text-display-2xl--letter-spacing: -0.02em;
+  --text-display-2xl--font-weight: 700;
+  --text-display-xl: 3.75rem;
+  --text-display-xl--line-height: 1.15;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 700;
+  --text-display-lg: 3rem;
+  --text-display-lg--line-height: 1.2;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+  --text-display-md: 2.25rem;
+  --text-display-md--line-height: 1.25;
+  --text-display-md--letter-spacing: -0.015em;
+  --text-display-md--font-weight: 700;
+  --text-display-sm: 1.875rem;
+  --text-display-sm--line-height: 1.3;
+  --text-display-sm--letter-spacing: -0.01em;
+  --text-display-sm--font-weight: 600;
+}
 
 /* ── Light Theme ─────────────────────────────────────────────── */
 :root {
