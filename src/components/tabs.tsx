@@ -28,7 +28,8 @@ export function Tabs({ defaultValue, value, onValueChange, children, className }
       })}
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child) && child.type === TabContent) {
-          return React.isValidElement(activeTab) && child.props.value === activeTab
+          const props = child.props as any;
+          return props.value === activeTab
             ? child
             : null;
         }
@@ -53,9 +54,10 @@ export function TabList({ children, activeTab, onTabChange, className }: {
     >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child) && child.type === TabTrigger) {
+          const props = child.props as any;
           return React.cloneElement(child, {
-            isActive: activeTab === child.props.value,
-            onClick: () => child.props.value && onTabChange(child.props.value),
+            isActive: activeTab === props.value,
+            onClick: () => props.value && onTabChange(props.value),
           } as any);
         }
         return child;
