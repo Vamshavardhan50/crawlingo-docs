@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FeatureCard, CodeBlock } from '@/components/feature-card';
-import { Shield, Search, Cpu, GitBranch, Activity, Database, FileText, Layers, Webhook, Globe } from 'lucide-react';
+import { Shield, Search, Cpu, GitBranch, Activity, Database, FileText, Layers, Webhook, Globe, Clock } from 'lucide-react';
+
+export default function FeaturesPage() {
   return (
     <div>
       {/* Page Header */}
@@ -43,7 +45,7 @@ import { Shield, Search, Cpu, GitBranch, Activity, Database, FileText, Layers, W
                   <p className="text-sm text-muted-foreground">Captures candidate nodes within parent coordinates when mismatches occur</p>
                 </div>
               </div>
-             n              <div className="flex gap-4">
+              <div className="flex gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-400">
                   <Cpu className="h-5 w-5" />
                 </div>
@@ -282,7 +284,7 @@ elements = page.before_text("USD")`}
                   <p className="text-sm text-muted-foreground">Publish changes to external services instantly</p>
                 </div>
               </div>
-             n              <div className="flex gap-4">
+              <div className="flex gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10 text-red-400">
                   <Activity className="h-5 w-5" />
                 </div>
