@@ -1,143 +1,505 @@
-"use client";
+'use client';
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { CopyButton } from '@/components/copy-button';
-import { Terminal, Clock } from 'lucide-react';
+import { Check, Copy, Terminal, ChevronDown } from 'lucide-react';
 
-export function FeatureCard({
-  icon,
-  title,
-  description,
-  gradient = false,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  gradient?: boolean;
-}) {
+/* ═══════════════════════════════════════════════════════════
+   COPY BUTTON
+   ═══════════════════════════════════════════════════════════ */
+function CopyBtn({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
-    <Card
+    <button
+      onClick={copy}
       className={cn(
-        'group relative border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300',
-        'hover:scale-[1.02] hover:shadow-lg hover:border-indigo-500/20'
+        'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-150',
+        copied
+          ? 'bg-[var(--color-success)]/15 text-[var(--color-success)]'
+          : 'bg-white/5 text-[var(--code-comment)] hover:bg-white/10 hover:text-white'
       )}
+      aria-label="Copy code"
     >
-      <CardHeader>
-        <div
-          className={cn(
-            'flex h-12 w-12 items-center justify-center rounded-lg',
-            gradient
-              ? 'bg-gradient-to-br from-indigo-500 to-purple-600'
-              : 'bg-muted/50'
-          )}
-        >
-          {icon}
-        </div>
-        <CardTitle className="text-lg">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground">{description}</p>
-      </CardContent>
-    </Card>
+      {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+      {copied ? 'Copied!' : 'Copy'}
+    </button>
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   SYNTAX TOKENIZER (lightweight, no runtime dep)
+   ═══════════════════════════════════════════════════════════ */
+function tokenizePython(code: string): React.ReactNode {
+  const lines = code.split('\n');
+  return (
+    <>
+      {lines.map((line, i) => (
+        <div key={i} className="table-row">
+          <span className="table-cell pr-6 select-none text-right text-[#3D4F6B] text-xs w-8">{i + 1}</span>
+          <span className="table-cell">
+            <PythonLine line={line} />
+          </span>
+        </div>
+      ))}
+    </>
+  );
+}
+
+function PythonLine({ line }: { line: string }) {
+  // Quick colorization via regex replacements
+  const parts: React.ReactNode[] = [];
+  let remaining = line;
+  let key = 0;
+
+  // Comment
+  const commentIdx = remaining.indexOf('#');
+  if (commentIdx !== -1 && !remaining.slice(0, commentIdx).includes('"') && !remaining.slice(0, commentIdx).includes("'")) {
+    parts.push(<NonCommentLine key={key++} text={remaining.slice(0, commentIdx)} />);
+    parts.push(<span key={key++} className="token-comment">{remaining.slice(commentIdx)}</span>);
+    return <>{parts}</>;
+  }
+
+  return <NonCommentLine text={remaining} />;
+}
+
+const PY_KEYWORDS = /\b(from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async)\b/g;
+const PY_STRINGS = /("""[\s\S]*?"""|'''[\s\S]*?'''|"[^"]*"|'[^']*'|f"[^"]*"|f'[^']*')/g;
+const PY_NUMBERS = /\b(\d+\.?\d*)\b/g;
+const PY_FUNCS   = /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g;
+const PY_DECO    = /(@[a-zA-Z_][a-zA-Z0-9_.]*)/g;
+
+function NonCommentLine({ text }: { text: string }) {
+  // Simple span-based approach: just output the raw text with color classes applied
+  // via dangerouslySetInnerHTML is unsafe; instead we do a multi-pass tokenization
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Apply syntax classes (order matters)
+  html = html
+    .replace(PY_STRINGS,   m => `<span class="token-string">${m}</span>`)
+    .replace(PY_DECO,      m => `<span class="token-decorator">${m}</span>`)
+    .replace(PY_KEYWORDS,  m => `<span class="token-keyword">${m}</span>`)
+    .replace(PY_NUMBERS,   m => `<span class="token-number">${m}</span>`)
+    .replace(PY_FUNCS,     (m, fn) => `<span class="token-function">${fn}</span>(`);
+
+  return <span dangerouslySetInnerHTML={{ __html: html }} />;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CODE BLOCK — Premium design
+   ═══════════════════════════════════════════════════════════ */
 export function CodeBlock({
   code,
-  language = 'bash',
+  language = 'python',
   title,
   fileName,
+  showLineNumbers = true,
 }: {
   code: string;
   language?: string;
   title?: string;
   fileName?: string;
+  showLineNumbers?: boolean;
 }) {
+  const langColors: Record<string, string> = {
+    python:     'bg-[#3B82F6]/20 text-[#60A5FA]',
+    typescript: 'bg-[#A78BFA]/20 text-[#A78BFA]',
+    javascript: 'bg-[#FBBF24]/20 text-[#FBBF24]',
+    rust:       'bg-[#FB923C]/20 text-[#FB923C]',
+    bash:       'bg-[#34D399]/20 text-[#34D399]',
+    toml:       'bg-[#F472B6]/20 text-[#F472B6]',
+  };
+  const langColor = langColors[language] || 'bg-white/5 text-[var(--code-comment)]';
+
   return (
-    <Card className="overflow-hidden border-border/50 bg-slate-950/50 backdrop-blur-sm">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-        <div className="flex items-center gap-2">
-          <Terminal className="h-4 w-4 text-indigo-400" />
-          {title && <CardTitle className="text-sm font-mono">{title}</CardTitle>}
-          {fileName && (
-            <Badge variant="secondary" className="text-xs">
-              {fileName}
-            </Badge>
-          )}
+    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02]">
+        <div className="flex items-center gap-3">
+          {/* Traffic light dots */}
+          <div className="flex items-center gap-1.5">
+            <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
+            <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+            <div className="h-3 w-3 rounded-full bg-[#28CA41]" />
+          </div>
+          <div className="flex items-center gap-2">
+            {fileName && (
+              <span className="text-xs font-mono text-[var(--code-comment)] bg-white/5 px-2 py-0.5 rounded">
+                {fileName}
+              </span>
+            )}
+            {title && !fileName && (
+              <span className="text-xs text-[var(--code-comment)]">{title}</span>
+            )}
+          </div>
         </div>
-        <CopyButton text={code} />
-      </CardHeader>
-      <CardContent className="p-0">
-        <pre className="overflow-x-auto p-4 font-mono text-sm text-slate-200">
-          <code className={`language-${language}`}>{code}</code>
+        <div className="flex items-center gap-2">
+          <span className={cn('text-xs font-mono px-2 py-0.5 rounded font-medium', langColor)}>
+            {language}
+          </span>
+          <CopyBtn text={code} />
+        </div>
+      </div>
+
+      {/* Code body */}
+      <div className="overflow-x-auto">
+        <pre className="p-4 text-sm leading-relaxed m-0 bg-transparent border-none rounded-none">
+          <code className="block table w-full font-mono">
+            {showLineNumbers ? tokenizePython(code) : (
+              <span dangerouslySetInnerHTML={{
+                __html: code
+                  .replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')
+              }} />
+            )}
+          </code>
         </pre>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
-export function TerminalExample({
+/* ═══════════════════════════════════════════════════════════
+   TERMINAL BLOCK
+   ═══════════════════════════════════════════════════════════ */
+export function TerminalBlock({
   commands,
-  title = "Command",
-  description,
+  title = 'Terminal',
 }: {
   commands: string[];
   title?: string;
-  description?: string;
 }) {
   return (
-    <Card className="border-border/50 bg-slate-950/50 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm">
-          <Terminal className="h-4 w-4 text-indigo-400" />
-          {title}
-        </CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-2 font-mono text-sm">
-          {commands.map((cmd, idx) => (
-            <div key={idx} className="flex items-start gap-3">
-              <span className="text-slate-500">$&gt;</span>
-              <code className="text-slate-200">{cmd}</code>
-            </div>
-          ))}
+    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg">
+      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02]">
+        <div className="flex items-center gap-1.5">
+          <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
+          <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+          <div className="h-3 w-3 rounded-full bg-[#28CA41]" />
         </div>
-      </CardContent>
-    </Card>
+        <div className="flex items-center gap-1.5 text-xs text-[var(--code-comment)]">
+          <Terminal className="h-3 w-3" />
+          {title}
+        </div>
+        <div className="ml-auto">
+          <CopyBtn text={commands.join('\n')} />
+        </div>
+      </div>
+      <div className="p-4 space-y-2 font-mono text-sm">
+        {commands.map((cmd, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <span className="text-[#34D399] select-none mt-0.5">$</span>
+            <span className="text-[var(--code-fg)]">{cmd}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
+/* ═══════════════════════════════════════════════════════════
+   TAB CODE BLOCK — multi-language
+   ═══════════════════════════════════════════════════════════ */
+const LANG_LABELS: Record<string, string> = {
+  python:     '🐍 Python',
+  typescript: '📘 Node.js',
+  rust:       '🦀 Rust',
+  bash:       '💻 Shell',
+};
+
+export function TabCodeBlock({
+  tabs,
+  defaultTab,
+}: {
+  tabs: { language: string; label?: string; code: string; fileName?: string }[];
+  defaultTab?: string;
+}) {
+  const [active, setActive] = useState(defaultTab || tabs[0]?.language);
+  const activeTab = tabs.find(t => t.language === active) || tabs[0];
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg">
+      {/* Tab bar */}
+      <div className="flex items-center gap-0 border-b border-[var(--code-border)] overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-1.5 px-4 py-2.5 border-r border-[var(--code-border)] flex-shrink-0">
+          <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
+          <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+          <div className="h-3 w-3 rounded-full bg-[#28CA41]" />
+        </div>
+        {tabs.map(tab => (
+          <button
+            key={tab.language}
+            onClick={() => setActive(tab.language)}
+            className={cn(
+              'px-4 py-2.5 text-xs font-medium transition-all duration-150 flex-shrink-0 border-r border-[var(--code-border)]',
+              active === tab.language
+                ? 'bg-white/5 text-white'
+                : 'text-[var(--code-comment)] hover:text-white hover:bg-white/[0.03]'
+            )}
+          >
+            {tab.label || LANG_LABELS[tab.language] || tab.language}
+          </button>
+        ))}
+        <div className="ml-auto pr-3 flex-shrink-0">
+          <CopyBtn text={activeTab.code} />
+        </div>
+      </div>
+
+      {/* Code */}
+      <div className="overflow-x-auto">
+        <pre className="p-4 text-sm leading-relaxed m-0 bg-transparent border-none rounded-none">
+          <code className="block table w-full font-mono">
+            {tokenizePython(activeTab.code)}
+          </code>
+        </pre>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FEATURE CARD
+   ═══════════════════════════════════════════════════════════ */
+export function FeatureCard({
+  icon,
+  title,
+  description,
+  accent = false,
+  className,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  accent?: boolean;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        'group relative p-6 rounded-xl border border-[var(--border)] bg-[var(--card)] transition-all duration-200',
+        'hover:-translate-y-0.5 hover:shadow-lg hover:border-[var(--brand-orange)]/30',
+        className
+      )}
+    >
+      {/* Icon */}
+      <div className={cn(
+        'flex h-11 w-11 items-center justify-center rounded-xl mb-4 transition-transform duration-200 group-hover:scale-110',
+        accent
+          ? 'bg-[var(--brand-orange)] shadow-orange'
+          : 'bg-[var(--surface)] border border-[var(--border)]'
+      )}>
+        <span className={accent ? 'text-white' : 'text-[var(--brand-orange)]'}>
+          {icon}
+        </span>
+      </div>
+
+      <h3 className="font-semibold text-[var(--foreground)] mb-2 text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        {title}
+      </h3>
+      <p className="text-sm text-[var(--foreground-muted)] leading-relaxed">
+        {description}
+      </p>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STEP CARD
+   ═══════════════════════════════════════════════════════════ */
+export function StepCard({
+  step,
+  title,
+  description,
+  children,
+}: {
+  step: number;
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="flex gap-5">
+      <div className="flex-shrink-0">
+        <div className="step-number">{step}</div>
+      </div>
+      <div className="flex-1 pb-10">
+        <h3 className="font-semibold text-[var(--foreground)] mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+          {title}
+        </h3>
+        {description && (
+          <p className="text-sm text-[var(--foreground-muted)] mb-4">{description}</p>
+        )}
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STATUS BADGE
+   ═══════════════════════════════════════════════════════════ */
 export function StatusBadge({
   status,
   text,
 }: {
-  status: 'success' | 'warning' | 'error' | 'info';
+  status: 'success' | 'warning' | 'error' | 'info' | 'neutral';
   text: string;
 }) {
-  const variants = {
-    success: 'bg-green-500/10 text-green-400 border-green-500/30',
-    warning: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30',
-    error: 'bg-red-500/10 text-red-400 border-red-500/30',
-    info: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
+  const styles = {
+    success: 'badge-green',
+    warning: 'bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/20',
+    error:   'bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20',
+    info:    'badge-indigo',
+    neutral: 'badge-gray',
   };
-
-  const icons = {
-    success: '✓',
-    warning: '⚠',
-    error: '✗',
-    info: 'ℹ',
-  };
+  const icons = { success: '✓', warning: '⚠', error: '✗', info: 'ℹ', neutral: '·' };
 
   return (
-    <Badge className={cn('border text-xs', variants[status])}>
-      <span className="flex items-center gap-1">
-        {icons[status]}
-        {text}
-      </span>
-    </Badge>
+    <span className={cn('badge', styles[status])}>
+      {icons[status]} {text}
+    </span>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE META (reading time, edit on GitHub)
+   ═══════════════════════════════════════════════════════════ */
+export function PageMeta({
+  title,
+  description,
+  readingTime,
+  lastUpdated,
+  githubPath,
+}: {
+  title: string;
+  description?: string;
+  readingTime?: string;
+  lastUpdated?: string;
+  githubPath?: string;
+}) {
+  return (
+    <div className="mb-10">
+      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--foreground)] mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.02em' }}>
+        {title}
+      </h1>
+      {description && (
+        <p className="text-lg text-[var(--foreground-muted)] leading-relaxed mb-4">
+          {description}
+        </p>
+      )}
+      {(readingTime || lastUpdated || githubPath) && (
+        <div className="flex flex-wrap items-center gap-4 text-xs text-[var(--foreground-subtle)]">
+          {readingTime && (
+            <span className="flex items-center gap-1.5">
+              📖 {readingTime} read
+            </span>
+          )}
+          {lastUpdated && (
+            <span className="flex items-center gap-1.5">
+              🕐 Updated {lastUpdated}
+            </span>
+          )}
+          {githubPath && (
+            <a
+              href={`https://github.com/Vamshavardhan50/crawlingo/edit/main/docs/${githubPath}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 hover:text-[var(--brand-orange)] transition-colors"
+            >
+              ✏️ Edit on GitHub
+            </a>
+          )}
+        </div>
+      )}
+      <div className="mt-6 border-b border-[var(--border)]" />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CALLOUT
+   ═══════════════════════════════════════════════════════════ */
+export function Callout({
+  type = 'info',
+  title,
+  children,
+}: {
+  type?: 'info' | 'tip' | 'warning' | 'danger';
+  title?: string;
+  children: React.ReactNode;
+}) {
+  const styles = {
+    info:    { border: '#6366F1', bg: 'rgba(99,102,241,0.05)', icon: 'ℹ️', label: 'Info' },
+    tip:     { border: '#10B981', bg: 'rgba(16,185,129,0.05)', icon: '💡', label: 'Tip' },
+    warning: { border: '#F59E0B', bg: 'rgba(245,158,11,0.05)', icon: '⚠️', label: 'Warning' },
+    danger:  { border: '#EF4444', bg: 'rgba(239,68,68,0.05)',  icon: '🚨', label: 'Important' },
+  };
+  const s = styles[type];
+
+  return (
+    <div
+      className="rounded-xl p-4 my-6 border-l-4"
+      style={{ borderLeftColor: s.border, background: s.bg, borderTop: `1px solid ${s.border}20`, borderRight: `1px solid ${s.border}20`, borderBottom: `1px solid ${s.border}20` }}
+    >
+      <div className="flex items-start gap-3">
+        <span className="text-base flex-shrink-0 mt-0.5">{s.icon}</span>
+        <div>
+          <p className="font-semibold text-[var(--foreground)] text-sm mb-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            {title || s.label}
+          </p>
+          <div className="text-sm text-[var(--foreground-muted)] leading-relaxed">
+            {children}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PREV/NEXT NAVIGATION
+   ═══════════════════════════════════════════════════════════ */
+export function DocNav({
+  prev,
+  next,
+}: {
+  prev?: { label: string; href: string };
+  next?: { label: string; href: string };
+}) {
+  return (
+    <div className="mt-16 pt-6 border-t border-[var(--border)] flex items-center justify-between gap-4">
+      {prev ? (
+        <a
+          href={prev.href}
+          className="group flex items-center gap-2 text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
+        >
+          <span className="text-[var(--foreground-subtle)] group-hover:text-[var(--brand-orange)] transition-colors">←</span>
+          <div>
+            <div className="text-xs text-[var(--foreground-subtle)]">Previous</div>
+            <div className="font-medium">{prev.label}</div>
+          </div>
+        </a>
+      ) : <div />}
+      {next ? (
+        <a
+          href={next.href}
+          className="group flex items-center gap-2 text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors text-right"
+        >
+          <div>
+            <div className="text-xs text-[var(--foreground-subtle)]">Next</div>
+            <div className="font-medium">{next.label}</div>
+          </div>
+          <span className="text-[var(--foreground-subtle)] group-hover:text-[var(--brand-orange)] transition-colors">→</span>
+        </a>
+      ) : <div />}
+    </div>
   );
 }

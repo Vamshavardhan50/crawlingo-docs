@@ -1,236 +1,313 @@
 import React from 'react';
-import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CodeBlock, TerminalExample } from '@/components/ui-card';
-import { StatusBadge } from '@/components/feature-card';
+import Head from 'next/head';
+import { PageMeta, CodeBlock, TerminalBlock, StepCard, TabCodeBlock, Callout, DocNav } from '@/components/feature-card';
 
 export default function QuickStartPage() {
   return (
-    <div>
-      {/* Page Header */}
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Quick Start</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          Get up and running with Crawlingo in under 2 minutes.
-        </p>
+    <>
+      <Head>
+        <title>Quick Start — Crawlingo</title>
+        <meta name="description" content="Get up and running with Crawlingo in under 2 minutes. Install via pip, npm, or cargo and start extracting data instantly." />
+      </Head>
+
+      <PageMeta
+        title="Quick Start"
+        description="Get up and running with Crawlingo in under 2 minutes. No complex configuration required."
+        readingTime="5 min"
+        lastUpdated="July 2026"
+        githubPath="quick-start.md"
+      />
+
+      {/* ── Step 1: Install ── */}
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-0 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        Installation
+      </h2>
+      <p className="text-[var(--foreground-muted)] mb-6">
+        Crawlingo provides pre-built binary wheels for Linux (x86_64, aarch64), macOS (Intel, Apple Silicon), and Windows (AMD64). No Rust toolchain required for installation.
+      </p>
+
+      <div className="space-y-4 mb-12">
+        <TerminalBlock
+          title="Python (3.8+)"
+          commands={['pip install crawlingo', 'python -c "import crawlingo; print(crawlingo.__version__)"']}
+        />
+        <TerminalBlock
+          title="Node.js (18+)"
+          commands={['npm install crawlingo', 'node -e "const c = require(\'crawlingo\'); console.log(Object.keys(c))"']}
+        />
+        <TerminalBlock
+          title="Rust (1.70+)"
+          commands={['cargo add crawlingo', '# or in Cargo.toml: crawlingo = "0.1"']}
+        />
       </div>
 
-      {/* Installation */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight">Installation</h2>
-        <p className="mt-2 text-muted-foreground">
-          Install the Python package to get started.
-        </p>
-        
-        <div className="mt-6 space-y-4">
-          <TerminalExample
-            title="Install Crawlingo"
-            commands={["pip install crawlingo"]}
-          />
-          
-          <TerminalExample
-            title="Verify Installation"
-            commands={['python -c "import crawlingo; print(crawlingo.__version__)"']}
-          />
-        </div>
-      </section>
+      <Callout type="tip" title="Build from source">
+        To build from source (Rust 1.70+ required):{' '}
+        <code>pip install crawlingo --no-binary crawlingo</code> or clone the repo and run{' '}
+        <code>maturin develop</code>.
+      </Callout>
 
-      {/* Basic Usage */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight">Basic Usage</h2>
-        <p className="mt-2 text-muted-foreground">
-          Extract data from any website with a simple API.
-        </p>
-        
-        <div className="mt-6 space-y-6">
-          <Card className="border-border/50 bg-slate-950/30">
-            <CardHeader>
-              <CardTitle>Simple Fetch</CardTitle>
-              <CardDescription>Fetch and extract page contents in a single call</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <CodeBlock
-                language="python"
-                title="Basic Page Extraction"
-                code={`from crawlingo import Page
+      {/* ── Step 2: Basic Usage ── */}
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        Basic Usage
+      </h2>
+      <p className="text-[var(--foreground-muted)] mb-6">
+        The <code>Page</code> class is the simplest entry point. Pass a URL, get back a parsed page object.
+      </p>
 
-# Fetch and extract page contents in a single call
+      <TabCodeBlock
+        tabs={[
+          {
+            language: 'python',
+            label: '🐍 Python',
+            fileName: 'basic.py',
+            code: `from crawlingo import Page
+
+# Fetch and parse in one call
 page = Page("https://example.com")
 
-print(page.title())
-print(page.text())`}
-              />
-            </CardContent>
-          </Card>
+print(page.title())           # "Example Domain"
+print(page.status)            # 200
+print(page.markdown()[:120])  # Clean GitHub-flavored markdown
 
-          <Card className="border-border/50 bg-slate-950/30">
-            <CardHeader>
-              <CardTitle>CSS Selectors</CardTitle>
-              <CardDescription>Use CSS selectors to extract specific elements</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <CodeBlock
-                language="python"
-                title="CSS Selector Examples"
-                code={`from crawlingo import Page
-
-page = Page("https://example.com")
-
-# Get the title
+# CSS selectors
 h1 = page.css("h1").text()
+links = [el.attr("href") for el in page.css("a")]
 
-# Iterate through paragraphs
-for p in page.xpath("//p"):
-    print(p.text())
+# XPath
+paragraphs = [p.text() for p in page.xpath("//p")]
 
-# Get all links
-for link in page.css("a"):
-    print(link.attr("href"))`}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+# Regex — returns raw matches
+prices = page.regex(r"\\$[\\d,.]+")
 
-      {/* Session Configuration */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight">Session Configuration</h2>
-        <p className="mt-2 text-muted-foreground">
-          Configure session behavior for your specific needs.
-        </p>
-        
-        <div className="mt-6 space-y-4">
-          <TerminalExample
-            title="Configure Session"
-            commands={[`from crawlingo import Session
+# Text anchors (SIMD-accelerated)
+el = page.find_text("Price:")        # exact text lookup
+sibling = page.after_text("Price:")  # element after "Price:"`,
+          },
+          {
+            language: 'typescript',
+            label: '📘 Node.js',
+            fileName: 'basic.ts',
+            code: `import { Page } from 'crawlingo';
 
-with Session() as session:
-    session.auto_match(True)
-    session.timeout(30)
-    session.fetcher_tier("stealthy")
-    session.browser_profile("chrome")
-    session.rate_limit(3.0)
+const page = await Page.create("https://example.com");
 
-    page = session.page("https://example.com")
-    print(page.css("h1").text())`]}
-          />
-        </div>
-      </section>
+console.log(page.title());   // "Example Domain"
+console.log(page.status);    // 200
+console.log(page.markdown()); // Clean markdown
 
-      {/* Dataset Building */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight">Dataset Building</h2>
-        <p className="mt-2 text-muted-foreground">
-          Build structured datasets with ease.
-        </p>
-        
-        <div className="mt-6 space-y-4">
-          <Card className="border-border/50 bg-slate-950/30">
-            <CardHeader>
-              <CardTitle>Build a Dataset</CardTitle>
-              <CardDescription>Extract structured data and export to multiple formats</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <CodeBlock
-                language="python"
-                title="Dataset Builder Example"
-                code={`from crawlingo import Dataset
+// CSS selectors
+const h1 = page.css("h1").first().text();
+const links = page.css("a").map(el => el.attr("href"));
 
-ds = (
-    Dataset("https://example.com")
-    .auto_match(True)
-    .field("title", "h1")
-    .field("price", ".price", selector_type="css", transform=lambda v: v.replace("$", ""))
-    .build()
-)
+// XPath
+const paragraphs = page.xpath("//p").map(el => el.text());
 
-print(ds.to_dict())
-ds.to_json("data.json")
-ds.to_csv("data.csv")
-ds.to_parquet("data.parquet")`}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+// Text anchors
+const price = page.findText("Price:").first()?.text();`,
+          },
+          {
+            language: 'rust',
+            label: '🦀 Rust',
+            fileName: 'main.rs',
+            code: `use crawlingo::Page;
+use std::sync::Arc;
 
-      {/* Crawler Example */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-bold tracking-tight">Batch Processing</h2>
-        <p className="mt-2 text-muted-foreground">
-          Process multiple pages efficiently with the Crawler.
-        </p>
-        
-        <div className="mt-6 space-y-4">
-          <Card className="border-border/50 bg-slate-950/30">
-            <CardHeader>
-              <CardTitle>Crawler Usage</CardTitle>
-              <CardDescription>Process multiple pages with a single configuration</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <CodeBlock
-                language="python"
-                title="Crawler Example"
-                code={`from crawlingo import Crawl
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let session = Arc::new(crawlingo::Session::new());
+    let page = Page::new("https://example.com", session).await?;
+
+    println!("Title:  {:?}", page.title());
+    println!("Status: {}", page.status());
+
+    let h1 = page.css("h1")?.first().text();
+    let paragraphs: Vec<_> = page.xpath("//p")?.iter()
+        .map(|el| el.text())
+        .collect();
+
+    Ok(())
+}`,
+          },
+        ]}
+        defaultTab="python"
+      />
+
+      {/* ── Step 3: Session ── */}
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        Session Configuration
+      </h2>
+      <p className="text-[var(--foreground-muted)] mb-6">
+        A <code>Session</code> is a reusable config container. All <code>Page</code>, <code>Dataset</code>, <code>Crawl</code>, and <code>Watch</code> operations can share a session. Configure it once and reuse across thousands of requests.
+      </p>
+
+      <CodeBlock
+        language="python"
+        fileName="session.py"
+        code={`from crawlingo import Session, Page
+
+with Session() as s:
+    # Self-healing selectors
+    s.auto_match(True)
+
+    # Stealth mode — rotate TLS fingerprints
+    s.fetcher_tier("stealthy")
+    s.browser_profile("chrome")  # or "firefox", "safari"
+
+    # Rate limiting (per-host token bucket)
+    s.rate_limit(5.0)   # 5 req/s per host
+
+    # Proxy rotation
+    s.proxy_pool([
+        "http://user:pass@proxy1:8080",
+        "http://user:pass@proxy2:8080",
+    ])
+
+    # Auth
+    s.auth_bearer("eyJhbGciOi...")
+
+    # Retry config
+    s.retry_base_delay(500).retry_max_delay(30000)
+
+    # Reuse session across multiple fetches
+    page1 = s.page("https://example.com")
+    page2 = s.page("https://other-site.com")
+    print(s.metrics())  # lock-free counters`}
+        showLineNumbers
+      />
+
+      {/* ── Step 4: Dataset ── */}
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        Dataset Builder
+      </h2>
+      <p className="text-[var(--foreground-muted)] mb-6">
+        The <code>Dataset</code> API provides a fluent builder for structured multi-field extraction. Export to JSON, CSV, or Parquet in a single method call.
+      </p>
+
+      <CodeBlock
+        language="python"
+        fileName="dataset.py"
+        code={`from crawlingo import Dataset, Session
+
+with Session() as s:
+    s.auto_match(True).rate_limit(5)
+
+    ds = (
+        Dataset("https://shop.example.com/products", session=s)
+        .field("title",    "h1")
+        .field("price",    ".price",      extraction_type="price")
+        .field("rating",   ".star-score", extraction_type="text")
+        .field("url",      "",            extraction_type="url")
+        .field("email",    r"[\\w.+]+@[\\w.]+", selector_type="regex",
+               extraction_type="datalink_email")
+        .build()
+    )
+
+    print(ds.to_dict())        # {"title": "...", "price": "49.99"}
+    ds.to_json("data.json")    # JSON file
+    ds.to_csv("data.csv")      # CSV file
+    ds.to_parquet("data.parquet")  # Parquet for Spark/BigQuery
+
+# Stream a large URL list at constant memory
+urls = ["https://shop.example.com/p/" + str(i) for i in range(10_000)]
+for chunk in Dataset(urls).field("title", "h1").stream():
+    print(chunk.data)`}
+        showLineNumbers
+      />
+
+      {/* ── Step 5: Crawl ── */}
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        Multi-Page Crawling
+      </h2>
+      <CodeBlock
+        language="python"
+        fileName="crawl.py"
+        code={`from crawlingo import Crawl
 
 results = (
-    Crawl("https://example.com")
-    .follow("a.next-page")
-    .limit(100)
-    .depth(5)
-    .concurrency(4)
-    .delay(0.5)
-    .field("title", "h1")
+    Crawl("https://docs.example.com")
+    .follow("nav a, main a")      # CSS for links to follow
+    .limit(500)                    # max pages
+    .depth(5)                      # max link depth
+    .concurrency(10)               # concurrent fetches
+    .delay(0.5)                    # polite delay
+    .respect_robots(True)          # honor robots.txt
+    .allowed_domains(["docs.example.com"])
+    .field("title",   "h1")
+    .field("content", "article")
+    .field("url",     "", extraction_type="url")
     .webhook("https://api.example.com/webhooks/crawl")
     .build()
 )
 
-results.to_json("output.json")`}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+results.to_json_file("crawl.json")
+results.to_parquet_file("crawl.parquet")`}
+        showLineNumbers
+      />
 
-      {/* Next Steps */}
-      <section className="mt-16">
-        <Card className="border-indigo-500/30 bg-gradient-to-r from-indigo-950/30 to-purple-950/30">
-          <CardHeader>
-            <CardTitle>What's Next?</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Link href="/features/auto-match">
-                <div className="group rounded-lg border border-border/50 bg-card/50 p-4 transition-colors hover:bg-muted/50">
-                  <h3 className="font-semibold">Learn About Self-Healing</h3>
-                  <p className="text-sm text-muted-foreground">Understand how Crawlingo auto-repairs selectors</p>
-                </div>
-              </Link>
-              
-              <Link href="/sdk/python">
-                <div className="group rounded-lg border border-border/50 bg-card/50 p-4 transition-colors hover:bg-muted/50">
-                  <h3 className="font-semibold">SDK Documentation</h3>
-                  <p className="text-sm text-muted-foreground">Explore Python, Node.js, and Rust SDKs</p>
-                </div>
-              </Link>
-              
-              <Link href="/tools/fetch-page">
-                <div className="group rounded-lg border border-border/50 bg-card/50 p-4 transition-colors hover:bg-muted/50">
-                  <h3 className="font-semibold">API Reference</h3>
-                  <p className="text-sm text-muted-foreground">Complete API documentation for all tools</p>
-                </div>
-              </Link>
-              
-              <Link href="/changelog">
-                <div className="group rounded-lg border border-border/50 bg-card/50 p-4 transition-colors hover:bg-muted/50">
-                  <h3 className="font-semibold">Changelog</h3>
-                  <p className="text-sm text-muted-foreground">View recent updates and improvements</p>
-                </div>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-    </div>
+      {/* ── Step 6: Watch ── */}
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        Change Monitoring
+      </h2>
+      <CodeBlock
+        language="python"
+        fileName="watch.py"
+        code={`from crawlingo import Watch
+
+def on_price(event):
+    print(f"Price changed: {event.old_value} → {event.new_value}")
+    print(f"Change: {event.percentage_change:.1f}%")
+    print(f"URL: {event.url}  Field: {event.field}")
+
+w = (
+    Watch("https://shop.example.com/product/1")
+    .field("price", ".price", extraction_type="price")
+    .field("stock", ".stock-badge")
+    .interval(300)                    # poll every 5 minutes
+    .on_price_change(on_price)
+    .on_stock_change(lambda e: print(f"Stock: {e.old_value} → {e.new_value}"))
+    .on_change(lambda e: print(f"Field '{e.field}' changed"))
+)
+
+w.run(detach=True)   # non-blocking background thread
+# w.stop()           # signal stop`}
+        showLineNumbers
+      />
+
+      <Callout type="info" title="Change event fields">
+        Every event exposes: <code>url</code>, <code>field</code>, <code>old_value</code>, <code>new_value</code>,{' '}
+        <code>change_type</code> (content / price / stock / element_added / element_removed),{' '}
+        <code>percentage_change</code>, and <code>timestamp</code>.
+      </Callout>
+
+      {/* ── Next steps ── */}
+      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+        What's next?
+      </h2>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {[
+          { title: 'Self-Healing Selectors', desc: 'How DOM fingerprinting auto-repairs broken selectors', href: '/features/auto-match' },
+          { title: 'Stealth Browsing',       desc: 'TLS fingerprint rotation and browser profile configuration', href: '/features/stealth' },
+          { title: 'Python SDK Reference',   desc: 'Complete method reference for the Python SDK', href: '/sdk/python' },
+          { title: 'Architecture',           desc: 'Rust core internals, FFI layers, and parallelism model', href: '/architecture' },
+        ].map(card => (
+          <a
+            key={card.href}
+            href={card.href}
+            className="group flex flex-col p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] hover:border-[var(--brand-orange)]/40 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200"
+          >
+            <h3 className="font-semibold text-sm text-[var(--foreground)] mb-1 group-hover:text-[var(--brand-orange)] transition-colors" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+              {card.title}
+            </h3>
+            <p className="text-xs text-[var(--foreground-muted)]">{card.desc}</p>
+          </a>
+        ))}
+      </div>
+
+      <DocNav
+        prev={{ label: 'Home', href: '/' }}
+        next={{ label: 'Self-Healing Selectors', href: '/features/auto-match' }}
+      />
+    </>
   );
 }

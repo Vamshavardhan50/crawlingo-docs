@@ -1,9 +1,7 @@
 // next.config.mjs
 export default {
   experimental: {
-    turbo: true,
-    optimizeCss: true,
-    optimizePackageImports: ["@radix-ui/react", "lucide-react", "framer-motion"]
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   images: {
     remotePatterns: [
