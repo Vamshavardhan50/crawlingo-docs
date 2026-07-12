@@ -1,0 +1,14 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/waitlist",
+      "destination": "/api/waitlist"
+    },
+    {
+      "source": "/((?!api/|docs/).*)",
+      "destination": "/index.html"
+    }
+
+  ]
+}
