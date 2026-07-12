@@ -19,6 +19,7 @@ export default function Document() {
         <meta name="keywords" content="Crawlingo, Rust web crawler, web scraping framework, Python web scraper, Node.js scraping, self-healing scraper, browser automation, data extraction, proxy rotation, AI scraper, RAG data collection, LLM dataset generation, HTML parser, SIMD web crawler, stealth TLS, change monitoring" />
         <meta name="author" content="Crawlingo Contributors" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="google-site-verification" content="2-zTpn3SPBWwB369vAfc9yYPnjYuTvffXoxnlRHVJMo" />
         <link rel="canonical" href={SITE_URL} />
 
         {/* ── Open Graph ── */}
