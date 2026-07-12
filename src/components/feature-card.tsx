@@ -51,45 +51,37 @@ function tokenizePython(code: string): React.ReactNode {
 }
 
 function PythonLine({ line }: { line: string }) {
-  // Quick colorization via regex replacements
-  const parts: React.ReactNode[] = [];
-  let remaining = line;
-  let key = 0;
+  const tokens = line.match(/("""[\s\S]*?"""|'''[\s\S]*?'''|"[^"]*"|'[^']*'|f"[^"]*"|f'[^']*'|#[^\n]*|\b(?:from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async)\b|\b\d+\.?\d*\b|@[a-zA-Z_][a-zA-Z0-9_.]*|\b[a-zA-Z_][a-zA-Z0-9_]*\s*(?=\()|\b[a-zA-Z_][a-zA-Z0-9_]*\b|[^\w\s]+|\s+)/g);
+  if (!tokens) return <>{line}</>;
 
-  // Comment
-  const commentIdx = remaining.indexOf('#');
-  if (commentIdx !== -1 && !remaining.slice(0, commentIdx).includes('"') && !remaining.slice(0, commentIdx).includes("'")) {
-    parts.push(<NonCommentLine key={key++} text={remaining.slice(0, commentIdx)} />);
-    parts.push(<span key={key++} className="token-comment">{remaining.slice(commentIdx)}</span>);
-    return <>{parts}</>;
-  }
-
-  return <NonCommentLine text={remaining} />;
-}
-
-const PY_KEYWORDS = /\b(from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async)\b/g;
-const PY_STRINGS = /("""[\s\S]*?"""|'''[\s\S]*?'''|"[^"]*"|'[^']*'|f"[^"]*"|f'[^']*')/g;
-const PY_NUMBERS = /\b(\d+\.?\d*)\b/g;
-const PY_FUNCS   = /\b([a-zA-Z_][a-zA-Z0-9_]*)\s*(?=\()/g;
-const PY_DECO    = /(@[a-zA-Z_][a-zA-Z0-9_.]*)/g;
-
-function NonCommentLine({ text }: { text: string }) {
-  // Simple span-based approach: just output the raw text with color classes applied
-  // via dangerouslySetInnerHTML is unsafe; instead we do a multi-pass tokenization
-  let html = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
-  // Apply syntax classes (order matters)
-  html = html
-    .replace(PY_STRINGS,   m => `<span class="token-string">${m}</span>`)
-    .replace(PY_DECO,      m => `<span class="token-decorator">${m}</span>`)
-    .replace(PY_KEYWORDS,  m => `<span class="token-keyword">${m}</span>`)
-    .replace(PY_NUMBERS,   m => `<span class="token-number">${m}</span>`)
-    .replace(PY_FUNCS,     (m, fn) => `<span class="token-function">${fn}</span>(`);
-
-  return <span dangerouslySetInnerHTML={{ __html: html }} />;
+  return (
+    <>
+      {tokens.map((token, idx) => {
+        if (token.startsWith('#')) {
+          return <span key={idx} className="token-comment">{token}</span>;
+        }
+        if (token.startsWith('"') || token.startsWith("'") || token.startsWith('f"') || token.startsWith("f'")) {
+          return <span key={idx} className="token-string">{token}</span>;
+        }
+        if (token.startsWith('@')) {
+          return <span key={idx} className="token-decorator">{token}</span>;
+        }
+        if (/^(?:from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async)$/.test(token)) {
+          return <span key={idx} className="token-keyword">{token}</span>;
+        }
+        if (/^\d+\.?\d*$/.test(token)) {
+          return <span key={idx} className="token-number">{token}</span>;
+        }
+        if (/\s*(?=\()/.test(token) && /^[a-zA-Z_]/.test(token)) {
+          return <span key={idx} className="token-function">{token}</span>;
+        }
+        if (/^[^\w\s]+$/.test(token)) {
+          return <span key={idx} className="token-operator">{token}</span>;
+        }
+        return <span key={idx}>{token}</span>;
+      })}
+    </>
+  );
 }
 
 /* ═══════════════════════════════════════════════════════════
