@@ -246,7 +246,7 @@ const USE_CASES = [
     icon: '🤖',
     title: 'LLM & RAG Datasets',
     description: 'Export clean Markdown from any site. Stream millions of URLs into Parquet for LLM fine-tuning and RAG pipelines.',
-    href: '/features/datasets',
+    href: '/features#datasets',
   },
   {
     icon: '🔍',
@@ -258,7 +258,7 @@ const USE_CASES = [
     icon: '🏢',
     title: 'Competitive Intelligence',
     description: 'Scrape competitor product listings using stealth profiles that bypass bot detection — without a browser.',
-    href: '/features/stealth',
+    href: '/features#stealth',
   },
 ];
 

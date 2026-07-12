@@ -54,21 +54,21 @@ const NAV_SECTIONS = [
   {
     title: 'Core Concepts',
     items: [
-      { label: 'Session',          path: '/concepts/session',      icon: Shield,   desc: 'Config & connection pool' },
-      { label: 'Page & Selectors', path: '/concepts/selectors',    icon: Code,     desc: 'CSS, XPath, Regex, Anchors' },
-      { label: 'Dataset Builder',  path: '/concepts/dataset',      icon: Database, desc: 'Fluent extraction API' },
-      { label: 'Crawler',          path: '/concepts/crawl',        icon: Globe,    desc: 'BFS multi-page crawling' },
-      { label: 'Watch Monitors',   path: '/concepts/watch',        icon: Activity, desc: 'Change detection & webhooks' },
+      { label: 'Session',          path: '/quick-start#session',      icon: Shield,   desc: 'Config & connection pool' },
+      { label: 'Page & Selectors', path: '/quick-start#basic-usage',  icon: Code,     desc: 'CSS, XPath, Regex, Anchors' },
+      { label: 'Dataset Builder',  path: '/quick-start#dataset-builder', icon: Database, desc: 'Fluent extraction API' },
+      { label: 'Crawler',          path: '/quick-start#crawler',      icon: Globe,    desc: 'BFS multi-page crawling' },
+      { label: 'Watch Monitors',   path: '/quick-start#watch-monitors', icon: Activity, desc: 'Change detection & webhooks' },
     ],
   },
   {
     title: 'Features',
     items: [
-      { label: 'Self-Healing',     path: '/features/auto-match',   icon: Shield,   desc: 'DOM fingerprint repair' },
-      { label: 'Stealth Browsing', path: '/features/stealth',      icon: Globe,    desc: 'TLS fingerprint rotation' },
-      { label: 'SIMD Text Anchors',path: '/features/text-anchors', icon: Cpu,      desc: 'Parallel CPU text search' },
-      { label: 'Change Monitors',  path: '/features/watches',      icon: Activity, desc: 'Reactive DOM polling' },
-      { label: 'Dataset Export',   path: '/features/datasets',     icon: FileText, desc: 'JSON, CSV, Parquet' },
+      { label: 'Self-Healing',     path: '/features#self-healing',   icon: Shield,   desc: 'DOM fingerprint repair' },
+      { label: 'Stealth Browsing', path: '/features#stealth',        icon: Globe,    desc: 'TLS fingerprint rotation' },
+      { label: 'SIMD Text Anchors',path: '/features#text-anchors',   icon: Cpu,      desc: 'Parallel CPU text search' },
+      { label: 'Change Monitors',  path: '/features#change-monitoring', icon: Activity, desc: 'Reactive DOM polling' },
+      { label: 'Dataset Export',   path: '/features#datasets',       icon: FileText, desc: 'JSON, CSV, Parquet' },
     ],
   },
   {

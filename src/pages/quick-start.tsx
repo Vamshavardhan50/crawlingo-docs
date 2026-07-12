@@ -48,7 +48,7 @@ export default function QuickStartPage() {
       </Callout>
 
       {/* ── Step 2: Basic Usage ── */}
-      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+      <h2 id="basic-usage" className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
         Basic Usage
       </h2>
       <p className="text-[var(--foreground-muted)] mb-6">
@@ -134,7 +134,7 @@ async fn main() -> anyhow::Result<()> {
       />
 
       {/* ── Step 3: Session ── */}
-      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+      <h2 id="session" className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
         Session Configuration
       </h2>
       <p className="text-[var(--foreground-muted)] mb-6">
@@ -177,7 +177,7 @@ with Session() as s:
       />
 
       {/* ── Step 4: Dataset ── */}
-      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+      <h2 id="dataset-builder" className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
         Dataset Builder
       </h2>
       <p className="text-[var(--foreground-muted)] mb-6">
@@ -216,7 +216,7 @@ for chunk in Dataset(urls).field("title", "h1").stream():
       />
 
       {/* ── Step 5: Crawl ── */}
-      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+      <h2 id="crawler" className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
         Multi-Page Crawling
       </h2>
       <CodeBlock
@@ -246,7 +246,7 @@ results.to_parquet_file("crawl.parquet")`}
       />
 
       {/* ── Step 6: Watch ── */}
-      <h2 className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+      <h2 id="watch-monitors" className="text-2xl font-bold tracking-tight text-[var(--foreground)] mt-12 mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
         Change Monitoring
       </h2>
       <CodeBlock
@@ -286,8 +286,8 @@ w.run(detach=True)   # non-blocking background thread
       </h2>
       <div className="grid gap-3 sm:grid-cols-2">
         {[
-          { title: 'Self-Healing Selectors', desc: 'How DOM fingerprinting auto-repairs broken selectors', href: '/features/auto-match' },
-          { title: 'Stealth Browsing',       desc: 'TLS fingerprint rotation and browser profile configuration', href: '/features/stealth' },
+          { title: 'Self-Healing Selectors', desc: 'How DOM fingerprinting auto-repairs broken selectors', href: '/features#self-healing' },
+          { title: 'Stealth Browsing',       desc: 'TLS fingerprint rotation and browser profile configuration', href: '/features#stealth' },
           { title: 'Python SDK Reference',   desc: 'Complete method reference for the Python SDK', href: '/sdk/python' },
           { title: 'Architecture',           desc: 'Rust core internals, FFI layers, and parallelism model', href: '/architecture' },
         ].map(card => (
@@ -306,7 +306,7 @@ w.run(detach=True)   # non-blocking background thread
 
       <DocNav
         prev={{ label: 'Home', href: '/' }}
-        next={{ label: 'Self-Healing Selectors', href: '/features/auto-match' }}
+        next={{ label: 'Self-Healing Selectors', href: '/features#self-healing' }}
       />
     </>
   );
