@@ -262,6 +262,79 @@ const USE_CASES = [
   },
 ];
 
+function HeroVisualCard() {
+  return (
+    <div className="relative w-full rounded-2xl border border-[var(--border)] bg-[var(--card)] shadow-2xl p-6 overflow-hidden">
+      {/* Card Header (Mac-style dots) */}
+      <div className="flex items-center justify-between mb-4 border-b border-[var(--border)] pb-3">
+        <div className="flex items-center gap-1.5">
+          <div className="h-3 w-3 rounded-full bg-[#FF5F56]" />
+          <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+          <div className="h-3 w-3 rounded-full bg-[#27C93F]" />
+        </div>
+        <span className="text-[10px] font-mono text-[var(--foreground-subtle)]">self_healing_selector.py</span>
+      </div>
+
+      {/* Code / Visual Demo */}
+      <div className="space-y-4 font-mono text-xs">
+        <div>
+          <span className="text-[var(--code-comment)]"># Target selector modified on target website</span>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-red-500 line-through">button#submit.btn-primary</span>
+            <span className="text-[var(--foreground-subtle)] text-[10px]">→</span>
+            <span className="text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded font-semibold">div.cta-btn-modern</span>
+          </div>
+        </div>
+
+        <div className="space-y-1.5 border-t border-[var(--border)] pt-3">
+          <div className="flex items-center gap-2">
+            <span className="text-purple-500">from</span>
+            <span className="text-blue-500">crawlingo</span>
+            <span className="text-purple-500">import</span>
+            <span className="text-blue-500">Session</span>
+          </div>
+          <div>
+            <span className="text-blue-500">s</span>
+            <span className="text-[var(--foreground)]"> = </span>
+            <span className="text-yellow-500">Session</span>
+            <span className="text-[var(--foreground)]">()</span>
+          </div>
+          <div>
+            <span className="text-blue-500">s</span>
+            <span className="text-[var(--foreground)]">.</span>
+            <span className="text-blue-500">auto_match</span>
+            <span className="text-[var(--foreground)]">(</span>
+            <span className="text-orange-500">True</span>
+            <span className="text-[var(--foreground)]">)</span>
+          </div>
+          <div className="text-[var(--foreground-subtle)]">...</div>
+          <div>
+            <span className="text-blue-500">btn</span>
+            <span className="text-[var(--foreground)]"> = s.</span>
+            <span className="text-blue-500">css</span>
+            <span className="text-[var(--foreground)]">(</span>
+            <span className="text-green-500">"button#submit"</span>
+            <span className="text-[var(--foreground)]">).</span>
+            <span className="text-blue-500">text</span>
+            <span className="text-[var(--foreground)]">()</span>
+          </div>
+        </div>
+
+        {/* Live Fingerprint Match Badge */}
+        <div className="bg-emerald-500/[0.06] border border-emerald-500/20 rounded-xl p-3.5 flex flex-col gap-2 mt-4 animate-pulse">
+          <div className="flex items-center gap-2">
+            <div className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Auto-Matched Similarity: 96%</span>
+          </div>
+          <p className="text-[10px] text-[var(--foreground-muted)] leading-relaxed font-sans">
+            Crawlingo auto-matched the drifted <code>div.cta-btn-modern</code> element based on 12 cached DOM layout weights (Jaro-Winkler distance).
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
   return (
     <>
@@ -274,15 +347,46 @@ export default function HomePage() {
           HERO
           ════════════════════════════════════════════════════ */}
       <section
-        className="relative min-h-[calc(100vh-64px)] flex items-center overflow-hidden"
+        className="relative min-h-[calc(100vh-80px)] pt-28 pb-20 flex items-center overflow-hidden"
         style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% -5%, rgba(99,102,241,0.07) 0%, transparent 70%), radial-gradient(ellipse 50% 50% at 90% 60%, rgba(255,107,53,0.06) 0%, transparent 60%), #FFFFFF',
+          background: 'radial-gradient(ellipse 80% 60% at 50% -5%, rgba(99,102,241,0.08) 0%, transparent 70%), radial-gradient(ellipse 50% 50% at 90% 60%, rgba(255,107,53,0.07) 0%, transparent 60%), var(--background)',
         }}
       >
         <HeroDecoration />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
-          <div className="max-w-3xl">
+        {/* Bulletproof Dynamic Background Blobs */}
+        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
+          {/* Orange Blob */}
+          <div 
+            className="absolute -top-[10%] -left-[10%] w-[55%] h-[55%] rounded-full animate-blob-slow" 
+            style={{
+              background: 'radial-gradient(circle, rgba(255, 107, 53, 0.16) 0%, transparent 70%)',
+              filter: 'blur(90px)',
+              WebkitFilter: 'blur(90px)',
+            }}
+          />
+          {/* Indigo Blob */}
+          <div 
+            className="absolute top-[25%] -right-[15%] w-[65%] h-[65%] rounded-full animate-blob-medium" 
+            style={{
+              background: 'radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, transparent 70%)',
+              filter: 'blur(110px)',
+              WebkitFilter: 'blur(110px)',
+            }}
+          />
+          {/* Violet Blob */}
+          <div 
+            className="absolute -bottom-[10%] left-[15%] w-[50%] h-[50%] rounded-full animate-blob-slow" 
+            style={{
+              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%)',
+              filter: 'blur(80px)',
+              WebkitFilter: 'blur(80px)',
+            }}
+          />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-6 w-full grid lg:grid-cols-12 gap-12 items-center">
+          <div className="lg:col-span-7 max-w-3xl">
             {/* Version pill */}
             <div className="inline-flex items-center gap-2 mb-8 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--card)] shadow-sm animate-fade-in">
               <span className="flex h-2 w-2 items-center justify-center">
@@ -347,17 +451,21 @@ export default function HomePage() {
 
             {/* Quick install */}
             <div className="mt-8 animate-slide-up delay-500">
-              <div className="inline-flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[var(--brand-navy)] text-[var(--code-fg)] font-mono text-sm">
+              <div className="inline-flex flex-wrap items-center gap-3 px-4 py-2.5 rounded-xl bg-[var(--brand-navy)] text-[var(--code-fg)] font-mono text-sm max-w-full">
                 <span className="text-[#34D399]">$</span>
-                <span>pip install crawlingo</span>
+                <span className="whitespace-nowrap">pip install crawlingo</span>
                 <span className="text-[var(--code-comment)] mx-1">·</span>
                 <span className="text-[#34D399]">$</span>
-                <span>npm install crawlingo</span>
-                <span className="text-[var(--code-comment)] mx-1">·</span>
-                <span className="text-[#34D399]">$</span>
-                <span>cargo add crawlingo</span>
+                <span className="whitespace-nowrap">npm install crawlingo</span>
+                <span className="text-[var(--code-comment)] mx-1 hidden sm:inline">·</span>
+                <span className="text-[#34D399] sm:inline hidden">$</span>
+                <span className="whitespace-nowrap sm:inline hidden">cargo add crawlingo</span>
               </div>
             </div>
+          </div>
+
+          <div className="lg:col-span-5 hidden lg:block animate-fade-in delay-500">
+            <HeroVisualCard />
           </div>
         </div>
       </section>

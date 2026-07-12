@@ -748,3 +748,39 @@
 .token-operator {
   color: var(--code-operator);
 }
+
+/* ── Premium Background Blob Animations ─── */
+@keyframes blob-float-1 {
+  0% {
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate(160px, -110px) scale(1.25) rotate(120deg);
+  }
+  66% {
+    transform: translate(-100px, 90px) scale(0.8) rotate(240deg);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1) rotate(360deg);
+  }
+}
+
+@keyframes blob-float-2 {
+  0% {
+    transform: translate(0px, 0px) scale(1.1) rotate(0deg);
+  }
+  50% {
+    transform: translate(-130px, 110px) scale(0.8) rotate(-180deg);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1.1) rotate(-360deg);
+  }
+}
+
+.animate-blob-slow {
+  animation: blob-float-1 14s ease-in-out infinite;
+}
+
+.animate-blob-medium {
+  animation: blob-float-2 10s ease-in-out infinite alternate;
+}
