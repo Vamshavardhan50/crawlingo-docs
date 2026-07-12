@@ -243,7 +243,7 @@ function TopNav({
             aria-label="Search documentation"
           >
             <Search className="h-3.5 w-3.5 flex-shrink-0" />
-            <span className="flex-1 text-left">Search docs…</span>
+            <span className="flex-1 text-left whitespace-nowrap">Search docs…</span>
             <kbd className="hidden lg:inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded border border-[var(--border)] font-mono bg-[var(--card)]">
               <Command className="h-2.5 w-2.5" />K
             </kbd>

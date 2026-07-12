@@ -51,22 +51,22 @@ function tokenizePython(code: string): React.ReactNode {
 }
 
 function PythonLine({ line }: { line: string }) {
-  const tokens = line.match(/("""[\s\S]*?"""|'''[\s\S]*?'''|"[^"]*"|'[^']*'|f"[^"]*"|f'[^']*'|#[^\n]*|\b(?:from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async)\b|\b\d+\.?\d*\b|@[a-zA-Z_][a-zA-Z0-9_.]*|\b[a-zA-Z_][a-zA-Z0-9_]*\s*(?=\()|\b[a-zA-Z_][a-zA-Z0-9_]*\b|[^\w\s]+|\s+)/g);
+  const tokens = line.match(/("""[\s\S]*?"""|'''[\s\S]*?'''|"[^"]*"|'[^']*'|`[^`]*`|f"[^"]*"|f'[^']*'|\/\/[^\n]*|#[^\n]*|\b(?:from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async|const|let|var|function|pub|use|fn|struct|impl|mut|std|type|interface|export|default)\b|\b\d+\.?\d*\b|@[a-zA-Z_][a-zA-Z0-9_.]*|\b[a-zA-Z_][a-zA-Z0-9_]*\s*(?=\()|\b[a-zA-Z_][a-zA-Z0-9_]*\b|[^\w\s]+|\s+)/g);
   if (!tokens) return <>{line}</>;
 
   return (
     <>
       {tokens.map((token, idx) => {
-        if (token.startsWith('#')) {
+        if (token.startsWith('#') || token.startsWith('//')) {
           return <span key={idx} className="token-comment">{token}</span>;
         }
-        if (token.startsWith('"') || token.startsWith("'") || token.startsWith('f"') || token.startsWith("f'")) {
+        if (token.startsWith('"') || token.startsWith("'") || token.startsWith('`') || token.startsWith('f"') || token.startsWith("f'")) {
           return <span key={idx} className="token-string">{token}</span>;
         }
         if (token.startsWith('@')) {
           return <span key={idx} className="token-decorator">{token}</span>;
         }
-        if (/^(?:from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async)$/.test(token)) {
+        if (/^(?:from|import|as|with|for|in|if|elif|else|return|def|class|True|False|None|print|lambda|and|or|not|is|await|async|const|let|var|function|pub|use|fn|struct|impl|mut|std|type|interface|export|default)$/.test(token)) {
           return <span key={idx} className="token-keyword">{token}</span>;
         }
         if (/^\d+\.?\d*$/.test(token)) {

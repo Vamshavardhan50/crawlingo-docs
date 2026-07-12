@@ -364,11 +364,11 @@ pre {
 }
 
 a {
-  color: var(--brand-orange);
+  color: inherit;
   text-decoration: none;
   transition: color var(--duration-fast) ease;
 }
-a:hover { color: var(--brand-orange-dark); text-decoration: underline; }
+a:hover { text-decoration: none; }
 
 hr {
   border: none;
@@ -720,3 +720,29 @@ hr {
 .toc-link:hover { color: var(--foreground-muted); text-decoration: none; }
 .toc-link.active { color: var(--brand-orange); font-weight: 500; }
 .toc-link.level-3 { padding-left: 0.75rem; }
+
+/* ── Code Syntax Highlighting ─── */
+.token-comment {
+  color: var(--code-comment);
+  font-style: italic;
+}
+.token-string {
+  color: var(--code-string);
+}
+.token-decorator {
+  color: var(--code-keyword);
+  font-weight: 500;
+}
+.token-keyword {
+  color: var(--code-keyword);
+  font-weight: 600;
+}
+.token-number {
+  color: var(--code-number);
+}
+.token-function {
+  color: var(--code-function);
+}
+.token-operator {
+  color: var(--code-operator);
+}
