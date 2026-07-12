@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTheme } from 'next-themes';
@@ -162,9 +162,11 @@ function SidebarSection({
    ═══════════════════════════════════════════════════════════ */
 function TopNav({
   onMenuClick,
+  onSearchClick,
   pathname,
 }: {
   onMenuClick: () => void;
+  onSearchClick: () => void;
   pathname: string;
 }) {
   const { theme, setTheme } = useTheme();
@@ -237,16 +239,26 @@ function TopNav({
 
         {/* Right actions */}
         <div className="ml-auto flex items-center gap-2">
-          {/* Search */}
+          {/* Search Button (Desktop) */}
           <button
-            className="hidden sm:flex items-center gap-2 h-9 px-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] text-sm text-[var(--foreground-subtle)] hover:border-[var(--border-strong)] hover:text-[var(--foreground-muted)] transition-colors w-44"
+            onClick={onSearchClick}
+            className="hidden sm:flex items-center gap-2 h-9 px-3 rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] text-sm text-[var(--foreground-subtle)] hover:border-[var(--border-strong)] hover:text-[var(--foreground-muted)] transition-colors w-44 cursor-pointer"
             aria-label="Search documentation"
           >
             <Search className="h-3.5 w-3.5 flex-shrink-0" />
             <span className="flex-1 text-left whitespace-nowrap">Search docs…</span>
-            <kbd className="hidden lg:inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded border border-[var(--border)] font-mono bg-[var(--card)]">
+            <kbd className="hidden lg:inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded border border-[var(--border)] font-mono bg-[var(--muted)] text-[var(--foreground-muted)]">
               <Command className="h-2.5 w-2.5" />K
             </kbd>
+          </button>
+
+          {/* Search Button (Mobile responsive icon-only) */}
+          <button
+            onClick={onSearchClick}
+            className="flex sm:hidden h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] text-[var(--foreground-subtle)] hover:border-[var(--border-strong)] hover:text-[var(--foreground-muted)] transition-colors cursor-pointer"
+            aria-label="Search documentation"
+          >
+            <Search className="h-4 w-4" />
           </button>
 
           {/* GitHub */}
@@ -495,8 +507,182 @@ function Footer() {
 /* ═══════════════════════════════════════════════════════════
    MAIN LAYOUT
    ═══════════════════════════════════════════════════════════ */
+const SEARCH_INDEX = [
+  // Getting started
+  { title: 'Quick Start', url: '/quick-start', category: 'Getting Started', desc: 'Get up and running with Crawlingo in under 2 minutes.' },
+  { title: 'Installation Guide', url: '/installation', category: 'Getting Started', desc: 'Install Python, Node.js, and Rust SDKs.' },
+  
+  // Core concepts
+  { title: 'Session Configuration', url: '/quick-start#session', category: 'Core Concepts', desc: 'Connection pooling, rate limiting, and proxies.' },
+  { title: 'Page & Selectors', url: '/quick-start#basic-usage', category: 'Core Concepts', desc: 'CSS, XPath, Regex, and SIMD text anchor selectors.' },
+  { title: 'Dataset Builder', url: '/quick-start#dataset-builder', category: 'Core Concepts', desc: 'Fluent builder API for structured multi-field data.' },
+  { title: 'Multi-Page Crawling', url: '/quick-start#crawler', category: 'Core Concepts', desc: 'BFS crawling up to max depth and concurrency limit.' },
+  { title: 'Change Monitoring', url: '/quick-start#watch-monitors', category: 'Core Concepts', desc: 'Active DOM polling and webhook notifications.' },
+
+  // Features
+  { title: 'Self-Healing Selectors', url: '/features#self-healing', category: 'Features', desc: 'DOM layout fingerprinting and Jaro-Winkler recovery.' },
+  { title: 'Stealth Browser Emulation', url: '/features#stealth', category: 'Features', desc: 'JA3 signature and HTTP/2 profile rotation.' },
+  { title: 'SIMD Text Search', url: '/features#text-anchors', category: 'Features', desc: 'memchr-based visible text anchor matching.' },
+  { title: 'Reactive DOM Watchers', url: '/features#change-monitoring', category: 'Features', desc: 'DOM polling with Stock/Price change listeners.' },
+  { title: 'Parquet/CSV/JSON Export', url: '/features#datasets', category: 'Features', desc: 'Exporting datasets directly to structured files.' },
+
+  // SDKs
+  { title: 'Python SDK Reference', url: '/sdk/python', category: 'SDK References', desc: 'Complete methods and attributes for the Python bindings.' },
+  { title: 'Node.js SDK Reference', url: '/sdk/nodejs', category: 'SDK References', desc: 'Complete TypeScript methods and models.' },
+  { title: 'Rust SDK Reference', url: '/sdk/rust', category: 'SDK References', desc: 'Crate structs and Tokio async reference.' },
+
+  // Reference
+  { title: 'System Architecture', url: '/architecture', category: 'Reference', desc: 'Rust core engine FFI, threads, and safety.' },
+  { title: 'Performance Benchmarks', url: '/benchmarks', category: 'Reference', desc: 'Latency, memory, and throughput comparison tables.' },
+  { title: 'Changelog', url: '/changelog', category: 'Project', desc: 'Latest releases and feature releases.' },
+  { title: 'Product Roadmap', url: '/roadmap', category: 'Project', desc: 'Future features, actors, and vector DB integrations.' },
+];
+
+function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [query, setQuery] = useState('');
+  const [activeIndex, setActiveIndex] = useState(0);
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      setQuery('');
+      setActiveIndex(0);
+      setTimeout(() => inputRef.current?.focus(), 50);
+    }
+  }, [open]);
+
+  // Filter items
+  const filtered = query.trim() === '' 
+    ? SEARCH_INDEX.slice(0, 5) 
+    : SEARCH_INDEX.filter(item => 
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.desc.toLowerCase().includes(query.toLowerCase()) ||
+        item.category.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 8);
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [query]);
+
+  // Key navigation
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActiveIndex(prev => (prev + 1) % Math.max(1, filtered.length));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActiveIndex(prev => (prev - 1 + filtered.length) % Math.max(1, filtered.length));
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (filtered[activeIndex]) {
+          router.push(filtered[activeIndex].url);
+          onClose();
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open, filtered, activeIndex, router, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-slate-950/60 backdrop-blur-sm flex items-start justify-center p-4 sm:p-6 md:p-20">
+      {/* Click outside to close */}
+      <div className="absolute inset-0" onClick={onClose} />
+
+      <div className="relative w-full max-w-lg bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] sm:max-h-[70vh] animate-fade-in">
+        {/* Input area */}
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--border)] bg-white/[0.01]">
+          <Search className="h-4 w-4 text-[var(--foreground-subtle)] flex-shrink-0" />
+          <input
+            ref={inputRef}
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search documentation..."
+            className="flex-1 bg-transparent text-[var(--foreground)] placeholder-[var(--foreground-subtle)] text-sm border-none outline-none focus:outline-none focus:ring-0"
+          />
+          <button 
+            onClick={onClose} 
+            className="text-xs text-[var(--foreground-subtle)] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--surface-raised)] cursor-pointer"
+          >
+            esc
+          </button>
+        </div>
+
+        {/* Results list */}
+        <div className="flex-1 overflow-y-auto p-2 space-y-3">
+          {filtered.length > 0 ? (
+            <div>
+              <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--foreground-subtle)]">
+                {query.trim() === '' ? 'Recommended Pages' : 'Search Results'}
+              </div>
+              <div className="mt-1 space-y-0.5">
+                {filtered.map((item, idx) => {
+                  const active = idx === activeIndex;
+                  return (
+                    <button
+                      key={item.url + idx}
+                      onClick={() => {
+                        router.push(item.url);
+                        onClose();
+                      }}
+                      className={cn(
+                        "w-full text-left px-3 py-2.5 rounded-lg border border-transparent transition-all flex flex-col gap-0.5 cursor-pointer",
+                        active 
+                          ? "bg-[var(--brand-orange)]/[0.08] border-[var(--brand-orange)]/25 text-[var(--foreground)] shadow-sm"
+                          : "hover:bg-[var(--surface-raised)] text-[var(--foreground-muted)]"
+                      )}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-sm">{item.title}</span>
+                        <span className="text-[10px] font-medium text-[var(--brand-indigo)] bg-[var(--brand-indigo)]/10 px-1.5 py-0.5 rounded">
+                          {item.category}
+                        </span>
+                      </div>
+                      <span className="text-xs text-[var(--foreground-subtle)] line-clamp-1">{item.desc}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="py-8 text-center text-sm text-[var(--foreground-subtle)] flex flex-col items-center gap-2">
+              <span>No results found for "<strong>{query}</strong>"</span>
+              <span className="text-xs">Try searching for keywords like "session", "stealth", or "python".</span>
+            </div>
+          )}
+        </div>
+
+        {/* Footer shortcuts */}
+        <div className="px-4 py-2.5 border-t border-[var(--border)] bg-[var(--surface)] text-[10px] text-[var(--foreground-subtle)] flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <kbd className="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)]">↑↓</kbd>
+            <span>to navigate</span>
+            <kbd className="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)]">↵</kbd>
+            <span>to select</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <kbd className="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)]">esc</kbd>
+            <span>to close</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const router = useRouter();
   const pathname = router.pathname;
   const isHome = pathname === '/';
@@ -505,10 +691,26 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // Close sidebar on route change
   useEffect(() => { setSidebarOpen(false); }, [pathname]);
 
+  // Cmd+K / Ctrl+K keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(o => !o);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
       {/* Top nav always present */}
-      <TopNav onMenuClick={() => setSidebarOpen(true)} pathname={pathname} />
+      <TopNav 
+        onMenuClick={() => setSidebarOpen(true)} 
+        onSearchClick={() => setSearchOpen(true)} 
+        pathname={pathname} 
+      />
 
       {isDoc ? (
         /* ── Documentation layout: sidebar + content ── */
@@ -534,6 +736,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       )}
 
       <Footer />
+
+      {/* Command Palette Search Modal */}
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }
