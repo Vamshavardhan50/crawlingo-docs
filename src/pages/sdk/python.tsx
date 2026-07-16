@@ -19,10 +19,10 @@ const SESSION_METHODS = [
   { method: '.retry_base_delay(int)', returns: 'Self', desc: 'Initial retry delay (ms)' },
   { method: '.retry_max_delay(int)', returns: 'Self', desc: 'Maximum retry delay (ms)' },
   { method: '.retry_multiplier(float)', returns: 'Self', desc: 'Exponential backoff factor' },
-  { method: '.auth_basic(user, pass)', returns: 'Self', desc: 'HTTP Basic Auth' },
-  { method: '.auth_bearer(token)', returns: 'Self', desc: 'Bearer token auth' },
-  { method: '.auth_header(name, value)', returns: 'Self', desc: 'Custom auth header' },
-  { method: '.auth_api_key(param, value)', returns: 'Self', desc: 'Query parameter API key' },
+  { method: '.basic_auth(user, pass)', returns: 'Self', desc: 'HTTP Basic Auth' },
+  { method: '.bearer_auth(token)', returns: 'Self', desc: 'Bearer token auth' },
+  { method: '.header_auth(name, value)', returns: 'Self', desc: 'Custom auth header' },
+  { method: '.api_key_auth(param, value)', returns: 'Self', desc: 'Query parameter API key' },
   { method: '.auth_oauth2(client_id, secret, token_url)', returns: 'Self', desc: 'OAuth2 with auto-refresh on 401' },
   { method: '.page(url)', returns: 'Page', desc: 'Fetch a page using this session' },
   { method: '.metrics()', returns: 'dict', desc: 'Lock-free metrics snapshot' },
@@ -58,16 +58,17 @@ const ELEMENT_METHODS = [
 ];
 
 const DATASET_METHODS = [
-  { method: 'Dataset(url/s, session?)', returns: 'Dataset', desc: 'Create for a URL or list of URLs' },
-  { method: '.field(name, selector, **opts)', returns: 'Self', desc: 'Add extraction field (selector_type, extraction_type, transform, default)' },
+  { method: 'Dataset(url, session?)', returns: 'Dataset', desc: 'Create for a URL' },
+  { method: '.field(name, selector, selector_type?, transform?, default?)', returns: 'Self', desc: 'Add extraction field' },
+  { method: '.with_schema(schema)', returns: 'Self', desc: 'Apply DatasetSchema validation' },
   { method: '.build()', returns: 'DatasetResult', desc: 'Execute extraction synchronously' },
-  { method: '.stream()', returns: 'Iterator', desc: 'Stream URL list results at constant memory' },
+  { method: '.build_async()', returns: 'Awaitable[DatasetResult]', desc: 'Execute extraction asynchronously' },
+  { method: '.build_structured()', returns: 'list[dict]', desc: 'Extract multi-row table records from a page' },
   { method: '→ .to_dict()', returns: 'dict', desc: 'Fields as Python dict' },
-  { method: '→ .to_json()', returns: 'str', desc: 'JSON string' },
-  { method: '→ .to_csv()', returns: 'str', desc: 'CSV string' },
+  { method: '→ .to_json(path)', returns: 'None', desc: 'Write JSON file' },
+  { method: '→ .to_csv(path)', returns: 'None', desc: 'Write CSV file' },
   { method: '→ .to_parquet(path)', returns: 'None', desc: 'Write Apache Parquet file' },
-  { method: '→ .to_json_file(path)', returns: 'None', desc: 'Write JSON file' },
-  { method: '→ .to_csv_file(path)', returns: 'None', desc: 'Write CSV file' },
+  { method: '→ .df()', returns: 'DataFrame', desc: 'Return as Pandas DataFrame' },
 ];
 
 export default function PythonSDKPage() {
@@ -196,6 +197,36 @@ e.prev_sibling()    # Previous sibling`}
         </table>
       </div>
 
+      {/* ── Schema and Pagination ── */}
+      <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Schema & Pagination Config</h2>
+      <p className="text-sm text-[var(--foreground-muted)] mb-4">
+        New in v1.0.0-beta.1: Configure crawl pagination loops and validate extracted datasets against strict schemas.
+      </p>
+      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+        <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
+          <div className="font-bold text-sm mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>PaginationConfig</div>
+          <p className="text-xs text-[var(--foreground-muted)] mb-2">Exposes factory methods to configure crawl navigation:</p>
+          <ul className="space-y-1.5 text-xs text-[var(--foreground-muted)]">
+            <li><code>crawlingo.PaginationConfig.next_link(selector: str)</code></li>
+            <li><code>crawlingo.PaginationConfig.page_number(template: str, start: int, max: int)</code></li>
+            <li><code>crawlingo.PaginationConfig.url_pattern(regex: str, max_page: int)</code></li>
+            <li>Configure on Crawl: <code>crawl.with_pagination(config)</code></li>
+            <li>Resumable crawls: <code>Crawl.resumable(url, session, db_path)</code></li>
+          </ul>
+        </div>
+        <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
+          <div className="font-bold text-sm mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>DatasetSchema</div>
+          <p className="text-xs text-[var(--foreground-muted)] mb-2">Validate types and required fields on datasets:</p>
+          <ul className="space-y-1.5 text-xs text-[var(--foreground-muted)]">
+            <li><code>schema = crawlingo.DatasetSchema()</code></li>
+            <li><code>schema.add_field(name: str, field_type: FieldType, required: bool)</code></li>
+            <li><code>FieldType</code> options: <code>String</code>, <code>Integer</code>, <code>Float</code>, <code>Boolean</code></li>
+            <li>Attach to Dataset: <code>dataset.with_schema(schema)</code></li>
+            <li>Run async: <code>await dataset.build_async()</code></li>
+          </ul>
+        </div>
+      </div>
+
       {/* ── Crawl & Watch summary ── */}
       <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Crawl & Watch</h2>
       <p className="text-sm text-[var(--foreground-muted)] mb-4">
@@ -205,7 +236,7 @@ e.prev_sibling()    # Previous sibling`}
         <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
           <div className="font-bold text-sm mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Crawl</div>
           <ul className="space-y-1 text-xs text-[var(--foreground-muted)]">
-            {['.follow(css)', '.limit(n)', '.depth(n)', '.concurrency(n)', '.delay(secs)', '.respect_robots(bool)', '.allowed_domains(list)', '.exclude_patterns(list)', '.field(name, sel)', '.webhook(url)', '.build()'].map(m => (
+            {['.follow(css)', '.limit(n)', '.depth(n)', '.concurrency(n)', '.delay(secs)', '.field(name, sel, selector_type?, default?)', '.with_pagination(config)', '.webhook(url)', '.build() → CrawlResults', 'CrawlResults.to_json(path)', 'CrawlResults.to_csv(path)', 'CrawlResults.to_parquet(path)'].map(m => (
               <li key={m}><code>{m}</code></li>
             ))}
           </ul>
@@ -213,7 +244,7 @@ e.prev_sibling()    # Previous sibling`}
         <div className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
           <div className="font-bold text-sm mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Watch</div>
           <ul className="space-y-1 text-xs text-[var(--foreground-muted)]">
-            {['.field(name, sel)', '.interval(secs)', '.on_change(fn)', '.on_price_change(fn)', '.on_stock_change(fn)', '.on_element_added(fn)', '.on_element_removed(fn)', '.run(detach=False)', '.stop()'].map(m => (
+            {['.field(name, sel, selector_type?, transform?, default?)', '.interval(secs)', '.on_change(fn)', '.on_price_change(fn)', '.on_stock_change(fn)', '.on_element_added(fn)', '.on_element_removed(fn)', '.run()  # blocking', '.run_async()  # awaitable', '.stop()'].map(m => (
               <li key={m}><code>{m}</code></li>
             ))}
           </ul>

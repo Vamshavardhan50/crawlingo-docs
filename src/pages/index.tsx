@@ -4,7 +4,7 @@ import Head from 'next/head';
 import {
   ArrowRight, Shield, Globe, Cpu, Database,
   Activity, GitBranch, Zap, Check, Code,
-  Terminal, FileText, Star, Package, ExternalLink,
+  Terminal, FileText, Star, Package, ExternalLink, X,
 } from 'lucide-react';
 import { TabCodeBlock, FeatureCard } from '@/components/feature-card';
 
@@ -65,14 +65,13 @@ function HeroDecoration() {
 /* ── Inline logo for hero ── */
 function HeroLogo() {
   return (
-    <svg width="56" height="56" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Crawlingo">
-      <path d="M52 32C52 43.046 43.046 52 32 52C20.954 52 12 43.046 12 32C12 20.954 20.954 12 32 12C38.627 12 44.52 15.12 48.35 20"
-        stroke="#0B1220" strokeWidth="6" strokeLinecap="round" fill="none"/>
-      <path d="M42 32C42 37.523 37.523 42 32 42C26.477 42 22 37.523 22 32C22 26.477 26.477 22 32 22C35.314 22 38.261 23.587 40.175 26"
-        stroke="#0B1220" strokeWidth="5" strokeLinecap="round" fill="none"/>
-      <circle cx="32" cy="32" r="5" fill="#FF6B35"/>
-      <circle cx="32" cy="32" r="8.5" stroke="#0B1220" strokeWidth="2.5" fill="none"/>
-    </svg>
+    <img
+      src="/logo.png"
+      width="120"
+      height="120"
+      alt="Crawlingo Logo"
+      className="object-contain"
+    />
   );
 }
 
@@ -102,7 +101,7 @@ with Session() as s:
 
     result = (Dataset("https://shop.example.com", session=s)
               .field("title",  "h1")
-              .field("price",  ".price", extraction_type="price")
+              .field("price",  ".price", extract_type="price")
               .field("stock",  ".stock-badge")
               .build())
 
@@ -129,24 +128,22 @@ const session = new Session()
 // Extract structured data
 const result = await new Dataset("https://shop.example.com", session)
   .field("title",  "h1")
-  .field("price",  ".price", { extractType: "price" })
+  .field("price",  ".price")
   .field("rating", ".star-rating")
   .build();
 
 console.log(result.toDict());
-result.toJsonFile("data.json");
+await result.toJson("data.json");
 
 // Watch for price changes
-const watcher = new Watch("https://shop.example.com/p/1")
-  .field("price", ".price", { extractType: "price" })
+const watcher = new Watch("https://shop.example.com/p/1", session)
+  .field("price", ".price")
   .interval(300);
 
-watcher.onPriceChange(e => {
-  console.log(\`Price changed: \${e.oldValue} → \${e.newValue}\`);
-  console.log(\`Change: \${e.percentageChange.toFixed(1)}%\`);
-});
-
-watcher.run();`,
+watcher.run((err, e) => {
+  if (err) return;
+  console.log(\`\${e.field} changed: \${e.oldValue} → \${e.newValue}\`);
+});`,
   },
   {
     language: 'rust',
@@ -222,6 +219,28 @@ const FEATURES = [
     description: 'Compiled Rust engine with memory-mapped shared state across Python, Node.js, and Rust SDKs. 3,500+ req/s on commodity hardware.',
   },
 ];
+
+function formatCell(val: string) {
+  if (val.startsWith('✅')) {
+    const text = val.replace('✅', '').trim();
+    return (
+      <span className="inline-flex items-center gap-1 justify-center text-emerald-500 font-semibold">
+        <Check className="h-3.5 w-3.5 stroke-[3]" />
+        {text && <span className="ml-1 text-[var(--foreground)]">{text}</span>}
+      </span>
+    );
+  }
+  if (val.startsWith('❌')) {
+    const text = val.replace('❌', '').trim();
+    return (
+      <span className="inline-flex items-center gap-1 justify-center text-slate-500/30">
+        <X className="h-3.5 w-3.5 stroke-[3]" />
+        {text && <span className="ml-1 text-[var(--foreground-muted)]">{text}</span>}
+      </span>
+    );
+  }
+  return val;
+}
 
 /* ── Benchmarks ── */
 const BENCH_ROWS = [
@@ -399,7 +418,7 @@ export default function HomePage() {
 
             {/* Headline */}
             <h1
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[var(--brand-navy)] animate-slide-up"
+              className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[var(--foreground)] animate-slide-up"
               style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.03em', lineHeight: '1.08' }}
             >
               Web Scraping
@@ -614,7 +633,7 @@ export default function HomePage() {
                 {['Python SDK', 'Node.js SDK', 'Rust SDK'].map(sdk => (
                   <div
                     key={sdk}
-                    className="flex items-center justify-center w-32 h-12 rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-sm text-sm font-medium text-[var(--foreground-muted)]"
+                    className="flex items-center justify-center w-32 h-12 rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-sm text-sm font-medium text-[var(--foreground-muted)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--brand-orange)]/40 hover:text-[var(--foreground)] cursor-default"
                   >
                     {sdk}
                   </div>
@@ -624,19 +643,23 @@ export default function HomePage() {
               {/* Arrow */}
               <div className="flex items-center justify-center h-12 mx-4">
                 <div className="flex items-center gap-1 text-[var(--foreground-subtle)]">
-                  <div className="h-px w-12 bg-gradient-to-r from-[var(--border)] to-[var(--brand-orange)]" />
-                  <div className="text-xs font-mono border border-[var(--border)] bg-[var(--surface)] px-2 py-1 rounded-full whitespace-nowrap">FFI</div>
-                  <div className="h-px w-12 bg-gradient-to-r from-[var(--brand-orange)] to-[var(--border)]" />
+                  <div className="w-12 flowing-line-container">
+                    <div className="flowing-line-pulse-orange" />
+                  </div>
+                  <div className="text-xs font-mono border border-[var(--border)] bg-[var(--surface)] px-2 py-1 rounded-full whitespace-nowrap z-10">FFI</div>
+                  <div className="w-12 flowing-line-container">
+                    <div className="flowing-line-pulse-orange" />
+                  </div>
                 </div>
               </div>
 
               {/* Core */}
               <div
-                className="w-52 py-8 rounded-2xl border-2 flex flex-col items-center gap-2 shadow-lg relative"
-                style={{ borderColor: 'var(--brand-orange)', background: 'linear-gradient(145deg, #fff 0%, #FAFAFA 100%)' }}
+                className="w-52 py-8 rounded-2xl border-2 flex flex-col items-center gap-2 relative core-card-glowing transition-all duration-300 hover:scale-[1.02]"
+                style={{ borderColor: 'var(--brand-orange)', background: 'linear-gradient(145deg, var(--card) 0%, var(--surface) 100%)' }}
               >
                 <div
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-bold text-white"
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-bold text-white shadow-sm"
                   style={{ background: 'var(--brand-orange)' }}
                 >
                   Rust Core
@@ -644,7 +667,7 @@ export default function HomePage() {
                 {['Engine', 'Parser', 'Selectors', 'Dataset', 'Crawl', 'Watch', 'Metrics'].map(c => (
                   <div
                     key={c}
-                    className="text-xs px-3 py-1 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground-muted)] w-36 text-center"
+                    className="text-xs px-3 py-1 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground-muted)] w-36 text-center transition-colors hover:bg-[var(--card)] hover:text-[var(--foreground)]"
                   >
                     {c}
                   </div>
@@ -654,9 +677,13 @@ export default function HomePage() {
               {/* Arrow */}
               <div className="flex items-center justify-center h-12 mx-4">
                 <div className="flex items-center gap-1 text-[var(--foreground-subtle)]">
-                  <div className="h-px w-12 bg-gradient-to-r from-[var(--border)] to-[var(--brand-indigo)]" />
-                  <div className="text-xs font-mono border border-[var(--border)] bg-[var(--surface)] px-2 py-1 rounded-full whitespace-nowrap">HTTP/2</div>
-                  <div className="h-px w-12 bg-gradient-to-r from-[var(--brand-indigo)] to-[var(--border)]" />
+                  <div className="w-12 flowing-line-container">
+                    <div className="flowing-line-pulse-indigo" />
+                  </div>
+                  <div className="text-xs font-mono border border-[var(--border)] bg-[var(--surface)] px-2 py-1 rounded-full whitespace-nowrap z-10">HTTP/2</div>
+                  <div className="w-12 flowing-line-container">
+                    <div className="flowing-line-pulse-indigo" />
+                  </div>
                 </div>
               </div>
 
@@ -670,7 +697,7 @@ export default function HomePage() {
                 ].map(item => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-2 w-36 h-12 rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-sm px-3 text-sm font-medium text-[var(--foreground-muted)]"
+                    className="flex items-center gap-2 w-36 h-12 rounded-xl border border-[var(--border)] bg-[var(--card)] shadow-sm px-3 text-sm font-medium text-[var(--foreground-muted)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--brand-indigo)]/40 hover:text-[var(--foreground)] cursor-default"
                   >
                     <div className="h-2 w-2 rounded-full flex-shrink-0" style={{ background: item.color }} />
                     {item.label}
@@ -726,9 +753,9 @@ export default function HomePage() {
                 {BENCH_ROWS.map((row, i) => (
                   <tr key={i} className={i % 2 === 0 ? '' : 'bg-[var(--surface)]'}>
                     <td className="font-medium">{row.metric}</td>
-                    <td className="text-center font-semibold" style={{ color: 'var(--brand-orange)' }}>{row.crawlingo}</td>
-                    <td className="text-center text-[var(--foreground-muted)]">{row.scrapy}</td>
-                    <td className="text-center text-[var(--foreground-muted)]">{row.playwright}</td>
+                    <td className="text-center font-semibold" style={{ color: 'var(--brand-orange)' }}>{formatCell(row.crawlingo)}</td>
+                    <td className="text-center text-[var(--foreground-muted)]">{formatCell(row.scrapy)}</td>
+                    <td className="text-center text-[var(--foreground-muted)]">{formatCell(row.playwright)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -835,7 +862,7 @@ export default function HomePage() {
                   <span className="text-xs font-semibold" style={{ color: item.color }}>{item.lang}</span>
                   <span className="text-xs text-white/30">{item.note}</span>
                 </div>
-                <code className="text-sm text-white/80 font-mono">{item.cmd}</code>
+                <code className="text-sm text-white/90 font-mono bg-transparent! border-none! p-0! font-medium">{item.cmd}</code>
               </div>
             ))}
           </div>

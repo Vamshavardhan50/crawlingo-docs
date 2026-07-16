@@ -94,17 +94,16 @@ const page = await Page.create("https://example.com");
 
 console.log(page.title());   // "Example Domain"
 console.log(page.status);    // 200
-console.log(page.markdown()); // Clean markdown
 
 // CSS selectors
-const h1 = page.css("h1").first().text();
-const links = page.css("a").map(el => el.attr("href"));
+const h1 = page.css("h1").first()?.text;
+const links = [...page.css("a")].map(el => el.attr("href"));
 
 // XPath
-const paragraphs = page.xpath("//p").map(el => el.text());
+const paragraphs = [...page.xpath("//p")].map(el => el.text);
 
 // Text anchors
-const price = page.findText("Price:").first()?.text();`,
+const price = page.findText("Price:").first()?.text;`,
           },
           {
             language: 'rust',
@@ -164,10 +163,7 @@ with Session() as s:
     ])
 
     # Auth
-    s.auth_bearer("eyJhbGciOi...")
-
-    # Retry config
-    s.retry_base_delay(500).retry_max_delay(30000)
+    s.bearer_auth("eyJhbGciOi...")
 
     # Reuse session across multiple fetches
     page1 = s.page("https://example.com")
@@ -195,23 +191,17 @@ with Session() as s:
     ds = (
         Dataset("https://shop.example.com/products", session=s)
         .field("title",    "h1")
-        .field("price",    ".price",      extraction_type="price")
-        .field("rating",   ".star-score", extraction_type="text")
-        .field("url",      "",            extraction_type="url")
-        .field("email",    r"[\\w.+]+@[\\w.]+", selector_type="regex",
-               extraction_type="datalink_email")
+        .field("price",    ".price")
+        .field("rating",   ".star-score")
+        .field("url",      "")
+        .field("email",    r"[\\w.+]+@[\\w.]+", selector_type="regex")
         .build()
     )
 
     print(ds.to_dict())        # {"title": "...", "price": "49.99"}
     ds.to_json("data.json")    # JSON file
     ds.to_csv("data.csv")      # CSV file
-    ds.to_parquet("data.parquet")  # Parquet for Spark/BigQuery
-
-# Stream a large URL list at constant memory
-urls = ["https://shop.example.com/p/" + str(i) for i in range(10_000)]
-for chunk in Dataset(urls).field("title", "h1").stream():
-    print(chunk.data)`}
+    ds.to_parquet("data.parquet")  # Parquet for Spark/BigQuery`}
         showLineNumbers
       />
 
@@ -231,17 +221,15 @@ results = (
     .depth(5)                      # max link depth
     .concurrency(10)               # concurrent fetches
     .delay(0.5)                    # polite delay
-    .respect_robots(True)          # honor robots.txt
-    .allowed_domains(["docs.example.com"])
     .field("title",   "h1")
     .field("content", "article")
-    .field("url",     "", extraction_type="url")
+    .field("url",     "")
     .webhook("https://api.example.com/webhooks/crawl")
     .build()
 )
 
-results.to_json_file("crawl.json")
-results.to_parquet_file("crawl.parquet")`}
+results.to_json("crawl.json")
+results.to_parquet("crawl.parquet")`}
         showLineNumbers
       />
 
@@ -253,23 +241,22 @@ results.to_parquet_file("crawl.parquet")`}
         language="python"
         fileName="watch.py"
         code={`from crawlingo import Watch
+import threading
 
-def on_price(event):
-    print(f"Price changed: {event.old_value} → {event.new_value}")
-    print(f"Change: {event.percentage_change:.1f}%")
-    print(f"URL: {event.url}  Field: {event.field}")
+def on_change(event):
+    print(f"Field '{event.field}' changed from {event.old_value} to {event.new_value}")
 
 w = (
     Watch("https://shop.example.com/product/1")
-    .field("price", ".price", extraction_type="price")
+    .field("price", ".price")
     .field("stock", ".stock-badge")
     .interval(300)                    # poll every 5 minutes
-    .on_price_change(on_price)
-    .on_stock_change(lambda e: print(f"Stock: {e.old_value} → {e.new_value}"))
-    .on_change(lambda e: print(f"Field '{e.field}' changed"))
+    .on_change(on_change)
 )
 
-w.run(detach=True)   # non-blocking background thread
+# Run in background thread
+t = threading.Thread(target=w.run)
+t.start()
 # w.stop()           # signal stop`}
         showLineNumbers
       />

@@ -125,7 +125,8 @@ print(crawlingo.__version__) # "0.1.0"`}
           <CodeBlock
             language="javascript"
             code={`const { Session } = require('crawlingo');
-console.log(Session.version); // "0.1.0"`}
+const s = new Session();
+console.log('Crawlingo loaded successfully:', s !== null);`}
             showLineNumbers={false}
           />
         </div>

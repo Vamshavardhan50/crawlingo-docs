@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { PageMeta, DocNav } from '@/components/feature-card';
+import { Check, X } from 'lucide-react';
 
 const BENCH_DATA = {
   throughput: [
@@ -37,6 +38,28 @@ const BENCH_DATA = {
     { metric: 'Open source',               crawlingo: '✅ MIT',               scrapy: '✅ BSD',          playwright: '✅ Apache 2.0' },
   ],
 };
+
+function formatCell(val: string) {
+  if (val.startsWith('✅')) {
+    const text = val.replace('✅', '').trim();
+    return (
+      <span className="inline-flex items-center gap-1 justify-center text-emerald-500 font-semibold">
+        <Check className="h-3.5 w-3.5 stroke-[3]" />
+        {text && <span className="ml-1 text-[var(--foreground)]">{text}</span>}
+      </span>
+    );
+  }
+  if (val.startsWith('❌')) {
+    const text = val.replace('❌', '').trim();
+    return (
+      <span className="inline-flex items-center gap-1 justify-center text-slate-500/30">
+        <X className="h-3.5 w-3.5 stroke-[3]" />
+        {text && <span className="ml-1 text-[var(--foreground-muted)]">{text}</span>}
+      </span>
+    );
+  }
+  return val;
+}
 
 function BarChart({ value, max, color }: { value: number; max: number; color: string }) {
   const pct = Math.min((value / max) * 100, 100);
@@ -217,9 +240,9 @@ export default function BenchmarksPage() {
             {BENCH_DATA.comparison.map((r, i) => (
               <tr key={i} className={i % 2 === 0 ? '' : 'bg-[var(--surface)]'}>
                 <td className="font-medium">{r.metric}</td>
-                <td className="font-semibold" style={{ color: 'var(--brand-orange)' }}>{r.crawlingo}</td>
-                <td className="text-[var(--foreground-muted)]">{r.scrapy}</td>
-                <td className="text-[var(--foreground-muted)]">{r.playwright}</td>
+                <td className="font-semibold" style={{ color: 'var(--brand-orange)' }}>{formatCell(r.crawlingo)}</td>
+                <td className="text-[var(--foreground-muted)]">{formatCell(r.scrapy)}</td>
+                <td className="text-[var(--foreground-muted)]">{formatCell(r.playwright)}</td>
               </tr>
             ))}
           </tbody>

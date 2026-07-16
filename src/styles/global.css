@@ -29,7 +29,12 @@
   /* Interface Palette mapping from root variables */
   --color-background:  var(--background);
   --color-foreground:  var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-foreground-inverse: var(--foreground-inverse);
   --color-border:      var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-border-subtle: var(--border-subtle);
   --color-input:       var(--input);
   --color-ring:        var(--ring);
   --color-card:        var(--card);
@@ -600,12 +605,13 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
+  padding: 6px 10px 6px 8px;
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
   color: var(--foreground-muted);
   transition: all var(--duration-fast) ease;
   text-decoration: none;
+  border-left: 2px solid transparent;
 }
 .sidebar-link:hover {
   color: var(--foreground);
@@ -616,8 +622,7 @@
   color: var(--brand-orange);
   background: rgba(255, 107, 53, 0.06);
   font-weight: 500;
-  border-left: 2px solid var(--brand-orange);
-  padding-left: 8px;
+  border-left-color: var(--brand-orange);
 }
 
 /* ── Badge ─── */
@@ -784,3 +789,74 @@
 .animate-blob-medium {
   animation: blob-float-2 10s ease-in-out infinite alternate;
 }
+
+/* ── Custom Scrollbar ─── */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-orange);
+}
+
+/* Firefox */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+/* ── Flowing Line & Architecture Diagram Animations ── */
+@keyframes flow-pulse {
+  0% {
+    left: -40px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes core-pulse {
+  0%, 100% {
+    box-shadow: 0 4px 20px rgba(255, 107, 53, 0.05), 0 0 0 1px rgba(255, 107, 53, 0.1);
+  }
+  50% {
+    box-shadow: 0 4px 30px rgba(255, 107, 53, 0.2), 0 0 8px rgba(255, 107, 53, 0.35);
+  }
+}
+
+.flowing-line-container {
+  position: relative;
+  overflow: hidden;
+  height: 1px;
+  background-color: var(--border);
+}
+
+.flowing-line-pulse-orange {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 30px;
+  background: linear-gradient(90deg, transparent, var(--brand-orange), transparent);
+  animation: flow-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.flowing-line-pulse-indigo {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 30px;
+  background: linear-gradient(90deg, transparent, var(--brand-indigo), transparent);
+  animation: flow-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.core-card-glowing {
+  animation: core-pulse 3s ease-in-out infinite;
+}
+

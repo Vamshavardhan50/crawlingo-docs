@@ -44,9 +44,9 @@ export default function Document() {
         <meta name="twitter:image:alt" content="Crawlingo — Rust-Powered Self-Healing Web Scraping" />
 
         {/* ── Favicon / Icons ── */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <link rel="manifest" href="/site.webmanifest" />
 
         {/* ── Google Fonts ── */}
@@ -113,7 +113,7 @@ export default function Document() {
               '@type': 'Organization',
               name: 'Crawlingo',
               url: SITE_URL,
-              logo: `${SITE_URL}/logo.svg`,
+              logo: `${SITE_URL}/logo.png`,
               sameAs: [
                 'https://github.com/Vamshavardhan50/crawlingo',
                 'https://pypi.org/project/crawlingo/',

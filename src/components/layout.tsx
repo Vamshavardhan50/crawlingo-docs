@@ -7,36 +7,21 @@ import {
   Moon, Sun, Menu, X, Search, ChevronRight, ChevronDown,
   GitBranch, BookOpen, Terminal, Zap, Shield, Globe,
   Database, Activity, Cpu, FileText, Code, Package,
-  ExternalLink, Star, ArrowRight, Command,
+  ExternalLink, Star, ArrowRight, Command, Heart,
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════
    CRAWLINGO LOGO (inline SVG — matches brand image)
    ═══════════════════════════════════════════════════════════ */
-function CrawlingoLogo({ size = 32 }: { size?: number }) {
+function CrawlingoLogo({ size = 120 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Crawlingo">
-      {/* Outer C arc */}
-      <path
-        d="M52 32C52 43.046 43.046 52 32 52C20.954 52 12 43.046 12 32C12 20.954 20.954 12 32 12C38.627 12 44.52 15.12 48.35 20"
-        stroke="#0B1220"
-        strokeWidth="6"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* Inner arc */}
-      <path
-        d="M42 32C42 37.523 37.523 42 32 42C26.477 42 22 37.523 22 32C22 26.477 26.477 22 32 22C35.314 22 38.261 23.587 40.175 26"
-        stroke="#0B1220"
-        strokeWidth="5"
-        strokeLinecap="round"
-        fill="none"
-      />
-      {/* Orange center dot */}
-      <circle cx="32" cy="32" r="5" fill="#FF6B35" />
-      {/* Small inner ring */}
-      <circle cx="32" cy="32" r="8.5" stroke="#0B1220" strokeWidth="2.5" fill="none" />
-    </svg>
+    <img
+      src="/logo.png"
+      width={size}
+      height={size}
+      alt="Crawlingo Logo"
+      className="object-contain"
+    />
   );
 }
 
@@ -47,56 +32,91 @@ const NAV_SECTIONS = [
   {
     title: 'Getting Started',
     items: [
-      { label: 'Quick Start',      path: '/quick-start',           icon: Zap,      desc: 'Up and running in 2 minutes' },
-      { label: 'Installation',     path: '/installation',          icon: Package,  desc: 'pip, npm, cargo' },
+      { label: 'Quick Start', path: '/quick-start', icon: Zap, desc: 'Up and running in 2 minutes' },
+      { label: 'Installation', path: '/installation', icon: Package, desc: 'pip, npm, cargo' },
+      { label: 'Configuration', path: '/configuration', icon: BookOpen, desc: 'TOML & env vars' },
     ],
   },
   {
-    title: 'Core Concepts',
+    title: 'Core Features',
     items: [
-      { label: 'Session',          path: '/quick-start#session',      icon: Shield,   desc: 'Config & connection pool' },
-      { label: 'Page & Selectors', path: '/quick-start#basic-usage',  icon: Code,     desc: 'CSS, XPath, Regex, Anchors' },
-      { label: 'Dataset Builder',  path: '/quick-start#dataset-builder', icon: Database, desc: 'Fluent extraction API' },
-      { label: 'Crawler',          path: '/quick-start#crawler',      icon: Globe,    desc: 'BFS multi-page crawling' },
-      { label: 'Watch Monitors',   path: '/quick-start#watch-monitors', icon: Activity, desc: 'Change detection & webhooks' },
+      { label: 'Key Features', path: '/features', icon: Globe, desc: 'Self-healing, stealth & SIMD' },
     ],
   },
   {
-    title: 'Features',
+    title: 'SDK References',
     items: [
-      { label: 'Self-Healing',     path: '/features#self-healing',   icon: Shield,   desc: 'DOM fingerprint repair' },
-      { label: 'Stealth Browsing', path: '/features#stealth',        icon: Globe,    desc: 'TLS fingerprint rotation' },
-      { label: 'SIMD Text Anchors',path: '/features#text-anchors',   icon: Cpu,      desc: 'Parallel CPU text search' },
-      { label: 'Change Monitors',  path: '/features#change-monitoring', icon: Activity, desc: 'Reactive DOM polling' },
-      { label: 'Dataset Export',   path: '/features#datasets',       icon: FileText, desc: 'JSON, CSV, Parquet' },
+      { label: 'Python SDK', path: '/sdk/python', icon: Terminal, desc: 'PyO3 bindings' },
+      { label: 'Node.js SDK', path: '/sdk/nodejs', icon: Terminal, desc: 'napi-rs bindings' },
+      { label: 'Rust SDK', path: '/sdk/rust', icon: Terminal, desc: 'Native crate' },
     ],
   },
   {
-    title: 'SDKs',
+    title: 'Reference & Tools',
     items: [
-      { label: 'Python SDK',       path: '/sdk/python',            icon: Terminal, desc: 'PyO3 bindings' },
-      { label: 'Node.js SDK',      path: '/sdk/nodejs',            icon: Terminal, desc: 'napi-rs bindings' },
-      { label: 'Rust SDK',         path: '/sdk/rust',              icon: Terminal, desc: 'Native crate' },
-    ],
-  },
-  {
-    title: 'Reference',
-    items: [
-      { label: 'Architecture',     path: '/architecture',          icon: GitBranch, desc: 'How Crawlingo works' },
-      { label: 'Benchmarks',       path: '/benchmarks',            icon: Zap,       desc: 'Performance data' },
-      { label: 'API Tools',        path: '/tools/fetch-page',      icon: Code,      desc: 'MCP server tools' },
-      { label: 'Configuration',    path: '/configuration',         icon: BookOpen,  desc: 'TOML & env vars' },
+      { label: 'Architecture', path: '/architecture', icon: GitBranch, desc: 'How Crawlingo works' },
+      { label: 'Benchmarks', path: '/benchmarks', icon: Zap, desc: 'Performance data' },
+      { label: 'API Tools & MCP', path: '/tools/fetch-page', icon: Code, desc: 'MCP server tools' },
     ],
   },
   {
     title: 'Resources',
     items: [
-      { label: 'Changelog',        path: '/changelog',             icon: BookOpen,  desc: 'What\'s new' },
-      { label: 'Roadmap',          path: '/roadmap',               icon: GitBranch, desc: 'What\'s coming' },
-      { label: 'GitHub',           path: 'https://github.com/Vamshavardhan50/crawlingo', icon: ExternalLink, desc: 'Source & issues', external: true },
+      { label: 'Sponsor', path: '/sponsor', icon: Heart, desc: 'Support the project' },
+      { label: 'Changelog', path: '/changelog', icon: BookOpen, desc: 'What\'s new' },
+      { label: 'Roadmap', path: '/roadmap', icon: GitBranch, desc: 'What\'s coming' },
+      { label: 'GitHub', path: 'https://github.com/Vamshavardhan50/crawlingo', icon: ExternalLink, desc: 'Source & issues', external: true },
     ],
   },
 ];
+
+const PAGE_TOC: Record<string, { label: string; hash: string }[]> = {
+  '/quick-start': [
+    { label: 'Basic Usage', hash: '#basic-usage' },
+    { label: 'Session Config', hash: '#session' },
+    { label: 'Dataset Builder', hash: '#dataset-builder' },
+    { label: 'Multi-Page Crawler', hash: '#crawler' },
+    { label: 'Watch Monitors', hash: '#watch-monitors' },
+  ],
+  '/features': [
+    { label: 'Self-Healing', hash: '#self-healing' },
+    { label: 'Stealth Emulation', hash: '#stealth' },
+    { label: 'SIMD Text Search', hash: '#text-anchors' },
+    { label: 'Reactive Watchers', hash: '#change-monitoring' },
+    { label: 'Dataset Export', hash: '#datasets' },
+  ],
+  '/sdk/python': [
+    { label: 'Session', hash: '#session' },
+    { label: 'Page', hash: '#page' },
+    { label: 'ElementList', hash: '#elementlist--elementref' },
+    { label: 'Dataset', hash: '#dataset' },
+    { label: 'Schema Config', hash: '#schema--pagination-config' },
+  ],
+  '/sdk/nodejs': [
+    { label: 'Quick Example', hash: '#examplets' },
+    { label: 'API Reference', hash: '#api-reference' },
+    { label: 'TypeScript Types', hash: '#typescript-types' },
+  ],
+  '/architecture': [
+    { label: 'Overview', hash: '#overview' },
+    { label: 'Fetch Pipeline', hash: '#fetch-pipeline' },
+    { label: 'Parallelism Model', hash: '#parallelism-model' },
+    { label: 'Core Dependencies', hash: '#core-dependencies' },
+  ],
+  '/configuration': [
+    { label: 'Precedence', hash: '#configuration-precedence' },
+    { label: 'Specs Spec', hash: '#configuration-specs' },
+    { label: 'CLI Interface', hash: '#cli-interface' },
+  ],
+  '/tools/fetch-page': [
+    { label: 'Overview', hash: '#overview' },
+    { label: 'Server Setup', hash: '#starting-the-server' },
+    { label: 'Exposed Tools', hash: '#exposed-tools-reference' },
+  ],
+  '/sponsor': [
+    { label: 'Sponsor Tiers', hash: '#sponsor-tiers' },
+  ],
+};
 
 /* ═══════════════════════════════════════════════════════════
    SIDEBAR SECTION
@@ -148,6 +168,20 @@ function SidebarSection({
                   <span className="flex-1">{item.label}</span>
                   {isExternal && <ExternalLink className="h-3 w-3 opacity-40" />}
                 </Link>
+                {active && PAGE_TOC[item.path] && (
+                  <ul className="ml-5 mt-1 mb-2 pl-3.5 border-l border-[var(--border)]/70 space-y-1">
+                    {PAGE_TOC[item.path].map(sub => (
+                      <li key={sub.hash}>
+                        <Link
+                          href={item.path + sub.hash}
+                          className="block py-1 text-xs text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors hover:pl-0.5 duration-100"
+                        >
+                          {sub.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             );
           })}
@@ -206,10 +240,10 @@ function TopNav({
           className="flex items-center gap-2.5 flex-shrink-0 hover:opacity-90 transition-opacity"
           aria-label="Crawlingo home"
         >
-          <CrawlingoLogo size={30} />
+          <CrawlingoLogo size={72} />
           <span
             className="text-lg font-bold tracking-tight"
-            style={{ fontFamily: 'Space Grotesk, sans-serif', color: 'var(--brand-navy)' }}
+            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
           >
             Crawlingo
           </span>
@@ -218,11 +252,11 @@ function TopNav({
         {/* Desktop nav links */}
         <nav className="hidden lg:flex items-center gap-6 ml-8">
           {[
-            { href: '/quick-start',  label: 'Docs' },
-            { href: '/features',     label: 'Features' },
-            { href: '/benchmarks',   label: 'Benchmarks' },
-            { href: '/sdk/python',   label: 'SDKs' },
-            { href: '/changelog',    label: 'Changelog' },
+            { href: '/quick-start', label: 'Docs' },
+            { href: '/features', label: 'Features' },
+            { href: '/benchmarks', label: 'Benchmarks' },
+            { href: '/sdk/python', label: 'SDKs' },
+            { href: '/changelog', label: 'Changelog' },
           ].map(link => (
             <Link
               key={link.href}
@@ -270,7 +304,7 @@ function TopNav({
             aria-label="View on GitHub"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
             </svg>
           </Link>
 
@@ -339,7 +373,7 @@ function Sidebar({
         {/* Mobile header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--border)] lg:hidden">
           <div className="flex items-center gap-2">
-            <CrawlingoLogo size={24} />
+            <CrawlingoLogo size={56} />
             <span className="font-bold text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Crawlingo</span>
           </div>
           <button
@@ -385,7 +419,7 @@ function Sidebar({
             className="flex items-center gap-2 text-xs text-[var(--foreground-subtle)] hover:text-[var(--foreground-muted)] transition-colors"
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+              <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
             </svg>
             Vamshavardhan50/crawlingo
             <ExternalLink className="h-2.5 w-2.5 ml-auto" />
@@ -408,7 +442,7 @@ function Footer() {
           {/* Brand */}
           <div className="col-span-2">
             <Link href="/" className="flex items-center gap-2.5 mb-4 hover:opacity-80 transition-opacity">
-              <CrawlingoLogo size={28} />
+              <CrawlingoLogo size={60} />
               <span className="font-bold text-base" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>Crawlingo</span>
             </Link>
             <p className="text-sm text-[var(--foreground-muted)] leading-relaxed max-w-xs">
@@ -419,7 +453,7 @@ function Footer() {
               <Link href="https://github.com/Vamshavardhan50/crawlingo" target="_blank" rel="noopener noreferrer"
                 className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:border-[var(--border-strong)] transition-colors"
                 aria-label="GitHub">
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" /></svg>
               </Link>
               {/* PyPI */}
               <Link href="https://pypi.org/project/crawlingo/" target="_blank" rel="noopener noreferrer"
@@ -509,33 +543,43 @@ function Footer() {
    ═══════════════════════════════════════════════════════════ */
 const SEARCH_INDEX = [
   // Getting started
-  { title: 'Quick Start', url: '/quick-start', category: 'Getting Started', desc: 'Get up and running with Crawlingo in under 2 minutes.' },
-  { title: 'Installation Guide', url: '/installation', category: 'Getting Started', desc: 'Install Python, Node.js, and Rust SDKs.' },
-  
+  { title: 'Quick Start', url: '/quick-start', category: 'Getting Started', desc: 'Get up and running with Crawlingo in under 2 minutes.', keywords: 'install setup pip npm cargo hello world example' },
+  { title: 'Installation Guide', url: '/installation', category: 'Getting Started', desc: 'Install Python, Node.js, and Rust SDKs.', keywords: 'pip npm cargo install wheels binary rust python nodejs' },
+
   // Core concepts
-  { title: 'Session Configuration', url: '/quick-start#session', category: 'Core Concepts', desc: 'Connection pooling, rate limiting, and proxies.' },
-  { title: 'Page & Selectors', url: '/quick-start#basic-usage', category: 'Core Concepts', desc: 'CSS, XPath, Regex, and SIMD text anchor selectors.' },
-  { title: 'Dataset Builder', url: '/quick-start#dataset-builder', category: 'Core Concepts', desc: 'Fluent builder API for structured multi-field data.' },
-  { title: 'Multi-Page Crawling', url: '/quick-start#crawler', category: 'Core Concepts', desc: 'BFS crawling up to max depth and concurrency limit.' },
-  { title: 'Change Monitoring', url: '/quick-start#watch-monitors', category: 'Core Concepts', desc: 'Active DOM polling and webhook notifications.' },
+  { title: 'Session Configuration', url: '/quick-start#session', category: 'Core Concepts', desc: 'Connection pooling, rate limiting, and proxies.', keywords: 'session proxy rate limit auth bearer basic header api key cookies timeout pool stealth' },
+  { title: 'Page & Selectors', url: '/quick-start#basic-usage', category: 'Core Concepts', desc: 'CSS, XPath, Regex, and SIMD text anchor selectors.', keywords: 'css xpath regex selector find text anchor html status title markdown' },
+  { title: 'Dataset Builder', url: '/quick-start#dataset-builder', category: 'Core Concepts', desc: 'Fluent builder API for structured multi-field data.', keywords: 'dataset field build json csv parquet export extract structured schema' },
+  { title: 'Multi-Page Crawling', url: '/quick-start#crawler', category: 'Core Concepts', desc: 'BFS crawling up to max depth and concurrency limit.', keywords: 'crawl spider bfs depth limit follow links concurrency pagination webhook' },
+  { title: 'Change Monitoring', url: '/quick-start#watch-monitors', category: 'Core Concepts', desc: 'Active DOM polling and webhook notifications.', keywords: 'watch monitor price stock change event webhook alert interval poll' },
 
   // Features
-  { title: 'Self-Healing Selectors', url: '/features#self-healing', category: 'Features', desc: 'DOM layout fingerprinting and Jaro-Winkler recovery.' },
-  { title: 'Stealth Browser Emulation', url: '/features#stealth', category: 'Features', desc: 'JA3 signature and HTTP/2 profile rotation.' },
-  { title: 'SIMD Text Search', url: '/features#text-anchors', category: 'Features', desc: 'memchr-based visible text anchor matching.' },
-  { title: 'Reactive DOM Watchers', url: '/features#change-monitoring', category: 'Features', desc: 'DOM polling with Stock/Price change listeners.' },
-  { title: 'Parquet/CSV/JSON Export', url: '/features#datasets', category: 'Features', desc: 'Exporting datasets directly to structured files.' },
+  { title: 'Self-Healing Selectors', url: '/features#self-healing', category: 'Features', desc: 'DOM layout fingerprinting and Jaro-Winkler recovery.', keywords: 'auto match fingerprint healing broken selector similarity repair' },
+  { title: 'Stealth Browser Emulation', url: '/features#stealth', category: 'Features', desc: 'JA3 signature and HTTP/2 profile rotation.', keywords: 'stealth cloudflare tls ja3 browser chrome firefox safari profile bypass bot detection' },
+  { title: 'SIMD Text Search', url: '/features#text-anchors', category: 'Features', desc: 'memchr-based visible text anchor matching.', keywords: 'simd text anchor memchr find after before price label fast' },
+  { title: 'Reactive DOM Watchers', url: '/features#change-monitoring', category: 'Features', desc: 'DOM polling with Stock/Price change listeners.', keywords: 'watch monitor react change stock price dom poll interval event callback' },
+  { title: 'Parquet/CSV/JSON Export', url: '/features#datasets', category: 'Features', desc: 'Exporting datasets directly to structured files.', keywords: 'parquet csv json export dataset file pandas spark bigquery' },
 
   // SDKs
-  { title: 'Python SDK Reference', url: '/sdk/python', category: 'SDK References', desc: 'Complete methods and attributes for the Python bindings.' },
-  { title: 'Node.js SDK Reference', url: '/sdk/nodejs', category: 'SDK References', desc: 'Complete TypeScript methods and models.' },
-  { title: 'Rust SDK Reference', url: '/sdk/rust', category: 'SDK References', desc: 'Crate structs and Tokio async reference.' },
+  { title: 'Python SDK Reference', url: '/sdk/python', category: 'SDK References', desc: 'Complete methods and attributes for the Python bindings.', keywords: 'python pyo3 session page dataset crawl watch element collection result to_json to_csv to_parquet' },
+  { title: 'Node.js SDK Reference', url: '/sdk/nodejs', category: 'SDK References', desc: 'Complete TypeScript methods and models.', keywords: 'nodejs typescript napi session page dataset crawl watch element collection result toJson toCsv toParquet' },
+  { title: 'Rust SDK Reference', url: '/sdk/rust', category: 'SDK References', desc: 'Crate structs and Tokio async reference.', keywords: 'rust crate tokio async struct trait crawlingo core engine' },
 
   // Reference
-  { title: 'System Architecture', url: '/architecture', category: 'Reference', desc: 'Rust core engine FFI, threads, and safety.' },
-  { title: 'Performance Benchmarks', url: '/benchmarks', category: 'Reference', desc: 'Latency, memory, and throughput comparison tables.' },
-  { title: 'Changelog', url: '/changelog', category: 'Project', desc: 'Latest releases and feature releases.' },
-  { title: 'Product Roadmap', url: '/roadmap', category: 'Project', desc: 'Future features, actors, and vector DB integrations.' },
+  { title: 'System Architecture', url: '/architecture', category: 'Reference', desc: 'Rust core engine FFI, threads, and safety.', keywords: 'architecture engine ffi thread safety memory async tokio rayon dom' },
+  { title: 'Performance Benchmarks', url: '/benchmarks', category: 'Reference', desc: 'Latency, memory, and throughput comparison tables.', keywords: 'benchmark latency memory throughput speed comparison performance' },
+  { title: 'Changelog', url: '/changelog', category: 'Project', desc: 'Latest releases and feature releases.', keywords: 'changelog release version history v1 beta' },
+  { title: 'Product Roadmap', url: '/roadmap', category: 'Project', desc: 'Future features, actors, and vector DB integrations.', keywords: 'roadmap future planned features vector db actor llm' },
+
+  // Auth
+  { title: 'Authentication', url: '/quick-start#session', category: 'Core Concepts', desc: 'Basic, Bearer, Header, OAuth2, and API key auth on Session.', keywords: 'auth authentication bearer basic oauth2 api key header login token' },
+
+  // Export
+  { title: 'Export to Parquet', url: '/features#datasets', category: 'Features', desc: 'Write scraped datasets to Apache Parquet format.', keywords: 'parquet export apache arrow pandas spark bigquery warehouse' },
+  { title: 'Export to JSON / CSV', url: '/features#datasets', category: 'Features', desc: 'Write scraped datasets to JSON or CSV files.', keywords: 'json csv export to_json to_csv save file' },
+
+  // Proxy
+  { title: 'Proxy & Rotation', url: '/quick-start#session', category: 'Core Concepts', desc: 'Single proxy, proxy pool rotation, and remote proxy provider.', keywords: 'proxy pool rotation provider ip rotate vpn residential datacenter' },
 ];
 
 function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -552,14 +596,18 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
     }
   }, [open]);
 
-  // Filter items
-  const filtered = query.trim() === '' 
-    ? SEARCH_INDEX.slice(0, 5) 
-    : SEARCH_INDEX.filter(item => 
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.desc.toLowerCase().includes(query.toLowerCase()) ||
-        item.category.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 8);
+  // Filter items — also match against keywords
+  const filtered = query.trim() === ''
+    ? SEARCH_INDEX.slice(0, 6)
+    : SEARCH_INDEX.filter(item => {
+      const q = query.toLowerCase();
+      return (
+        item.title.toLowerCase().includes(q) ||
+        item.desc.toLowerCase().includes(q) ||
+        item.category.toLowerCase().includes(q) ||
+        ((item as any).keywords ?? '').toLowerCase().includes(q)
+      );
+    }).slice(0, 10);
 
   useEffect(() => {
     setActiveIndex(0);
@@ -594,13 +642,16 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-slate-950/60 backdrop-blur-sm flex items-start justify-center p-4 sm:p-6 md:p-20">
+    <div
+      className="fixed inset-0 z-[100] backdrop-blur-sm flex items-start justify-center p-4 sm:p-6 md:p-20"
+      style={{ background: 'rgba(0,0,0,0.55)' }}
+    >
       {/* Click outside to close */}
       <div className="absolute inset-0" onClick={onClose} />
 
       <div className="relative w-full max-w-lg bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] sm:max-h-[70vh] animate-fade-in">
         {/* Input area */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--border)] bg-white/[0.01]">
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[var(--border)]/80">
           <Search className="h-4 w-4 text-[var(--foreground-subtle)] flex-shrink-0" />
           <input
             ref={inputRef}
@@ -608,10 +659,11 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search documentation..."
-            className="flex-1 bg-transparent text-[var(--foreground)] placeholder-[var(--foreground-subtle)] text-sm border-none outline-none focus:outline-none focus:ring-0"
+            className="flex-1 bg-transparent text-[var(--foreground)] placeholder:text-[var(--foreground-subtle)] text-sm border-none outline-none focus:outline-none focus:ring-0 caret-[var(--brand-orange)]"
+            style={{ color: 'var(--foreground)' }}
           />
-          <button 
-            onClick={onClose} 
+          <button
+            onClick={onClose}
             className="text-xs text-[var(--foreground-subtle)] hover:text-[var(--foreground)] px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--surface-raised)] cursor-pointer"
           >
             esc
@@ -637,7 +689,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                       }}
                       className={cn(
                         "w-full text-left px-3 py-2.5 rounded-lg border border-transparent transition-all flex flex-col gap-0.5 cursor-pointer",
-                        active 
+                        active
                           ? "bg-[var(--brand-orange)]/[0.08] border-[var(--brand-orange)]/25 text-[var(--foreground)] shadow-sm"
                           : "hover:bg-[var(--surface-raised)] text-[var(--foreground-muted)]"
                       )}
@@ -703,18 +755,44 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Page transition: animate main content on route change
+  const [pageKey, setPageKey] = useState(pathname);
+  useEffect(() => {
+    setPageKey(pathname);
+  }, [pathname]);
+
   return (
     <div className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
       {/* Top nav always present */}
-      <TopNav 
-        onMenuClick={() => setSidebarOpen(true)} 
-        onSearchClick={() => setSearchOpen(true)} 
-        pathname={pathname} 
+      <TopNav
+        onMenuClick={() => setSidebarOpen(true)}
+        onSearchClick={() => setSearchOpen(true)}
+        pathname={pathname}
       />
 
       {isDoc ? (
         /* ── Documentation layout: sidebar + content ── */
-        <div className="flex pt-16">
+        <div className="flex pt-16 relative">
+          {/* Subtle Ambient Doc Background Blobs */}
+          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
+            <div
+              className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] rounded-full animate-blob-slow opacity-[0.04] dark:opacity-[0.08]"
+              style={{
+                background: 'radial-gradient(circle, rgba(255, 107, 53, 0.5) 0%, transparent 70%)',
+                filter: 'blur(100px)',
+                WebkitFilter: 'blur(100px)',
+              }}
+            />
+            <div
+              className="absolute top-[40%] -left-[10%] w-[40%] h-[40%] rounded-full animate-blob-medium opacity-[0.02] dark:opacity-[0.05]"
+              style={{
+                background: 'radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%)',
+                filter: 'blur(80px)',
+                WebkitFilter: 'blur(80px)',
+              }}
+            />
+          </div>
+
           <Sidebar
             open={sidebarOpen}
             onClose={() => setSidebarOpen(false)}
@@ -722,8 +800,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           />
 
           {/* Main content area */}
-          <main className="flex-1 min-w-0">
-            <div className="mx-auto max-w-3xl px-6 py-10 lg:px-12 lg:py-12">
+          <main className="flex-1 min-w-0 relative z-10">
+            <div
+              key={pageKey}
+              className="mx-auto max-w-3xl px-6 py-10 lg:px-12 lg:py-12 animate-fade-in"
+            >
               {children}
             </div>
           </main>

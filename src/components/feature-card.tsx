@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Check, Copy, Terminal, ChevronDown } from 'lucide-react';
+import { Check, Copy, Terminal, ChevronDown, BookOpen, Clock } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════
    COPY BUTTON
@@ -387,27 +387,17 @@ export function PageMeta({
           {description}
         </p>
       )}
-      {(readingTime || lastUpdated || githubPath) && (
+      {(readingTime || lastUpdated) && (
         <div className="flex flex-wrap items-center gap-4 text-xs text-[var(--foreground-subtle)]">
           {readingTime && (
             <span className="flex items-center gap-1.5">
-              📖 {readingTime} read
+              <BookOpen className="h-3.5 w-3.5" /> {readingTime} read
             </span>
           )}
           {lastUpdated && (
             <span className="flex items-center gap-1.5">
-              🕐 Updated {lastUpdated}
+              <Clock className="h-3.5 w-3.5" /> Updated {lastUpdated}
             </span>
-          )}
-          {githubPath && (
-            <a
-              href={`https://github.com/Vamshavardhan50/crawlingo/edit/main/docs/${githubPath}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 hover:text-[var(--brand-orange)] transition-colors"
-            >
-              ✏️ Edit on GitHub
-            </a>
           )}
         </div>
       )}

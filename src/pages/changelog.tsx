@@ -4,10 +4,34 @@ import { PageMeta, DocNav } from '@/components/feature-card';
 
 const CHANGELOG = [
   {
-    version: 'v0.1.0',
-    date: 'July 12, 2026',
+    version: 'v1.0.0-beta.1',
+    date: 'July 15, 2026',
     tag: 'Latest',
     tagColor: 'var(--color-success)',
+    summary: 'High-performance optimizations, FFI binding completion, and sitemap decompression.',
+    added: [
+      'FFI Pagination Config: Python and JS client classes supporting NextLink, PageNumber, and UrlPattern selectors',
+      'FFI Dataset Schema validation: dynamic field constraints check (required status and type assertions)',
+      'Sitemap Gzip support: auto-decompresses gzipped sitemaps (.xml.gz) via flate2',
+      'Monotonic B-Tree PersistentFrontier layout optimization ($O(1)$ writes, $O(\log n)$ LIFO reads)',
+      'Non-blocking FingerprintStore writes (asynchronous flushes on session teardown)',
+      'Batched Parquet serialization stream (default chunk size of 1000 records)',
+      'Pre-compiled regex pattern queries in pagination to avoid hot-spot compilations',
+    ],
+    fixed: [
+      'Resolved Python wrapper build_async coroutine compatibility running FFI tasks on event loop executor',
+    ],
+    changed: [],
+    breaking: [
+      'Removed individual rate_limit_rps field from FetchRequest (rate limiting moved to Session/FetchManager level)',
+      'Converted ExtractionRule to a type alias for DatasetField to remove layer duplication',
+    ],
+  },
+  {
+    version: 'v0.1.0',
+    date: 'July 12, 2026',
+    tag: 'Stable',
+    tagColor: 'var(--brand-teal)',
     summary: 'Initial public release of Crawlingo.',
     added: [
       'Core Rust engine with HTTP/2 standard and stealthy fetcher tiers',

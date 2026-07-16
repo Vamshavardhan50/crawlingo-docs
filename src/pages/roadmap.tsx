@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { PageMeta, DocNav } from '@/components/feature-card';
+import { CheckCircle2, Hammer, Calendar } from 'lucide-react';
 
 const ROADMAP = {
   done: [
@@ -74,7 +75,9 @@ export default function RoadmapPage() {
           <div className="flex items-center gap-2 mb-4">
             <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-success)]" />
             <h2 className="text-base font-bold text-[var(--foreground)]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Shipped ✅
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-4 w-4 text-[var(--color-success)]" /> Shipped
+              </span>
             </h2>
             <span className="ml-auto text-xs badge badge-green">{ROADMAP.done.length}</span>
           </div>
@@ -99,7 +102,9 @@ export default function RoadmapPage() {
           <div className="flex items-center gap-2 mb-4">
             <span className="h-2.5 w-2.5 rounded-full bg-[var(--brand-orange)] animate-pulse-dot" />
             <h2 className="text-base font-bold text-[var(--foreground)]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              In Progress 🔨
+              <span className="flex items-center gap-1.5">
+                <Hammer className="h-4 w-4 text-[var(--brand-orange)]" /> In Progress
+              </span>
             </h2>
             <span className="ml-auto text-xs badge badge-orange">{ROADMAP.inProgress.length}</span>
           </div>
@@ -128,7 +133,9 @@ export default function RoadmapPage() {
           <div className="flex items-center gap-2 mb-4">
             <span className="h-2.5 w-2.5 rounded-full bg-[var(--brand-indigo)]" />
             <h2 className="text-base font-bold text-[var(--foreground)]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Planned 📋
+              <span className="flex items-center gap-1.5">
+                <Calendar className="h-4 w-4 text-[var(--brand-indigo)]" /> Planned
+              </span>
             </h2>
             <span className="ml-auto text-xs badge badge-indigo">{ROADMAP.planned.length}</span>
           </div>

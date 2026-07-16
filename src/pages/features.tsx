@@ -109,7 +109,7 @@ with Session() as s:
             { icon: <GitBranch className="h-4 w-4" />, title: 'Multi-Profile Support', desc: 'Switch between Chrome, Firefox, and Safari browser identity profiles per request.' },
             { icon: <Clock className="h-4 w-4" />, title: 'Timing Randomization', desc: 'Request gaps and header ordering randomized to avoid detection patterns.' },
           ].map(c => (
-            <div key={c.title} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
+            <div key={c.title} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] card-hover">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--brand-indigo)]/10 text-[var(--brand-indigo)] mb-3">
                 {c.icon}
               </div>
@@ -243,30 +243,25 @@ for row in rows:
           language="python"
           fileName="watch.py"
           code={`from crawlingo import Watch
+import threading
 import requests
 
 def alert(event):
-    msg = f"[{event.field}] {event.old_value} → {event.new_value} ({event.percentage_change:.1f}%)"
-    requests.post("https://hooks.slack.com/T.../...", json={"text": msg})
+    msg = f"[{event.field}] {event.old_value} → {event.new_value}"
+    requests.post("https://hooks.slack.com/services/...", json={"text": msg})
 
 w = (
     Watch("https://shop.example.com/product/42")
-    .field("price", ".price",      extraction_type="price")
+    .field("price", ".price")
     .field("stock", ".stock-badge")
     .interval(300)                   # every 5 minutes
     .on_price_change(alert)
     .on_stock_change(lambda e: print(f"Stock: {e.old_value} → {e.new_value}"))
-    .on_element_added(lambda e: print(f"New element appeared: {e.new_value}"))
-    .on_element_removed(lambda e: print(f"Element removed: {e.old_value}"))
 )
 
 # Run in background thread
-w.run(detach=True)
-
-# Or block the main thread
-# w.run()
-
-# Stop monitoring
+t = threading.Thread(target=w.run)
+t.start()
 # w.stop()`}
           showLineNumbers
         />
@@ -285,16 +280,16 @@ w.run(detach=True)
           Structured Dataset Export
         </h2>
         <p className="text-[var(--foreground-muted)] mb-6 leading-relaxed">
-          The <code>Dataset</code> builder extracts multiple typed fields in one pass and exports them directly to JSON, CSV, or Parquet. Streaming mode processes millions of URLs at constant memory by using bounded async channels for backpressure.
+          The <code>Dataset</code> builder extracts multiple fields in one pass and exports them directly to JSON, CSV, or Parquet.
         </p>
 
         <div className="grid gap-3 sm:grid-cols-3 mb-8">
           {[
-            { format: 'JSON',    method: '.to_json() / .to_json_file()', use: 'Web APIs, general analysis' },
-            { format: 'CSV',     method: '.to_csv() / .to_csv_file()',   use: 'Spreadsheets, data import' },
+            { format: 'JSON',    method: '.to_json("file.json")',       use: 'Web APIs, general analysis' },
+            { format: 'CSV',     method: '.to_csv("file.csv")',         use: 'Spreadsheets, data import' },
             { format: 'Parquet', method: '.to_parquet("file.parquet")',   use: 'Data warehouses, Spark, BigQuery' },
           ].map(f => (
-            <div key={f.format} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)]">
+            <div key={f.format} className="p-4 rounded-xl border border-[var(--border)] bg-[var(--card)] card-hover">
               <div className="text-sm font-bold text-[var(--brand-teal)] mb-1">{f.format}</div>
               <code className="text-xs text-[var(--foreground-muted)] block mb-2">{f.method}</code>
               <div className="text-xs text-[var(--foreground-subtle)]">{f.use}</div>
@@ -311,11 +306,10 @@ w.run(detach=True)
 ds = (
     Dataset("https://example.com/products")
     .field("title",    "h1")
-    .field("price",    ".price",        extraction_type="price")
-    .field("date",     "time.posted",   extraction_type="datetime")
-    .field("url",      "",              extraction_type="url")
-    .field("email",    r"[\\w.]+@[\\w]+\\.[\\w]+",
-           selector_type="regex", extraction_type="datalink_email")
+    .field("price",    ".price")
+    .field("date",     "time.posted")
+    .field("url",      "")
+    .field("email",    r"[\\w.]+@[\\w]+\\.[\\w]+", selector_type="regex")
     .build()
 )
 
