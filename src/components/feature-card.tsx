@@ -85,7 +85,7 @@ function AskAiDropdown({ code, language = 'python' }: { code: string; language?:
 
       {/* Dropdown Menu */}
       {open && (
-        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl z-50 p-1.5 animate-fade-in text-xs">
+        <div className="absolute right-0 top-full mt-2.5 w-56 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl z-[100] p-1.5 animate-fade-in text-xs">
           <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 mb-1 flex items-center gap-1">
             <Sparkles className="h-3 w-3 text-orange-400" />
             AI & Copy Options
@@ -231,9 +231,9 @@ export function CodeBlock({
   const langColor = langColors[language] || 'bg-white/5 text-[var(--code-comment)]';
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full">
+    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-10">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02]">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02] rounded-t-xl">
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Traffic light dots */}
           <div className="flex items-center gap-1.5">
@@ -261,7 +261,7 @@ export function CodeBlock({
       </div>
 
       {/* Code body */}
-      <div className="overflow-x-auto p-3 sm:p-4 max-w-full">
+      <div className="overflow-x-auto p-3 sm:p-4 max-w-full rounded-b-xl">
         <pre className="text-sm leading-relaxed m-0 bg-transparent border-none rounded-none p-0 overflow-x-auto">
           {showLineNumbers ? tokenizePython(code) : (
             <code className="block font-mono whitespace-pre text-sm overflow-x-auto">
@@ -290,8 +290,8 @@ export function TerminalBlock({
   title?: string;
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg">
-      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02]">
+    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-10">
+      <div className="flex items-center gap-3 px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02] rounded-t-xl">
         <div className="flex items-center gap-1.5">
           <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
           <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
@@ -305,7 +305,7 @@ export function TerminalBlock({
           <CopyBtn text={commands.join('\n')} />
         </div>
       </div>
-      <div className="p-4 space-y-2 font-mono text-sm">
+      <div className="p-4 space-y-2 font-mono text-sm rounded-b-xl overflow-x-auto">
         {commands.map((cmd, i) => (
           <div key={i} className="flex items-start gap-2">
             <span className="text-[#34D399] select-none mt-0.5">$</span>
@@ -338,39 +338,39 @@ export function TabCodeBlock({
   const activeTab = tabs.find(t => t.language === active) || tabs[0];
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg">
+    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-10">
       {/* Tab bar */}
-      <div className="flex items-center gap-0 border-b border-[var(--code-border)] overflow-x-auto scrollbar-none">
-        <div className="flex items-center gap-1.5 px-4 py-2.5 border-r border-[var(--code-border)] flex-shrink-0">
-          <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
-          <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
-          <div className="h-3 w-3 rounded-full bg-[#28CA41]" />
+      <div className="flex items-center justify-between border-b border-[var(--code-border)] rounded-t-xl bg-white/[0.02]">
+        <div className="flex items-center gap-0 overflow-x-auto scrollbar-none">
+          <div className="flex items-center gap-1.5 px-4 py-2.5 border-r border-[var(--code-border)] flex-shrink-0">
+            <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
+            <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+            <div className="h-3 w-3 rounded-full bg-[#28CA41]" />
+          </div>
+          {tabs.map(tab => (
+            <button
+              key={tab.language}
+              onClick={() => setActive(tab.language)}
+              className={cn(
+                'px-4 py-2.5 text-xs font-medium transition-all duration-150 flex-shrink-0 border-r border-[var(--code-border)]',
+                active === tab.language
+                  ? 'bg-white/5 text-white'
+                  : 'text-[var(--code-comment)] hover:text-white hover:bg-white/[0.03]'
+              )}
+            >
+              {tab.label || LANG_LABELS[tab.language] || tab.language}
+            </button>
+          ))}
         </div>
-        {tabs.map(tab => (
-          <button
-            key={tab.language}
-            onClick={() => setActive(tab.language)}
-            className={cn(
-              'px-4 py-2.5 text-xs font-medium transition-all duration-150 flex-shrink-0 border-r border-[var(--code-border)]',
-              active === tab.language
-                ? 'bg-white/5 text-white'
-                : 'text-[var(--code-comment)] hover:text-white hover:bg-white/[0.03]'
-            )}
-          >
-            {tab.label || LANG_LABELS[tab.language] || tab.language}
-          </button>
-        ))}
-        <div className="ml-auto pr-3 flex-shrink-0">
+        <div className="px-3 py-2 flex-shrink-0">
           <CopyBtn text={activeTab.code} />
         </div>
       </div>
 
       {/* Code */}
-      <div className="overflow-x-auto">
-        <pre className="p-4 text-sm leading-relaxed m-0 bg-transparent border-none rounded-none">
-          <code className="block table w-full font-mono">
-            {tokenizePython(activeTab.code)}
-          </code>
+      <div className="overflow-x-auto p-3 sm:p-4 max-w-full rounded-b-xl">
+        <pre className="text-sm leading-relaxed m-0 bg-transparent border-none rounded-none p-0 overflow-x-auto">
+          {tokenizePython(activeTab.code)}
         </pre>
       </div>
     </div>
@@ -482,6 +482,168 @@ export function StatusBadge({
 }
 
 /* ═══════════════════════════════════════════════════════════
+   PAGE AI & MARKDOWN DROPDOWN
+   ═══════════════════════════════════════════════════════════ */
+export function PageAiDropdown({
+  title,
+  description,
+  githubPath,
+}: {
+  title: string;
+  description?: string;
+  githubPath?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const getPageMarkdown = () => {
+    // Collect page text & headers
+    let md = `# Crawlingo Documentation: ${title}\n\n`;
+    if (description) md += `> ${description}\n\n`;
+
+    const mainEl = document.querySelector('main');
+    if (mainEl) {
+      // Clean extracted text from page
+      const headings = Array.from(mainEl.querySelectorAll('h2, h3, p, pre'));
+      headings.forEach(el => {
+        if (el.tagName === 'H2') md += `\n## ${el.textContent?.trim()}\n\n`;
+        else if (el.tagName === 'H3') md += `\n### ${el.textContent?.trim()}\n\n`;
+        else if (el.tagName === 'P') md += `${el.textContent?.trim()}\n\n`;
+        else if (el.tagName === 'PRE') md += `\`\`\`\n${el.textContent?.trim()}\n\`\`\`\n\n`;
+      });
+    }
+
+    md += `\n---\n*Source: Crawlingo Web Scraping Framework — https://crawlingo-docs.vercel.app*`;
+    return md;
+  };
+
+  const copyPageMarkdown = async () => {
+    const md = getPageMarkdown();
+    await navigator.clipboard.writeText(md);
+    setCopied(true);
+    setOpen(false);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const copyPagePromptForAi = async () => {
+    const prompt = `I am using the Crawlingo web scraping framework. Here is the full documentation page for "${title}":\n\n${getPageMarkdown()}\n\nHow do I best implement this feature in my scraping pipeline?`;
+    await navigator.clipboard.writeText(prompt);
+    setCopied(true);
+    setOpen(false);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const askChatGPTPage = () => {
+    const query = `Explain and help me implement the Crawlingo "${title}" feature in Python/TypeScript:\n\n${description ?? ''}`;
+    window.open(`https://chatgpt.com/?q=${encodeURIComponent(query)}`, '_blank');
+    setOpen(false);
+  };
+
+  const askClaudePage = () => {
+    const query = `How do I use the Crawlingo framework for "${title}"? Overview: ${description ?? ''}`;
+    window.open(`https://claude.ai/new?q=${encodeURIComponent(query)}`, '_blank');
+    setOpen(false);
+  };
+
+  const askPerplexityPage = () => {
+    const query = `Crawlingo web scraping framework ${title} documentation`;
+    window.open(`https://www.perplexity.ai/search?q=${encodeURIComponent(query)}`, '_blank');
+    setOpen(false);
+  };
+
+  return (
+    <div className="relative inline-block text-left" ref={dropdownRef}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--brand-orange)] text-white hover:bg-[var(--brand-orange-dark)] shadow-sm transition-all duration-150 cursor-pointer"
+        aria-label="Ask AI about this page"
+      >
+        <Sparkles className="h-3.5 w-3.5" />
+        <span>{copied ? 'Copied Page!' : 'Ask AI / Copy Page'}</span>
+        <ChevronDown className={cn('h-3 w-3 transition-transform', open && 'rotate-180')} />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-64 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl z-[100] p-1.5 animate-fade-in text-xs">
+          <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 mb-1 flex items-center gap-1">
+            <Sparkles className="h-3 w-3 text-orange-400" />
+            Page AI & Export Options
+          </div>
+
+          <button
+            onClick={copyPageMarkdown}
+            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-slate-200 hover:bg-slate-800/80 hover:text-white transition-colors text-left"
+          >
+            <FileText className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+            <div>
+              <div className="font-medium">Copy Page as Markdown</div>
+              <div className="text-[10px] text-slate-400">Copy full page text & code to clipboard</div>
+            </div>
+          </button>
+
+          <button
+            onClick={copyPagePromptForAi}
+            className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-slate-200 hover:bg-slate-800/80 hover:text-white transition-colors text-left"
+          >
+            <Copy className="h-4 w-4 text-indigo-400 flex-shrink-0" />
+            <div>
+              <div className="font-medium">Copy Prompt for AI</div>
+              <div className="text-[10px] text-slate-400">Formatted for Cursor & Claude Code</div>
+            </div>
+          </button>
+
+          <div className="my-1 border-t border-slate-800/80" />
+
+          <button
+            onClick={askChatGPTPage}
+            className="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-emerald-300 hover:bg-emerald-500/10 transition-colors text-left"
+          >
+            <span className="flex items-center gap-2 font-medium">
+              <Bot className="h-4 w-4 text-emerald-400" />
+              Ask ChatGPT about Page
+            </span>
+            <ExternalLink className="h-3 w-3 opacity-60" />
+          </button>
+
+          <button
+            onClick={askClaudePage}
+            className="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-orange-300 hover:bg-orange-500/10 transition-colors text-left"
+          >
+            <span className="flex items-center gap-2 font-medium">
+              <Sparkles className="h-4 w-4 text-orange-400" />
+              Ask Claude about Page
+            </span>
+            <ExternalLink className="h-3 w-3 opacity-60" />
+          </button>
+
+          <button
+            onClick={askPerplexityPage}
+            className="w-full flex items-center justify-between px-2.5 py-2 rounded-lg text-cyan-300 hover:bg-cyan-500/10 transition-colors text-left"
+          >
+            <span className="flex items-center gap-2 font-medium">
+              <Bot className="h-4 w-4 text-cyan-400" />
+              Ask Perplexity
+            </span>
+            <ExternalLink className="h-3 w-3 opacity-60" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    PAGE META (reading time, edit on GitHub)
    ═══════════════════════════════════════════════════════════ */
 export function PageMeta({
@@ -498,15 +660,22 @@ export function PageMeta({
   githubPath?: string;
 }) {
   return (
-    <div className="mb-10">
-      <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--foreground)] mb-3" style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.02em' }}>
-        {title}
-      </h1>
+    <div className="mb-10 relative">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--foreground)]" style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.02em' }}>
+          {title}
+        </h1>
+        <div className="flex-shrink-0 pt-1">
+          <PageAiDropdown title={title} description={description} githubPath={githubPath} />
+        </div>
+      </div>
+
       {description && (
         <p className="text-lg text-[var(--foreground-muted)] leading-relaxed mb-4">
           {description}
         </p>
       )}
+
       {(readingTime || lastUpdated) && (
         <div className="flex flex-wrap items-center gap-4 text-xs text-[var(--foreground-subtle)]">
           {readingTime && (
