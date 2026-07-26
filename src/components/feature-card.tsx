@@ -37,16 +37,16 @@ function CopyBtn({ text }: { text: string }) {
 function tokenizePython(code: string): React.ReactNode {
   const lines = code.split('\n');
   return (
-    <>
+    <div className="flex flex-col font-mono text-sm">
       {lines.map((line, i) => (
-        <div key={i} className="table-row">
-          <span className="table-cell pr-6 select-none text-right text-[#3D4F6B] text-xs w-8">{i + 1}</span>
-          <span className="table-cell">
+        <div key={i} className="flex items-start group hover:bg-white/[0.02] px-1 rounded">
+          <span className="pr-4 select-none text-right text-[#3D4F6B] text-xs min-w-[2.25rem] shrink-0 font-mono pt-0.5">{i + 1}</span>
+          <span className="whitespace-pre font-mono text-sm min-w-0 flex-1 overflow-x-auto scrollbar-none">
             <PythonLine line={line} />
           </span>
         </div>
       ))}
-    </>
+    </div>
   );
 }
 
@@ -111,24 +111,24 @@ export function CodeBlock({
   const langColor = langColors[language] || 'bg-white/5 text-[var(--code-comment)]';
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg">
+    <div className="overflow-hidden rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02]">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02]">
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Traffic light dots */}
           <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
-            <div className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
-            <div className="h-3 w-3 rounded-full bg-[#28CA41]" />
+            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#FF5F57]" />
+            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#FFBD2E]" />
+            <div className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-[#28CA41]" />
           </div>
           <div className="flex items-center gap-2">
             {fileName && (
-              <span className="text-xs font-mono text-[var(--code-comment)] bg-white/5 px-2 py-0.5 rounded">
+              <span className="text-xs font-mono text-[var(--code-comment)] bg-white/5 px-2 py-0.5 rounded truncate max-w-[140px] sm:max-w-xs">
                 {fileName}
               </span>
             )}
             {title && !fileName && (
-              <span className="text-xs text-[var(--code-comment)]">{title}</span>
+              <span className="text-xs text-[var(--code-comment)] truncate max-w-[140px] sm:max-w-xs">{title}</span>
             )}
           </div>
         </div>
@@ -141,18 +141,18 @@ export function CodeBlock({
       </div>
 
       {/* Code body */}
-      <div className="overflow-x-auto">
-        <pre className="p-4 text-sm leading-relaxed m-0 bg-transparent border-none rounded-none">
-          <code className="block table w-full font-mono">
-            {showLineNumbers ? tokenizePython(code) : (
+      <div className="overflow-x-auto p-3 sm:p-4 max-w-full">
+        <pre className="text-sm leading-relaxed m-0 bg-transparent border-none rounded-none p-0 overflow-x-auto">
+          {showLineNumbers ? tokenizePython(code) : (
+            <code className="block font-mono whitespace-pre text-sm overflow-x-auto">
               <span dangerouslySetInnerHTML={{
                 __html: code
                   .replace(/&/g, '&amp;')
                   .replace(/</g, '&lt;')
                   .replace(/>/g, '&gt;')
               }} />
-            )}
-          </code>
+            </code>
+          )}
         </pre>
       </div>
     </div>

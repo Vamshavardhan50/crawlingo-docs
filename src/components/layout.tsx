@@ -38,9 +38,24 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    title: 'Core Features',
+    title: 'Core API Reference',
+    items: [
+      { label: 'Page API', path: '/page', icon: FileText, desc: 'DOM querying & extraction' },
+      { label: 'Session API', path: '/session', icon: Shield, desc: 'Shared config & proxies' },
+      { label: 'Dataset API', path: '/dataset', icon: Database, desc: 'Schema-driven datasets' },
+      { label: 'Crawl API', path: '/crawl', icon: Globe, desc: 'Multi-page recursive crawler' },
+      { label: 'Watch API', path: '/watch', icon: Activity, desc: 'Periodic change monitoring' },
+      { label: 'Authentication', path: '/authentication', icon: Shield, desc: 'Basic, Bearer, Dynamic auth' },
+    ],
+  },
+  {
+    title: 'Feature Guides',
     items: [
       { label: 'Key Features', path: '/features', icon: Globe, desc: 'Self-healing, stealth & SIMD' },
+      { label: 'Selectors Guide', path: '/selectors', icon: Code, desc: 'CSS, XPath, Regex & Text' },
+      { label: 'Auto-Match', path: '/auto-match', icon: Cpu, desc: 'Self-healing selectors' },
+      { label: 'Change Detection', path: '/change-detection', icon: Activity, desc: 'Diffing & webhooks' },
+      { label: 'Advanced Features', path: '/advanced', icon: Zap, desc: 'Hooks, streams & metrics' },
     ],
   },
   {
@@ -52,10 +67,12 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    title: 'Reference & Tools',
+    title: 'Guides & Tools',
     items: [
+      { label: 'Cookbook', path: '/cookbook', icon: BookOpen, desc: 'Production-ready recipes' },
       { label: 'Architecture', path: '/architecture', icon: GitBranch, desc: 'How Crawlingo works' },
       { label: 'Benchmarks', path: '/benchmarks', icon: Zap, desc: 'Performance data' },
+      { label: 'FAQ & Troubleshooting', path: '/faq', icon: BookOpen, desc: 'Common issues & fixes' },
       { label: 'API Tools & MCP', path: '/tools/fetch-page', icon: Code, desc: 'MCP server tools' },
     ],
   },
@@ -78,12 +95,86 @@ const PAGE_TOC: Record<string, { label: string; hash: string }[]> = {
     { label: 'Multi-Page Crawler', hash: '#crawler' },
     { label: 'Watch Monitors', hash: '#watch-monitors' },
   ],
+  '/page': [
+    { label: 'Constructor', hash: '#constructor' },
+    { label: 'Properties', hash: '#properties' },
+    { label: 'CSS Selectors', hash: '#css-selectors' },
+    { label: 'XPath Selectors', hash: '#xpath-selectors' },
+    { label: 'Regex Selectors', hash: '#regex-selectors' },
+    { label: 'Text Anchors', hash: '#text-anchors' },
+    { label: 'Extraction Types', hash: '#extraction-types' },
+  ],
+  '/session': [
+    { label: 'Python Usage', hash: '#python' },
+    { label: 'Node.js Usage', hash: '#nodejs' },
+    { label: 'Session Methods', hash: '#session-methods' },
+    { label: 'Precedence', hash: '#configuration-precedence' },
+    { label: 'Thread Safety', hash: '#thread-safety' },
+  ],
+  '/dataset': [
+    { label: 'Python Usage', hash: '#python' },
+    { label: 'Node.js Usage', hash: '#nodejs' },
+    { label: 'Field API', hash: '#field-api' },
+    { label: 'Extraction Types', hash: '#extraction-types' },
+    { label: 'Schema Validation', hash: '#schema-validation' },
+    { label: 'Streaming', hash: '#streaming-dataset' },
+    { label: 'Export Formats', hash: '#export-formats' },
+  ],
+  '/crawl': [
+    { label: 'Python Usage', hash: '#python' },
+    { label: 'Node.js Usage', hash: '#nodejs' },
+    { label: 'Parameters', hash: '#parameters' },
+    { label: 'Field Extraction', hash: '#field-extraction' },
+    { label: 'Politeness', hash: '#rate-limiting-and-politeness' },
+  ],
+  '/watch': [
+    { label: 'Python Usage', hash: '#python' },
+    { label: 'Node.js Usage', hash: '#nodejs' },
+    { label: 'Parameters', hash: '#parameters' },
+    { label: 'Event Properties', hash: '#change-event-properties' },
+    { label: 'Change Types', hash: '#change-types' },
+  ],
+  '/authentication': [
+    { label: 'Basic Auth', hash: '#basic-auth' },
+    { label: 'Bearer Token', hash: '#bearer-token' },
+    { label: 'Custom Header', hash: '#custom-header-auth' },
+    { label: 'API Key', hash: '#api-key-auth-query-parameter' },
+    { label: 'Dynamic Auth', hash: '#dynamic-auth-oauth2--token-refresh' },
+  ],
   '/features': [
     { label: 'Self-Healing', hash: '#self-healing' },
     { label: 'Stealth Emulation', hash: '#stealth' },
     { label: 'SIMD Text Search', hash: '#text-anchors' },
     { label: 'Reactive Watchers', hash: '#change-monitoring' },
     { label: 'Dataset Export', hash: '#datasets' },
+  ],
+  '/selectors': [
+    { label: 'CSS Selectors', hash: '#css-selectors' },
+    { label: 'XPath Selectors', hash: '#xpath-selectors' },
+    { label: 'Regex Selectors', hash: '#regex-selectors' },
+    { label: 'Text Anchors', hash: '#text-anchor-selectors' },
+    { label: 'Performance', hash: '#performance-characteristics' },
+  ],
+  '/auto-match': [
+    { label: 'How It Works', hash: '#how-it-works' },
+    { label: 'Usage', hash: '#usage' },
+    { label: 'Fingerprint Components', hash: '#fingerprint-components' },
+    { label: 'Custom Weights', hash: '#custom-weights' },
+    { label: 'Best Practices', hash: '#best-practices' },
+  ],
+  '/change-detection': [
+    { label: 'Change Types', hash: '#change-types' },
+    { label: 'Event Object', hash: '#event-object' },
+    { label: 'Detection Function', hash: '#change-detection-function' },
+    { label: 'Webhooks', hash: '#integration-with-webhooks' },
+  ],
+  '/advanced': [
+    { label: 'Hooks & Middleware', hash: '#hooks-and-middleware' },
+    { label: 'Mock Transport', hash: '#custom-transport-mock-for-testing' },
+    { label: 'Streaming Dataset', hash: '#streaming-dataset' },
+    { label: 'Proxy Rotation', hash: '#proxy-rotation' },
+    { label: 'Metrics', hash: '#metrics' },
+    { label: 'MCP Server', hash: '#mcp-server' },
   ],
   '/sdk/python': [
     { label: 'Session', hash: '#session' },
@@ -97,6 +188,12 @@ const PAGE_TOC: Record<string, { label: string; hash: string }[]> = {
     { label: 'API Reference', hash: '#api-reference' },
     { label: 'TypeScript Types', hash: '#typescript-types' },
   ],
+  '/cookbook': [
+    { label: 'E-Commerce Scraping', hash: '#1-e-commerce-product-scraping' },
+    { label: 'Pagination Schemes', hash: '#2-pagination-all-3-schemes' },
+    { label: 'Authenticated Fetch', hash: '#3-authenticated-fetching' },
+    { label: 'Webhooks & Change', hash: '#4-change-detection--webhooks' },
+  ],
   '/architecture': [
     { label: 'Overview', hash: '#overview' },
     { label: 'Fetch Pipeline', hash: '#fetch-pipeline' },
@@ -107,6 +204,13 @@ const PAGE_TOC: Record<string, { label: string; hash: string }[]> = {
     { label: 'Precedence', hash: '#configuration-precedence' },
     { label: 'Specs Spec', hash: '#configuration-specs' },
     { label: 'CLI Interface', hash: '#cli-interface' },
+  ],
+  '/faq': [
+    { label: 'General', hash: '#general' },
+    { label: 'Installation', hash: '#installation' },
+    { label: 'Usage', hash: '#usage' },
+    { label: 'Performance', hash: '#performance' },
+    { label: 'Errors', hash: '#errors' },
   ],
   '/tools/fetch-page': [
     { label: 'Overview', hash: '#overview' },
@@ -772,7 +876,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
       {isDoc ? (
         /* ── Documentation layout: sidebar + content ── */
-        <div className="flex pt-16 relative">
+        <div className="flex pt-16 relative w-full overflow-x-hidden">
           {/* Subtle Ambient Doc Background Blobs */}
           <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0">
             <div
@@ -800,10 +904,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           />
 
           {/* Main content area */}
-          <main className="flex-1 min-w-0 relative z-10">
+          <main className="flex-1 min-w-0 relative z-10 w-full overflow-x-hidden">
             <div
               key={pageKey}
-              className="mx-auto max-w-3xl px-6 py-10 lg:px-12 lg:py-12 animate-fade-in"
+              className="mx-auto max-w-3xl px-4 sm:px-6 py-6 sm:py-10 lg:px-12 lg:py-12 animate-fade-in w-full overflow-x-hidden"
             >
               {children}
             </div>
