@@ -54,7 +54,7 @@ function AskAiDropdown({ code, language = 'python' }: { code: string; language?:
   };
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div className={cn("relative inline-block text-left", open && "z-[500]")} ref={dropdownRef}>
       <div className="flex items-center gap-1">
         {/* Quick Copy Button */}
         <button
@@ -74,6 +74,7 @@ function AskAiDropdown({ code, language = 'python' }: { code: string; language?:
         {/* Ask AI Trigger */}
         <button
           onClick={() => setOpen(!open)}
+          aria-expanded={open}
           className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-[var(--brand-orange)]/15 text-[var(--brand-orange)] hover:bg-[var(--brand-orange)]/25 transition-all duration-150 border border-[var(--brand-orange)]/30 cursor-pointer"
           aria-label="Ask AI options"
         >
@@ -85,7 +86,7 @@ function AskAiDropdown({ code, language = 'python' }: { code: string; language?:
 
       {/* Dropdown Menu */}
       {open && (
-        <div className="absolute right-0 top-full mt-2.5 w-56 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl z-[100] p-1.5 animate-fade-in text-xs">
+        <div className="absolute right-0 top-full mt-2.5 w-60 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl z-[500] p-1.5 animate-fade-in text-xs">
           <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 mb-1 flex items-center gap-1">
             <Sparkles className="h-3 w-3 text-orange-400" />
             AI & Copy Options
@@ -231,7 +232,7 @@ export function CodeBlock({
   const langColor = langColors[language] || 'bg-white/5 text-[var(--code-comment)]';
 
   return (
-    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-10">
+    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-0 [&:has([aria-expanded='true'])]:z-[400]">
       {/* Header */}
       <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02] rounded-t-xl">
         <div className="flex items-center gap-2 sm:gap-3">
@@ -290,7 +291,7 @@ export function TerminalBlock({
   title?: string;
 }) {
   return (
-    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-10">
+    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-0 [&:has([aria-expanded='true'])]:z-[400]">
       <div className="flex items-center gap-3 px-4 py-2.5 border-b border-[var(--code-border)] bg-white/[0.02] rounded-t-xl">
         <div className="flex items-center gap-1.5">
           <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
@@ -338,7 +339,7 @@ export function TabCodeBlock({
   const activeTab = tabs.find(t => t.language === active) || tabs[0];
 
   return (
-    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-10">
+    <div className="relative rounded-xl border border-[var(--code-border)] bg-[var(--code-bg)] shadow-lg my-6 max-w-full z-0 [&:has([aria-expanded='true'])]:z-[400]">
       {/* Tab bar */}
       <div className="flex items-center justify-between border-b border-[var(--code-border)] rounded-t-xl bg-white/[0.02]">
         <div className="flex items-center gap-0 overflow-x-auto scrollbar-none">
