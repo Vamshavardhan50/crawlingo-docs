@@ -465,12 +465,11 @@ function Sidebar({
         />
       )}
 
-      {/* Drawer */}
+      {/* Drawer / Fixed Sidebar */}
       <aside
         className={cn(
-          'fixed top-0 left-0 bottom-0 z-50 w-[272px] transform transition-transform duration-300 ease-out-expo',
-          'flex flex-col bg-[var(--card)] border-r border-[var(--border)]',
-          'lg:sticky lg:top-16 lg:translate-x-0 lg:h-[calc(100vh-64px)] lg:z-auto',
+          'fixed top-0 left-0 bottom-0 z-50 w-[272px] transform transition-transform duration-300 ease-out-expo flex flex-col bg-[var(--card)] border-r border-[var(--border)]',
+          'lg:fixed lg:top-16 lg:left-0 lg:bottom-0 lg:w-[272px] lg:h-[calc(100vh-64px)] lg:translate-x-0 lg:z-30',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >
@@ -904,10 +903,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           />
 
           {/* Main content area */}
-          <main className="flex-1 min-w-0 relative z-10 w-full overflow-x-hidden">
+          <main className="flex-1 min-w-0 relative z-10 w-full overflow-x-hidden lg:pl-[272px]">
             <div
               key={pageKey}
-              className="mx-auto max-w-3xl px-4 sm:px-6 py-6 sm:py-10 lg:px-12 lg:py-12 animate-fade-in w-full overflow-x-hidden"
+              className="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-10 lg:px-12 lg:py-12 animate-fade-in w-full overflow-x-hidden"
             >
               {children}
             </div>

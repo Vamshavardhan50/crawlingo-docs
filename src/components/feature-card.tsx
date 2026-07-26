@@ -1,34 +1,154 @@
-'use client';
-
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Check, Copy, Terminal, ChevronDown, BookOpen, Clock } from 'lucide-react';
+import { Check, Copy, Terminal, ChevronDown, BookOpen, Clock, Sparkles, ExternalLink, Bot, FileText } from 'lucide-react';
 
 /* ═══════════════════════════════════════════════════════════
-   COPY BUTTON
+   ASK AI & COPY DROPDOWN
    ═══════════════════════════════════════════════════════════ */
-function CopyBtn({ text }: { text: string }) {
+function AskAiDropdown({ code, language = 'python' }: { code: string; language?: string }) {
+  const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    await navigator.clipboard.writeText(text);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const copyCode = async () => {
+    await navigator.clipboard.writeText(code);
     setCopied(true);
+    setOpen(false);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const copyPromptForAi = async () => {
+    const prompt = `I am using the Crawlingo web scraping framework (${language}). Here is the code snippet:\n\n\`\`\`${language}\n${code}\n\`\`\`\n\nCan you explain how this works and show me how to extend it for my scraping pipeline?`;
+    await navigator.clipboard.writeText(prompt);
+    setCopied(true);
+    setOpen(false);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const askChatGPT = () => {
+    const query = `Explain and help me customize this Crawlingo (${language}) code snippet:\n\n\`\`\`${language}\n${code}\n\`\`\``;
+    window.open(`https://chatgpt.com/?q=${encodeURIComponent(query)}`, '_blank');
+    setOpen(false);
+  };
+
+  const askClaude = () => {
+    const query = `How do I use and extend this Crawlingo (${language}) code:\n\n\`\`\`${language}\n${code}\n\`\`\``;
+    window.open(`https://claude.ai/new?q=${encodeURIComponent(query)}`, '_blank');
+    setOpen(false);
+  };
+
+  const askPerplexity = () => {
+    const query = `Crawlingo web scraping framework example (${language}):\n${code}`;
+    window.open(`https://www.perplexity.ai/search?q=${encodeURIComponent(query)}`, '_blank');
+    setOpen(false);
+  };
+
   return (
-    <button
-      onClick={copy}
-      className={cn(
-        'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-150',
-        copied
-          ? 'bg-[var(--color-success)]/15 text-[var(--color-success)]'
-          : 'bg-white/5 text-[var(--code-comment)] hover:bg-white/10 hover:text-white'
+    <div className="relative inline-block text-left" ref={dropdownRef}>
+      <div className="flex items-center gap-1">
+        {/* Quick Copy Button */}
+        <button
+          onClick={copyCode}
+          className={cn(
+            'flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all duration-150',
+            copied
+              ? 'bg-[var(--color-success)]/15 text-[var(--color-success)]'
+              : 'bg-white/5 text-[var(--code-comment)] hover:bg-white/10 hover:text-white'
+          )}
+          aria-label="Copy code"
+        >
+          {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
+
+        {/* Ask AI Trigger */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-[var(--brand-orange)]/15 text-[var(--brand-orange)] hover:bg-[var(--brand-orange)]/25 transition-all duration-150 border border-[var(--brand-orange)]/30 cursor-pointer"
+          aria-label="Ask AI options"
+        >
+          <Sparkles className="h-3 w-3 animate-pulse" />
+          <span>Ask AI</span>
+          <ChevronDown className={cn('h-3 w-3 transition-transform', open && 'rotate-180')} />
+        </button>
+      </div>
+
+      {/* Dropdown Menu */}
+      {open && (
+        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-[#0F172A] border border-[#1E293B] shadow-2xl z-50 p-1.5 animate-fade-in text-xs">
+          <div className="px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-800/80 mb-1 flex items-center gap-1">
+            <Sparkles className="h-3 w-3 text-orange-400" />
+            AI & Copy Options
+          </div>
+
+          <button
+            onClick={copyCode}
+            className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition-colors text-left"
+          >
+            <Copy className="h-3.5 w-3.5 text-slate-400" />
+            <span>Copy Raw Code</span>
+          </button>
+
+          <button
+            onClick={copyPromptForAi}
+            className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-800/80 hover:text-white transition-colors text-left"
+          >
+            <FileText className="h-3.5 w-3.5 text-indigo-400" />
+            <span>Copy Prompt for AI</span>
+          </button>
+
+          <div className="my-1 border-t border-slate-800/80" />
+
+          <button
+            onClick={askChatGPT}
+            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-emerald-300 hover:bg-emerald-500/10 transition-colors text-left font-medium"
+          >
+            <span className="flex items-center gap-2">
+              <Bot className="h-3.5 w-3.5 text-emerald-400" />
+              Ask ChatGPT
+            </span>
+            <ExternalLink className="h-3 w-3 opacity-60" />
+          </button>
+
+          <button
+            onClick={askClaude}
+            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-orange-300 hover:bg-orange-500/10 transition-colors text-left font-medium"
+          >
+            <span className="flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-orange-400" />
+              Ask Claude
+            </span>
+            <ExternalLink className="h-3 w-3 opacity-60" />
+          </button>
+
+          <button
+            onClick={askPerplexity}
+            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-cyan-300 hover:bg-cyan-500/10 transition-colors text-left font-medium"
+          >
+            <span className="flex items-center gap-2">
+              <Bot className="h-3.5 w-3.5 text-cyan-400" />
+              Ask Perplexity
+            </span>
+            <ExternalLink className="h-3 w-3 opacity-60" />
+          </button>
+        </div>
       )}
-      aria-label="Copy code"
-    >
-      {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-      {copied ? 'Copied!' : 'Copy'}
-    </button>
+    </div>
   );
+}
+
+function CopyBtn({ text }: { text: string }) {
+  return <AskAiDropdown code={text} />;
 }
 
 /* ═══════════════════════════════════════════════════════════
