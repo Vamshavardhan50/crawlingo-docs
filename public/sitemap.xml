@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://crawlingo-docs.vercel.app/</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/guides</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/api-reference</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/quick-start</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/installation</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/dataset-jobs</loc></url>
@@ -33,4 +35,15 @@
   <url><loc>https://crawlingo-docs.vercel.app/deployment</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/publishing</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/docs-hosting</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/overview</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/use-cases</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/concepts</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/first-run</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/developer-tutorial</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/report-reference</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/production-guide</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/reference/dataset-job</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/reference/job-config</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/reference/session</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/reference/page</loc></url>
 </urlset>

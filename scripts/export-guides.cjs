@@ -6,6 +6,11 @@ if (!process.argv[2]) throw new Error('Usage: npm run export:guides -- /path/to/
 const output = path.resolve(process.argv[2]);
 fs.mkdirSync(output, { recursive: true });
 const mapping = {
+  'api-dataset-job.md': '/reference/dataset-job', 'api-job-config.md': '/reference/job-config',
+  'api-session.md': '/reference/session', 'api-page.md': '/reference/page',
+  'overview.md': '/overview', 'use-cases.md': '/use-cases', 'concepts.md': '/concepts',
+  'first-run.md': '/first-run', 'developer-tutorial.md': '/developer-tutorial',
+  'report-reference.md': '/report-reference', 'production-guide.md': '/production-guide',
   'advanced.md': '/advanced', 'authentication.md': '/authentication', 'auto-match.md': '/auto-match',
   'change-detection.md': '/change-detection', 'configuration.md': '/configuration', 'crawl.md': '/crawl',
   'dataset.md': '/dataset', 'faq.md': '/faq', 'getting-started.md': '/quick-start',

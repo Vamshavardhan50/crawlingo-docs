@@ -1,34 +1,24 @@
-import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowRight, Check, Copy, FileCode2 } from 'lucide-react';
-import { DOCS, NAV_GROUPS, type CodeExample } from '@/content/docs';
-
-export function CodeBlock({ examples }: { examples: CodeExample[] }) {
-  const [selected, setSelected] = useState(0);
-  const [status, setStatus] = useState('Copy');
-  const current = examples[selected] ?? examples[0];
-  async function copy() {
-    try { await navigator.clipboard.writeText(current.code); setStatus('Copied'); }
-    catch { setStatus('Select code to copy'); }
-    window.setTimeout(() => setStatus('Copy'), 2500);
-  }
-  return <div className="code-block">
-    <div className="code-toolbar"><div className="code-tabs" aria-label="Code language">
-      {examples.map((example, index) => <button key={example.label} type="button" aria-pressed={selected === index} onClick={() => { setSelected(index); setStatus('Copy'); }}>{examples.length === 1 && <FileCode2 size={14} />}{example.label}</button>)}
-    </div><button className="copy-code" onClick={copy} type="button" aria-label={`Copy ${current.label} code`}>{status === 'Copied' ? <Check size={14} /> : <Copy size={14} />}<span aria-live="polite">{status}</span></button></div>
-    <pre tabIndex={0} aria-label={`${current.language} example`}><code>{current.code}</code></pre>
-  </div>;
-}
+import { ArrowRight, ChevronDown, Clock3, Download } from 'lucide-react';
+import { DOCS, NAV_GROUPS } from '@/content/docs';
+import { docToMarkdown } from '@/content/markdown';
+import { CodeBlock } from './code-block';
+import CopyButton from './copy-button';
+export { CodeBlock } from './code-block';
 
 export default function DocumentationPage({ path }: { path: string }) {
   const page = DOCS[path];
+  const markdown = docToMarkdown(page);
   const paths = NAV_GROUPS.flatMap(group => group.paths);
   const next = paths[paths.indexOf(path) + 1];
+  const words = page.sections.map(section => [section.title, ...(section.paragraphs ?? []), ...(section.bullets ?? []), ...(section.table?.rows.flat() ?? [])].join(' ')).join(' ').split(/\s+/).length;
+  const minutes = Math.max(2, Math.ceil(words / 180));
   return <><Head><title>{page.title} · Crawlingo</title><meta name="description" content={page.description} key="description" /></Head>
     <div className="document-grid"><article className="doc-article">
-      <header className="doc-heading"><span className="eyebrow">{page.category}</span><h1>{page.title}</h1><p className="lead">{page.description}</p></header>
+      <header className="doc-heading"><div className="doc-breadcrumb"><Link href="/guides">Docs</Link><span>/</span><span>{page.category}</span></div><h1>{page.title}</h1><p className="lead">{page.description}</p><div className="doc-tools"><CopyButton text={markdown} label="Copy page" /><a className="download-page" href={`data:text/markdown;charset=utf-8,${encodeURIComponent(markdown)}`} download={`${path.replace(/^\//, '').replaceAll('/', '-')}.md`}><Download size={14} />Download .md</a></div><div className="reading-meta"><span>{page.audience ?? 'Developers'}</span><span><Clock3 size={13} />{minutes} min read</span><span>{page.sections.length} sections</span></div></header>
       <div className="source-note"><span className="status-dot" />Development docs <span>·</span> New dataset APIs require the current source build.</div>
+      <details className="mobile-toc"><summary>In this guide<ChevronDown size={15} /></summary><nav aria-label="Guide sections">{page.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</nav></details>
       {page.sections.map(section => <section className="doc-section" id={section.id} key={section.id}>
         <h2><a href={`#${section.id}`}>{section.title}<span aria-hidden="true" className="heading-anchor">#</span></a></h2>
         {section.paragraphs?.map((paragraph, i) => <p key={i}>{paragraph}</p>)}

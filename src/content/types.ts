@@ -8,4 +8,4 @@ export type DocSection = {
   table?: { headings: string[]; rows: string[][] };
   links?: { label: string; href: string }[];
 };
-export type Doc = { title: string; description: string; category: string; sections: DocSection[] };
+export type Doc = { title: string; description: string; category: string; audience?: string; sections: DocSection[] };

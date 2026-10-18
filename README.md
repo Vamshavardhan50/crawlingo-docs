@@ -29,6 +29,10 @@ Open `http://localhost:3020`. Build regenerates sitemap and robots metadata.
 | --- | --- |
 | `src/content/docs.ts` | API guides, examples and navigation |
 | `src/content/operations.ts` | Complete example, deployment, publishing and hosting |
+| `src/content/getting-started.ts` | Plain-language overview, concepts, use cases and guided first run |
+| `src/content/developer-guides.ts` | Integration tutorial, report reference and larger-job operations |
+| `src/content/api-reference.ts` | SDK signatures, parameter contracts, examples, errors and reference index |
+| `src/content/markdown.ts` | Page text used by Copy page and Markdown downloads |
 | `src/content/types.ts` | Content schema |
 | `src/content/site.json` | Public URL and site name |
 | `src/components/` | Shared layout, documentation renderer and theme provider |
@@ -39,13 +43,30 @@ Open `http://localhost:3020`. Build regenerates sitemap and robots metadata.
 
 Keep examples aligned with SDK source. Distinguish development APIs from published
 packages. Benchmarks need workload, method and limitations. Preserve route names
-and section IDs. Export the named guides to the sibling Markdown repository with:
+and section IDs. Export the named guides to a local Markdown directory with:
 
 ```sh
 npm run export:guides -- ../docs
 ```
 
 The exporter updates its named guides and index, leaving other authored files alone.
+In the development workspace, `../docs` is an older checkout of this same GitHub
+repository. Preserve those exports locally; push website changes from this checkout.
+
+The public landing page is `/`; `/guides` is the developer quickstart and documentation
+directory; `/api-reference` indexes classes, configuration types and related guides.
+Guide pages provide code tabs, syntax colors, Copy code, line wrapping, Copy page and
+Markdown downloads. Search includes method names and prioritizes reference headings.
+Documentation, API Reference, SDKs and Examples stay visible on narrow screens.
+
+The UI uses the teal/navy palette from `public/brand-mark.svg`, a compact vector mark
+based on the original logo. Color tokens live in `src/styles/global.css`; light and
+dark themes share the same navigation hierarchy and focus indicators.
+
+For an isolated preview build while another server uses `.next`, set
+`CRAWLINGO_DOCS_BUILD_DIR=.next-preview` for both the build and start commands.
+For environments where Turbopack's worker IPC is unavailable, use
+`npm run build -- --webpack` or `npx next dev --webpack`.
 
 ## Deploy
 

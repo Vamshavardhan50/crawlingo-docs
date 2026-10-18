@@ -1,6 +1,9 @@
 import type { CodeExample, Doc } from './types';
 export type { CodeExample, Doc, DocSection } from './types';
 import { OPERATION_DOCS } from './operations';
+import { GETTING_STARTED_DOCS } from './getting-started';
+import { DEVELOPER_GUIDES } from './developer-guides';
+import { API_DOCS } from './api-reference';
 
 export const REPOSITORY = 'https://github.com/Vamshavardhan50/crawlingo';
 export const JOB_JSON = `{
@@ -213,13 +216,15 @@ Object.assign(DOCS, {
   ] },
 } satisfies Record<string, Doc>);
 
-Object.assign(DOCS, OPERATION_DOCS);
+Object.assign(DOCS, OPERATION_DOCS, GETTING_STARTED_DOCS, DEVELOPER_GUIDES, API_DOCS);
 
 export const NAV_GROUPS = [
   { title: 'Start here', paths: ['/quick-start', '/installation', '/examples', '/features'] },
-  { title: 'Build a dataset', paths: ['/dataset-jobs', '/schema', '/recovery', '/cookbook'] },
+  { title: 'API reference', paths: ['/reference/dataset-job', '/reference/job-config', '/schema', '/report-reference', '/reference/session', '/reference/page'] },
   { title: 'SDKs', paths: ['/sdk/python', '/sdk/nodejs', '/sdk/rust'] },
-  { title: 'Ship and operate', paths: ['/deployment', '/publishing', '/docs-hosting'] },
+  { title: 'Build a dataset', paths: ['/developer-tutorial', '/dataset-jobs', '/recovery', '/cookbook'] },
+  { title: 'Understand Crawlingo', paths: ['/overview', '/use-cases', '/concepts', '/first-run'] },
+  { title: 'Ship and operate', paths: ['/production-guide', '/deployment', '/publishing', '/docs-hosting'] },
   { title: 'Reference', paths: ['/session', '/configuration', '/page', '/dataset', '/selectors', '/auto-match', '/crawl', '/watch', '/change-detection', '/authentication', '/advanced', '/tools/fetch-page'] },
   { title: 'Learn', paths: ['/architecture', '/benchmarks', '/faq'] },
   { title: 'Project', paths: ['/changelog', '/roadmap', '/sponsor'] },
