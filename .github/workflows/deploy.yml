@@ -12,7 +12,7 @@ permissions:
   deployments: write
 
 concurrency:
-  group: docs-${{ github.ref }}
+  group: docs-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
