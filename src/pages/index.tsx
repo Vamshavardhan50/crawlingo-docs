@@ -24,13 +24,13 @@ export default function Home() {
         <div className="landing-intro">
           <div className="home-kicker"><span className="status-dot" />Open source · Current development source</div>
           <h1>Web pages in.<br /><em>Useful datasets out.</em></h1>
-          <p>Build product catalogs, article collections and datasets for analysis. Give Crawlingo your URLs and field rules; the Rust engine validates records, removes exact duplicates and exports JSONL or CSV.</p>
+          <p>Build research directories, document collections and datasets for analysis. Give Crawlingo your URLs and field rules; the Rust engine validates records, removes exact duplicates and exports JSONL or CSV.</p>
           <div className="hero-actions">
             <Link className="button button-primary" href="/guides">Start building<ArrowRight size={16} /></Link>
             <Link className="button" href="/api-reference">API Reference<ArrowUpRight size={15} /></Link>
           </div>
           <div className="language-line"><span>Rust engine</span><span>Python</span><span>Node.js</span><span>CLI</span></div>
-          <p className="availability-note">New dataset APIs require a source build. <Link href="/installation">Installation guide<ArrowUpRight size={12} /></Link></p>
+          <p className="availability-note">New dataset APIs require a source build. <Link href="/installation">Installation guide<ArrowUpRight size={12} /></Link> · <Link href="/research-datasets">Research dataset walkthrough<ArrowUpRight size={12} /></Link></p>
         </div>
         <div className="record-demo" aria-label="Illustration of the included product dataset example">
           <div className="record-demo-heading"><span className="eyebrow">A small, real example</span><span className="demo-label">Product catalog</span></div>

@@ -50,4 +50,7 @@
   <url><loc>https://crawlingo-docs.vercel.app/integrations/playwright</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/integrations/data</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/integrations/workers</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/research-datasets</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/dataset-design</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/real-world-results</loc></url>
 </urlset>

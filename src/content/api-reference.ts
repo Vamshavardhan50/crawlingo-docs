@@ -5,6 +5,7 @@ export const API_DOCS: Record<string, Doc> = {
     title: 'DatasetJob', category: 'API reference',
     description: 'Stream a URL file into validated JSONL or CSV shards. Construct a job, run it, inspect its report, and resume committed progress.',
     sections: [
+      { id: 'workflow', title: 'Use this API to build a dataset', paragraphs: ['Start by defining the unit of observation, source identity and required fields. The research walkthrough runs this API through the CLI against a public directory, then collects a fixed sample of documents.'], links: [{ label: 'Research dataset walkthrough', href: '/research-datasets' }, { label: 'Dataset design and quality', href: '/dataset-design' }, { label: 'Public-site measurements', href: '/real-world-results' }] },
       { id: 'import', title: 'Import', code: [
         { label: 'Python', language: 'python', code: 'from crawlingo import DatasetJob, Session' },
         { label: 'Node.js', language: 'typescript', code: "import { DatasetJob, Session, type JobConfig, type JobReport } from 'crawlingo';" },

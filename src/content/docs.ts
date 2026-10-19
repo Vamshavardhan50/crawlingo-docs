@@ -5,6 +5,8 @@ import { GETTING_STARTED_DOCS } from './getting-started';
 import { DEVELOPER_GUIDES } from './developer-guides';
 import { API_DOCS } from './api-reference';
 import { INTEGRATION_DOCS } from './integrations';
+import { RESEARCH_DOCS } from './research';
+import { PUBLIC_RESULTS } from './public-results';
 
 export const REPOSITORY = 'https://github.com/Vamshavardhan50/crawlingo';
 export const JOB_JSON = `{
@@ -137,6 +139,7 @@ Object.assign(DOCS, {
     { id: 'exports', title: 'Choose an export API', table: { headings: ['API', 'Use', 'Formats'], rows: [['DatasetResult', 'Small collected result', 'JSON, CSV, Parquet'], ['DatasetStream', 'Rust record producers', 'CSV, Parquet'], ['DatasetJob', 'Resumable URL-file pipeline', 'JSONL shards, CSV shards']] }, links: jobLink },
   ] },
   '/selectors': { title: 'Selectors', category: 'Reference', description: 'Write explicit extraction rules and test them against representative page shapes.', sections: [
+    { id: 'columns', title: 'Select a table column', paragraphs: ['Use td:nth-child(3) for the third element child of a row. Positive integer positions are supported; odd, even, an+b expressions and other pseudo-classes are not. Element positions ignore whitespace text. Qualify the column before selecting its links so version, author or related-document links do not contaminate a title.'], code: [{ label: 'Directory field', language: 'json', code: '{"name":"title","selector":"td:nth-child(3)","required":true}' }], links: [{ label: 'Research directory example', href: '/research-datasets' }] },
     { id: 'css', title: 'CSS and row scope', code: [{ label: 'Field definitions', language: 'json', code: '[\n  {"name":"title","selector":"h2","required":true},\n  {"name":"sku","selector":"article.product","extract_type":"attr:data-sku"}\n]' }], paragraphs: ['These are entries in the fields array of a job with row_selector set to article.product. The row container itself can match an attribute field. The selector engine supports a subset of browser selector behavior; check your selectors against real fixtures.'] },
     { id: 'alternatives', title: 'Other selector modes', paragraphs: ['Job selector_type accepts css, xpath, regex, text, after_text and before_text. These are the project’s implementations, not promises of complete browser CSS or full XPath standards compliance. Regular expressions are compiled during configuration validation.'] },
     { id: 'drift', title: 'Handle layout changes', paragraphs: ['Required fields and rejection reports expose broken extraction. DatasetJob does not silently recover selectors. The existing Dataset builder can optionally use stored fingerprints for heuristic CSS recovery.'], links: [{ label: 'Selector recovery', href: '/auto-match' }] },
@@ -217,17 +220,17 @@ Object.assign(DOCS, {
   ] },
 } satisfies Record<string, Doc>);
 
-Object.assign(DOCS, OPERATION_DOCS, GETTING_STARTED_DOCS, DEVELOPER_GUIDES, API_DOCS, INTEGRATION_DOCS);
+Object.assign(DOCS, OPERATION_DOCS, GETTING_STARTED_DOCS, DEVELOPER_GUIDES, API_DOCS, INTEGRATION_DOCS, RESEARCH_DOCS, PUBLIC_RESULTS);
 
 export const NAV_GROUPS = [
   { title: 'Getting started', paths: ['/overview', '/installation', '/quick-start', '/first-run', '/concepts', '/use-cases'] },
-  { title: 'Build a dataset', paths: ['/developer-tutorial', '/dataset-jobs', '/examples', '/recovery', '/cookbook'] },
+  { title: 'Build a dataset', paths: ['/dataset-design', '/research-datasets', '/developer-tutorial', '/dataset-jobs', '/examples', '/recovery', '/cookbook'] },
   { title: 'Integrations', paths: ['/integrations', '/integrations/playwright', '/integrations/data', '/integrations/workers'] },
   { title: 'API reference', paths: ['/reference/dataset-job', '/reference/job-config', '/schema', '/report-reference', '/reference/session', '/reference/page'] },
   { title: 'SDKs', paths: ['/sdk/python', '/sdk/nodejs', '/sdk/rust'] },
   { title: 'Ship and operate', paths: ['/production-guide', '/deployment', '/publishing', '/docs-hosting'] },
   { title: 'Engine capabilities', paths: ['/features', '/session', '/configuration', '/page', '/dataset', '/selectors', '/auto-match', '/crawl', '/watch', '/change-detection', '/authentication', '/advanced', '/tools/fetch-page'] },
-  { title: 'Learn', paths: ['/architecture', '/benchmarks', '/faq'] },
+  { title: 'Learn', paths: ['/architecture', '/real-world-results', '/benchmarks', '/faq'] },
   { title: 'Project', paths: ['/changelog', '/roadmap', '/sponsor'] },
 ];
 
