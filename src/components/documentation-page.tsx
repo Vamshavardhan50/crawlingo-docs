@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowRight, ChevronDown, Clock3, Download } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronDown, Clock3, Download } from 'lucide-react';
 import { DOCS, NAV_GROUPS } from '@/content/docs';
 import { docToMarkdown } from '@/content/markdown';
 import { CodeBlock } from './code-block';
@@ -12,6 +12,7 @@ export default function DocumentationPage({ path }: { path: string }) {
   const markdown = docToMarkdown(page);
   const paths = NAV_GROUPS.flatMap(group => group.paths);
   const next = paths[paths.indexOf(path) + 1];
+  const previous = paths[paths.indexOf(path) - 1];
   const words = page.sections.map(section => [section.title, ...(section.paragraphs ?? []), ...(section.bullets ?? []), ...(section.table?.rows.flat() ?? [])].join(' ')).join(' ').split(/\s+/).length;
   const minutes = Math.max(2, Math.ceil(words / 180));
   return <><Head><title>{page.title} · Crawlingo</title><meta name="description" content={page.description} key="description" /></Head>
@@ -27,7 +28,7 @@ export default function DocumentationPage({ path }: { path: string }) {
         {section.bullets && <ul>{section.bullets.map(item => <li key={item}>{item}</li>)}</ul>}
         {section.links && <div className="section-links">{section.links.map(link => <Link href={link.href} key={link.href}>{link.label}<ArrowRight size={14} /></Link>)}</div>}
       </section>)}
-      <footer className="doc-footer"><span>Found a mismatch? <a href="https://github.com/Vamshavardhan50/crawlingo/issues">Report a documentation issue</a>.</span>{next && <Link className="next-page" href={next}><small>Next guide</small><strong>{DOCS[next].title}<ArrowRight size={17} /></strong></Link>}</footer>
+      <footer className="doc-footer"><span>Found a mismatch? <a href="https://github.com/Vamshavardhan50/crawlingo/issues">Report a documentation issue</a>.</span><nav className="chapter-pagination" aria-label="Chapter navigation">{previous ? <Link className="next-page previous-page" href={previous}><small>Previous</small><strong><ArrowLeft size={17} />{DOCS[previous].title}</strong></Link> : <Link className="next-page previous-page" href="/guides"><small>Introduction</small><strong><ArrowLeft size={17} />The Crawlingo Guide</strong></Link>}{next && <Link className="next-page" href={next}><small>Next</small><strong>{DOCS[next].title}<ArrowRight size={17} /></strong></Link>}</nav></footer>
     </article><aside className="page-toc" aria-label="On this page"><span>On this page</span>{page.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}<div className="toc-tip">Start small.<br />Inspect the output.<br />Then increase the workload.</div></aside></div>
   </>;
 }

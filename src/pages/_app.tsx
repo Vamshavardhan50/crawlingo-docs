@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Layout } from '@/components/layout';
 import '@/styles/global.css';
+import '@/styles/book.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

@@ -1,38 +1,26 @@
-import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Braces, Terminal } from 'lucide-react';
+import { ArrowRight, BookOpen, Braces, Cable } from 'lucide-react';
 import { DOCS, NAV_GROUPS } from '@/content/docs';
-import { API_DOCS } from '@/content/api-reference';
-import { CodeBlock } from '@/components/code-block';
-import type { CodeExample } from '@/content/types';
-
-const languages = ['Python', 'Node.js', 'Rust'] as const;
-const installs: CodeExample[] = [
-  { label: 'Terminal · activated virtual environment', language: 'shell', code: 'python -m pip install maturin\ncd sdk/python\nmaturin develop' },
-  { label: 'Terminal · repository root', language: 'shell', code: 'cd sdk/nodejs\nnpm install\nnpm run build\n# In your application, install the built local package:\n# npm install /absolute/path/to/crawlingo/sdk/nodejs' },
-  { label: 'Your application · Cargo.toml', language: 'toml', code: '[dependencies]\ncrawlingo = { path = "../crawlingo" }\ntokio = { version = "1", features = ["full"] }\nserde_json = "1"' },
-];
-const examples = API_DOCS['/reference/dataset-job'].sections.find(section => section.id === 'example')!.code!;
-const commands = ['python main.py', 'node main.mjs', 'cargo run --release'];
 
 export default function Guides() {
-  const [language, setLanguage] = useState(0);
-  return <><Head><title>Developer Documentation · Crawlingo</title><meta name="description" content="Build your first Crawlingo dataset with copy-ready Python, Node.js and Rust examples, installation commands and complete SDK API references." key="description" /></Head>
-    <div className="docs-hub developer-hub">
-      <span className="eyebrow">Crawlingo / Developer docs</span><h1>Build your first dataset.</h1><p className="lead">From a URL to a validated record. Start with working code, then explore the SDK and the contracts behind it.</p>
-      <div className="developer-shortcuts"><Link href="/quick-start"><Terminal size={17} />Quickstart<ArrowRight size={15} /></Link><Link href="/api-reference"><Braces size={17} />API Reference<ArrowRight size={15} /></Link><Link href="/examples"><BookOpen size={17} />Example projects<ArrowRight size={15} /></Link></div>
-      <section className="developer-start" aria-labelledby="start-title">
-        <div className="developer-start-heading"><div><span className="eyebrow">Start building</span><h2 id="start-title">Choose your language</h2></div><div className="language-picker" role="group" aria-label="Quickstart language">{languages.map((name, index) => <button type="button" key={name} onClick={() => setLanguage(index)} aria-pressed={language === index}>{name}</button>)}</div></div>
-        <div className="source-note"><span className="status-dot" />Current development APIs require a matching source build. <Link href="/installation">Prerequisites & setup<ArrowRight size={12} /></Link></div>
-        <div className="quickstart-workspace">
-          <div className="quickstart-steps"><h3><span>01</span> Install from your checkout</h3><p>Clone the repository and follow the platform prerequisites. For Python, activate a virtual environment first. Adjust local dependency paths to your checkout.</p><CodeBlock examples={[installs[language]]} /><Link className="text-link" href={['/installation#python', '/sdk/nodejs#setup', '/sdk/rust#dependencies'][language]}>Complete {languages[language]} setup<ArrowRight size={14} /></Link><h3><span>02</span> Save the example and run</h3><p>The example creates urls.txt, defines a required title field and writes to datasets/example. Run it in a writable directory.</p><CodeBlock examples={[{ label: 'Run your example', language: 'shell', code: commands[language] }]} /><h3><span>03</span> Inspect the output</h3><p>Read the report and part-00000000.jsonl. Repeating an unchanged job resumes it; changed inputs need a fresh output directory.</p><Link className="text-link" href="/report-reference">Understand your report<ArrowRight size={14} /></Link></div>
-          <div className="quickstart-code"><CodeBlock examples={[examples[language]]} /><div className="expected-output"><span className="eyebrow">Example output · after a successful fetch</span><CodeBlock examples={[{ label: 'part-00000000.jsonl', language: 'json', code: '{"title":"Example Domain","_source_url":"https://example.com/","_row":"0"}' }]} /></div><Link className="text-link" href="/reference/dataset-job">Parameters, returns & errors<ArrowRight size={14} /></Link></div>
-        </div>
-      </section>
-      <div className="hub-paths"><Link href="/first-run"><BookOpen size={23} /><strong>Prefer a guided walkthrough?</strong><span>Run a local product catalog with expected records, duplicates and errors.</span><ArrowRight size={16} /></Link><Link href="/api-reference"><Braces size={23} /><strong>Looking up a method?</strong><span>Go directly to signatures, parameters, types and usage examples.</span><ArrowRight size={16} /></Link></div>
-      <div className="directory-heading"><span className="eyebrow">Documentation directory</span><h2>Go deeper when you need to.</h2></div>
-      {NAV_GROUPS.map(group => <section className="hub-group" key={group.title}><h2>{group.title}</h2><div>{group.paths.map(path => <Link href={path} key={path}><strong>{DOCS[path].title}<ArrowRight size={14} /></strong><p>{DOCS[path].description}</p></Link>)}</div></section>)}
-    </div>
+  return <><Head><title>The Crawlingo Guide</title><meta name="description" content="Learn what Crawlingo does, generate a dataset, integrate with Playwright and data tools, and look up the SDK API." key="description" /></Head>
+    <article className="book-introduction">
+      <div className="doc-breadcrumb">Documentation / Introduction</div>
+      <h1>The Crawlingo Guide</h1>
+      <p className="lead">Turn web pages into a dataset your application can use.</p>
+      <p>Crawlingo is a Rust collection engine with Python and Node.js SDKs. Give it URLs and field rules; it fetches pages, validates records, removes exact duplicates, and writes resumable JSONL or CSV files.</p>
+      <div className="book-pipeline" aria-label="Dataset pipeline"><span>URLs</span><ArrowRight size={15} /><span>Field rules</span><ArrowRight size={15} /><span>Dataset + report</span></div>
+      <div className="source-note">Source edition · 1.0.0-alpha.2. Build from source for the DatasetJob API. <Link href="/publishing">Release status</Link></div>
+      <section className="book-section"><h2>What is it for?</h2><p>Build product catalogs, article collections, research datasets, or scheduled data imports. Use the SDK in a backend worker, or run the CLI from a terminal. Crawlingo handles collection and export; your application chooses discovery, scheduling, analysis and storage.</p></section>
+      <section className="book-section"><h2>Choose where to start</h2><div className="book-start-list">
+        <Link href="/first-run"><BookOpen size={20} /><div><strong>New to Crawlingo</strong><span>Run a small local example and understand its output.</span></div><ArrowRight size={16} /></Link>
+        <Link href="/integrations"><Cable size={20} /><div><strong>Add it to your stack</strong><span>Playwright, Puppeteer, pandas, DuckDB and worker services.</span></div><ArrowRight size={16} /></Link>
+        <Link href="/api-reference"><Braces size={20} /><div><strong>Look up an API</strong><span>Signatures, configuration fields, return values and errors.</span></div><ArrowRight size={16} /></Link>
+      </div></section>
+      <section className="book-section"><h2>How to read this guide</h2><p>Read the first two chapters in order for a complete walkthrough. Use Integrations for a specific tool and API reference when you already know the workflow. Collapse a chapter in the sidebar, or hide the sidebar for more reading space. Press <kbd>Ctrl K</kbd> to search.</p></section>
+      <section className="book-section"><h2>Contents</h2><ol className="book-contents">{NAV_GROUPS.map((group, index) => <li key={group.title}><span>{String(index + 1).padStart(2, '0')}</span><div><h3>{group.title}</h3><div>{group.paths.map(path => <Link key={path} href={path}>{DOCS[path].title}</Link>)}</div></div></li>)}</ol></section>
+      <footer className="book-next"><Link href="/overview"><span>Start reading</span><strong>What is Crawlingo?<ArrowRight size={18} /></strong></Link></footer>
+    </article>
   </>;
 }

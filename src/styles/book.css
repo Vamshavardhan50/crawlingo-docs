@@ -1,0 +1,103 @@
+/* Reading layout, shared by the guide and API reference. */
+:root { --sidebar: 274px; }
+.brand-navigation { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.site-header { height: 62px; padding: 0 24px; gap: 20px; }
+.wordmark { font-size: 21px; letter-spacing: -.6px; }
+.developer-nav { top: 62px; height: 43px; padding: 0 26px; }
+.developer-nav a { font-size: 12px; }
+.docs-sidebar { top: 105px; padding: 22px 17px; background: var(--surface); }
+.book-sidebar-title { display: flex; align-items: center; justify-content: space-between; margin: 0 7px 17px; }
+.book-sidebar-title>span { font-size: 10px; letter-spacing: .1em; font-weight: 700; color: var(--muted); }
+.book-sidebar-title button { border: 0; background: none; color: var(--muted); font-size: 11px; padding: 3px; }
+.book-sidebar-title button:hover { color: var(--accent); }
+.docs-sidebar .search-box { margin-bottom: 18px; border-radius: 4px; }
+.docs-sidebar .sidebar-entrypoints { margin-bottom: 20px; }
+.nav-group { margin: 0 0 13px; }
+.nav-group-toggle { display: flex; align-items: center; gap: 8px; width: 100%; background: none; border: 0; text-align: left; padding: 7px 6px; font-size: 12px; font-weight: 650; }
+.nav-group-toggle>svg { margin-left: auto; color: var(--muted); flex-shrink: 0; }
+.nav-group-toggle[aria-expanded=false]>svg { transform: rotate(-90deg); }
+.chapter-number { color: var(--muted); font: 10px ui-monospace, Consolas, monospace; }
+.nav-group a { font-size: 12px; line-height: 1.5; padding: 6px 8px 6px 29px; border-radius: 3px; }
+.nav-group a[aria-current] { box-shadow: inset 2px 0 var(--accent); }
+.sidebar-bottom { font-size: 10px; }
+.book-main { padding: 149px 42px 0; }
+.book-main h1 { font-size: 36px; letter-spacing: -1px; font-weight: 650; }
+.book-main .document-grid { grid-template-columns: minmax(0, 760px) 165px; gap: 48px; max-width: 1000px; }
+.book-main .doc-section p, .book-main .doc-section ul { font-size: 15px; line-height: 1.8; }
+.book-main .doc-section h2 { font-size: 23px; margin-bottom: 17px; }
+.book-main .lead { font-size: 17px; line-height: 1.65; }
+.book-main .doc-section { scroll-margin-top: 128px; }
+.book-main .page-toc { top: 146px; }
+.book-main .doc-heading { padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+.book-main .reading-meta { margin-bottom: 0; }
+.book-main .source-note { border-radius: 3px; border-left: 3px solid var(--accent); background: var(--surface); }
+.book-main .code-block { border-radius: 5px; }
+.book-main .code-block pre { font-size: 13px; line-height: 1.75; padding: 20px; }
+.book-main .code-caption { display: none; }
+.book-main .table-scroll { border-radius: 4px; }
+.book-main table { font-size: 13px; }
+.book-main td:first-child { min-width: 125px; }
+.book-main .section-links a { font-size: 13px; }
+.book-main .docs-hub { max-width: 960px; }
+.book-introduction { max-width: 790px; margin: 0 auto; }
+.book-introduction>p:not(.lead), .book-section>p { font-size: 15px; line-height: 1.85; color: var(--muted); margin: 22px 0; }
+.book-introduction h1 { margin: 17px 0 16px; }
+.book-pipeline { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin: 26px 0; padding: 17px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font: 13px ui-monospace, Consolas, monospace; }
+.book-pipeline svg { color: var(--accent); }
+.book-introduction .source-note a { color: var(--accent); text-decoration: underline; }
+.book-section { margin-top: 38px; }
+.book-section h2 { font-size: 23px; font-weight: 650; letter-spacing: -.4px; margin: 0 0 18px; }
+.book-start-list { border-top: 1px solid var(--line); }
+.book-start-list>a { display: flex; align-items: center; gap: 17px; padding: 20px 2px; border-bottom: 1px solid var(--line); }
+.book-start-list>a>svg:first-child { color: var(--accent); flex-shrink: 0; }
+.book-start-list>a>svg:last-child { margin-left: auto; flex-shrink: 0; }
+.book-start-list strong { display: block; font-size: 15px; font-weight: 600; }
+.book-start-list span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; }
+.book-start-list>a:hover strong { color: var(--accent); }
+.book-contents { list-style: none; padding: 0; margin: 0; }
+.book-contents>li { display: flex; gap: 20px; border-top: 1px solid var(--line); padding: 20px 0; }
+.book-contents>li>span { color: var(--muted); font: 12px ui-monospace, Consolas, monospace; padding-top: 5px; }
+.book-contents h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+.book-contents li>div>div { display: flex; flex-wrap: wrap; gap: 5px 17px; }
+.book-contents a { font-size: 13px; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; }
+.book-contents a:hover { color: var(--accent); }
+.book-next { margin-top: 25px; border-top: 1px solid var(--line); padding-top: 22px; }
+.book-next a { display: block; text-align: right; }
+.book-next span { color: var(--muted); font-size: 12px; }
+.book-next strong { display: flex; align-items: center; justify-content: flex-end; gap: 10px; font-size: 16px; }
+.chapter-pagination { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.chapter-pagination .next-page { min-width: 0; padding: 16px; border-radius: 4px; }
+.chapter-pagination strong { gap: 10px; }
+.chapter-pagination svg { flex-shrink: 0; }
+.previous-page strong { justify-content: flex-start; }
+html { scroll-padding-top: 128px; }
+@media (min-width: 901px) {
+  .docs-sidebar.is-collapsed { display: none; }
+  .site-main.sidebar-hidden { margin-left: 0; }
+}
+@media (max-width: 1250px) {
+  .book-main .document-grid { grid-template-columns: minmax(0, 760px); justify-content: center; }
+}
+@media (max-width: 900px) {
+  .desktop-sidebar-toggle { display: none; }
+  .book-main { padding: 140px 28px 0; }
+  .docs-sidebar { width: min(320px, 88vw); }
+  .sidebar-overlay { top: 105px; }
+  .site-header { padding: 0 20px; }
+}
+@media (max-width: 640px) {
+  .site-header { padding: 0 16px; gap: 10px; }
+  .brand-navigation { gap: 0; }
+  .developer-nav { top: 62px; height: 43px; gap: 12px; padding: 0 16px; }
+  .developer-nav>div { gap: 20px; }
+  .developer-nav a { font-size: 12px; }
+  .docs-sidebar, .sidebar-overlay { top: 105px; }
+  .book-main { padding: 133px 20px 0; }
+  .book-main h1 { font-size: 30px; }
+  .book-main .lead { font-size: 16px; }
+  .book-main .doc-section p, .book-main .doc-section ul { font-size: 14px; }
+  .book-main .code-block pre { font-size: 12px; padding: 16px; }
+  .book-pipeline { gap: 9px; font-size: 11px; }
+  .book-main .doc-section h2 { font-size: 21px; }
+  .chapter-pagination { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}

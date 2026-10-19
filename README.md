@@ -32,6 +32,7 @@ Open `http://localhost:3020`. Build regenerates sitemap and robots metadata.
 | `src/content/getting-started.ts` | Plain-language overview, concepts, use cases and guided first run |
 | `src/content/developer-guides.ts` | Integration tutorial, report reference and larger-job operations |
 | `src/content/api-reference.ts` | SDK signatures, parameter contracts, examples, errors and reference index |
+| `src/content/integrations.ts` | Playwright/Puppeteer discovery, pandas/DuckDB and worker integration recipes |
 | `src/content/markdown.ts` | Page text used by Copy page and Markdown downloads |
 | `src/content/types.ts` | Content schema |
 | `src/content/site.json` | Public URL and site name |
@@ -53,8 +54,12 @@ The exporter updates its named guides and index, leaving other authored files al
 In the development workspace, `../docs` is an older checkout of this same GitHub
 repository. Preserve those exports locally; push website changes from this checkout.
 
-The public landing page is `/`; `/guides` is the developer quickstart and documentation
-directory; `/api-reference` indexes classes, configuration types and related guides.
+The public landing page is `/`; `/guides` is a concise book-style introduction and
+chapter directory; `/api-reference` indexes classes, configuration types and related guides.
+`/integrations` connects browser discovery, analysis and backend worker recipes.
+The sidebar can be hidden on desktop, and individual chapters can be collapsed.
+Preferences are stored locally; search opens the navigation when needed.
+`src/styles/book.css` contains the reading layout; `global.css` retains shared and landing styles.
 Guide pages provide code tabs, syntax colors, Copy code, line wrapping, Copy page and
 Markdown downloads. Search includes method names and prioritizes reference headings.
 Documentation, API Reference, SDKs and Examples stay visible on narrow screens.

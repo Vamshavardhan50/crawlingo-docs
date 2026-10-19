@@ -201,7 +201,7 @@ interface JobConfig {
       { id: 'members', title: 'Properties and selector methods', table: { headings: ['Python', 'Node.js', 'Returns'], rows: [
         ['page.url', 'page.url', 'string: page URL.'],
         ['page.status', 'page.status', 'int / number: HTTP status.'],
-        ['page.html', 'page.html', 'string: retained HTML.'],
+        ['html()', 'page.html', 'string: retained HTML.'],
         ['title()', 'title()', 'string: document title.'],
         ['css(selector)', 'css(selector)', 'ElementCollection for a CSS selector.'],
         ['xpath(query)', 'xpath(query)', 'ElementCollection for a supported XPath query.'],

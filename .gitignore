@@ -7,6 +7,4 @@ dist/**
 .next/**
 out/
 *.tsbuildinfo
-.next-preview/
-.next-developer/
-.next-live/
+.next-*/

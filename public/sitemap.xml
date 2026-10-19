@@ -46,4 +46,8 @@
   <url><loc>https://crawlingo-docs.vercel.app/reference/job-config</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/reference/session</loc></url>
   <url><loc>https://crawlingo-docs.vercel.app/reference/page</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/integrations</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/integrations/playwright</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/integrations/data</loc></url>
+  <url><loc>https://crawlingo-docs.vercel.app/integrations/workers</loc></url>
 </urlset>
