@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { DOCS } = require('./load-content.cjs');
+const { docToMarkdown } = require('../src/content/markdown.ts');
 const site = require('../src/content/site.json');
 if (!process.argv[2]) throw new Error('Usage: npm run export:guides -- /path/to/output-directory');
 const output = path.resolve(process.argv[2]);
@@ -22,22 +23,27 @@ const mapping = {
   'sdk-python.md': '/sdk/python', 'selectors.md': '/selectors', 'session.md': '/session', 'watch.md': '/watch',
   'product-example.md': '/examples', 'deployment.md': '/deployment', 'publishing.md': '/publishing', 'docs-hosting.md': '/docs-hosting',
 };
-const escape = value => value.replaceAll('|', '\\|');
+// Preserve existing filenames, and export every new guide/reference route too.
+const covered = new Set(Object.values(mapping));
+for (const route of Object.keys(DOCS)) if (!covered.has(route)) mapping[`${route.slice(1)}.md`] = route;
+const routeFiles = Object.fromEntries(Object.entries(mapping).map(([file, route]) => [route, file]));
+routeFiles['/guides'] = 'index.md';
+routeFiles['/api-reference'] = 'api-reference.md';
 for (const [filename, route] of Object.entries(mapping)) {
   const page = DOCS[route];
-  const blocks = [`# ${page.title}`, page.description, '> Current development source. New dataset APIs require a matching source build; published alpha packages may differ.'];
-  for (const section of page.sections) {
-    blocks.push(`## ${section.title}`, ...section.paragraphs || []);
-    for (const example of section.code || []) blocks.push(`### ${example.label}`, `\`\`\`${example.language}\n${example.code}\n\`\`\``);
-    if (section.table) blocks.push([
-      `| ${section.table.headings.map(escape).join(' | ')} |`,
-      `| ${section.table.headings.map(() => '---').join(' | ')} |`,
-      ...section.table.rows.map(row => `| ${row.map(escape).join(' | ')} |`),
-    ].join('\n'));
-    if (section.bullets) blocks.push(section.bullets.map(item => `- ${item}`).join('\n'));
-    if (section.links) blocks.push(section.links.map(link => `- [${link.label}](${link.href.startsWith('/') ? site.url : ''}${link.href})`).join('\n'));
-  }
-  fs.writeFileSync(path.join(output, filename), blocks.join('\n\n') + '\n');
+  const destination = path.join(output, filename);
+  fs.mkdirSync(path.dirname(destination), { recursive: true });
+  const resolveLink = href => {
+    if (!href.startsWith('/')) return href;
+    const [target, anchor] = href.split('#');
+    if (!routeFiles[target]) return site.url + href;
+    const relative = path.relative(path.dirname(destination), path.join(output, routeFiles[target])).replaceAll('\\', '/');
+    return relative + (anchor ? `#${anchor}` : '');
+  };
+  fs.writeFileSync(destination, docToMarkdown(page, resolveLink));
 }
-fs.writeFileSync(path.join(output, 'index.md'), ['# Crawlingo documentation', 'Generate validated datasets with a Rust engine and Python and Node.js bindings.', ...Object.entries(mapping).map(([file, route]) => `- [${DOCS[route].title}](${file})`)].join('\n\n') + '\n');
+fs.writeFileSync(path.join(output, 'index.md'), ['# Crawlingo documentation', 'Generate validated datasets with a Rust engine and Python and Node.js bindings.', '[API reference](api-reference.md) · [Implementation status](reference/implementation-status.md)', ...Object.entries(mapping).map(([file, route]) => `- [${DOCS[route].title}](${file})`)].join('\n\n') + '\n');
+fs.writeFileSync(path.join(output, 'api-reference.md'), ['# API reference', 'Source inventory, signatures and behavior. Presence in source is not a runtime test result.', ...Object.entries(mapping).filter(([, route]) => route.startsWith('/reference/')).map(([file, route]) => `- [${DOCS[route].title}](${file})`)].join('\n\n') + '\n');
+fs.mkdirSync(path.join(output, '_meta'), { recursive: true });
+fs.copyFileSync(path.join(__dirname, '../src/content/generated/sdk-api.json'), path.join(output, '_meta/sdk-api.json'));
 console.log(`Exported ${Object.keys(mapping).length} guides and index to ${output}.`);

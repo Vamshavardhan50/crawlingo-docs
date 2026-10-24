@@ -5,20 +5,22 @@ import { DOCS, NAV_GROUPS } from '@/content/docs';
 import { docToMarkdown } from '@/content/markdown';
 import { CodeBlock } from './code-block';
 import CopyButton from './copy-button';
+import site from '@/content/site.json';
 export { CodeBlock } from './code-block';
 
 export default function DocumentationPage({ path }: { path: string }) {
   const page = DOCS[path];
-  const markdown = docToMarkdown(page);
-  const paths = NAV_GROUPS.flatMap(group => group.paths);
+  const markdown = docToMarkdown(page, href => href.startsWith('/') ? site.url + href : href);
+  const siblingPrefix = path.match(/^\/reference\/(node|python)\//)?.[0];
+  const paths = siblingPrefix ? Object.keys(DOCS).filter(route => route.startsWith(siblingPrefix)) : NAV_GROUPS.flatMap(group => group.paths);
   const next = paths[paths.indexOf(path) + 1];
   const previous = paths[paths.indexOf(path) - 1];
   const words = page.sections.map(section => [section.title, ...(section.paragraphs ?? []), ...(section.bullets ?? []), ...(section.table?.rows.flat() ?? [])].join(' ')).join(' ').split(/\s+/).length;
   const minutes = Math.max(2, Math.ceil(words / 180));
   return <><Head><title>{page.title} · Crawlingo</title><meta name="description" content={page.description} key="description" /></Head>
-    <div className="document-grid"><article className="doc-article">
+    <div className={`document-grid ${siblingPrefix ? 'api-reference-document' : ''}`}><article className="doc-article">
       <header className="doc-heading"><div className="doc-breadcrumb"><Link href="/guides">Docs</Link><span>/</span><span>{page.category}</span></div><h1>{page.title}</h1><p className="lead">{page.description}</p><div className="doc-tools"><CopyButton text={markdown} label="Copy page" /><a className="download-page" href={`data:text/markdown;charset=utf-8,${encodeURIComponent(markdown)}`} download={`${path.replace(/^\//, '').replaceAll('/', '-')}.md`}><Download size={14} />Download .md</a></div><div className="reading-meta"><span>{page.audience ?? 'Developers'}</span><span><Clock3 size={13} />{minutes} min read</span><span>{page.sections.length} sections</span></div></header>
-      <div className="source-note"><span className="status-dot" />Development docs <span>·</span> New dataset APIs require the current source build.</div>
+      <div className="source-note"><span className="status-dot" />Source reference <span>·</span> Match your SDK version. <Link href="/reference/implementation-status">Availability and known issues</Link></div>
       <details className="mobile-toc"><summary>In this guide<ChevronDown size={15} /></summary><nav aria-label="Guide sections">{page.sections.map(section => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</nav></details>
       {page.sections.map(section => <section className="doc-section" id={section.id} key={section.id}>
         <h2><a href={`#${section.id}`}>{section.title}<span aria-hidden="true" className="heading-anchor">#</span></a></h2>

@@ -71,6 +71,20 @@
 .chapter-pagination svg { flex-shrink: 0; }
 .previous-page strong { justify-content: flex-start; }
 html { scroll-padding-top: 128px; }
+.api-reference-document .doc-section h2 { font-family: var(--font-mono, ui-monospace, monospace); font-size: 20px; overflow-wrap: anywhere; }
+.api-reference-document #members .section-links { display: flex; flex-wrap: wrap; gap: 7px; }
+.api-reference-document #members .section-links a { padding: 5px 9px; font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-radius: 4px; }
+.api-reference-document #members .section-links svg { display: none; }
+.api-reference-document .table-scroll td { vertical-align: top; overflow-wrap: anywhere; }
+.api-reference-document .page-toc { max-height: calc(100vh - 145px); overflow-y: auto; }
+.source-note { flex-wrap: wrap; }
+.source-note a { text-decoration: underline; text-underline-offset: 3px; }
+.api-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 26px 0; }
+.api-summary-grid a { border: 1px solid var(--line); padding: 20px; border-radius: 5px; background: var(--surface); }
+.api-summary-grid strong, .api-summary-grid span { display: block; }
+.api-summary-grid strong { font-size: 18px; margin-bottom: 7px; }
+.api-summary-grid span { color: var(--muted); font-size: 12px; line-height: 1.6; }
+@media (max-width: 640px) { .api-summary-grid { grid-template-columns: 1fr; } }
 @media (min-width: 901px) {
   .docs-sidebar.is-collapsed { display: none; }
   .site-main.sidebar-hidden { margin-left: 0; }

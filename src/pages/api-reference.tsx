@@ -3,12 +3,15 @@ import Link from 'next/link';
 import { ArrowRight, Braces, Code2, Terminal } from 'lucide-react';
 import { API_GROUPS } from '@/content/api-reference';
 import { CodeBlock } from '@/components/code-block';
+import { API_SNAPSHOT } from '@/content/sdk-reference';
 
 export default function ApiReference() {
   return <><Head><title>API Reference · Crawlingo</title><meta name="description" content="Crawlingo SDK API reference: DatasetJob, JobConfig, JobField, JobReport, Session and Page. Signatures, parameters, returns, errors and copyable examples." key="description" /></Head>
     <div className="docs-hub api-hub">
       <span className="eyebrow">Developer reference</span><h1>API Reference</h1>
       <p className="lead">The contracts behind your dataset pipeline. Find a class, inspect its parameters, and copy an example into your project.</p>
+      <div className="api-summary-grid"><Link href="/reference/node"><strong>Node.js / TypeScript</strong><span>{API_SNAPSHOT.node.exports.length} package exports · methods, fields, errors and examples</span></Link><Link href="/reference/python"><strong>Python</strong><span>{API_SNAPSHOT.python.exports.length} package exports · wrapper contracts and binding limitations</span></Link><Link href="/reference/rust"><strong>Rust</strong><span>Full rustdoc · modules, structs, traits and implementations</span></Link></div>
+      <p><Link href="/reference/implementation-status">Read the implementation audit</Link> before choosing an integration. Source inventory counts are not runtime coverage scores. <Link href="/reference/cli">CLI reference</Link> covers all commands and flags.</p>
       <div className="api-context"><Braces size={19} /><p><strong>Local SDKs · Python, Node.js and Rust</strong><span>These APIs run in your application. Crawlingo does not currently provide a hosted REST API or API key service.</span></p></div>
       <div className="reference-languages"><Link href="/sdk/python">Python SDK<ArrowRight size={14} /></Link><Link href="/sdk/nodejs">Node.js / TypeScript<ArrowRight size={14} /></Link><Link href="/sdk/rust">Rust crate<ArrowRight size={14} /></Link></div>
       <section className="book-section"><h2>Generated Rust reference</h2><p>For the exact modules, types and trait implementations in your checkout, build the crate documentation with rustdoc. Native build prerequisites still apply. This opens the local reference for your source revision.</p><CodeBlock examples={[{ label: 'From the engine repository root', language: 'shell', code: 'cargo doc --locked --no-deps --open\n# Include the optional Chromium module:\ncargo doc --locked --no-deps --features browser --open' }]} /></section>

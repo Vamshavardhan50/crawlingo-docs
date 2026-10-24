@@ -7,6 +7,8 @@ import { API_DOCS } from './api-reference';
 import { INTEGRATION_DOCS } from './integrations';
 import { RESEARCH_DOCS } from './research';
 import { PUBLIC_RESULTS } from './public-results';
+import { SDK_REFERENCE_DOCS } from './sdk-reference';
+import { REFERENCE_OPERATIONS } from './reference-operations';
 
 export const REPOSITORY = 'https://github.com/Vamshavardhan50/crawlingo';
 export const JOB_JSON = `{
@@ -69,10 +71,10 @@ cargo build --release --features cli` }], links: [{ label: 'SDK installation ins
     { id: 'run', title: '4. Run and inspect the result', code: RUN_EXAMPLES, paragraphs: ['Open datasets/pages/part-00000000.jsonl for accepted records. Inspect the report counters and error shards too: complete means the input was processed, not that every page succeeded.', 'Run the same configuration again to resume. Keep the input file and configuration unchanged, and use a new output directory for a different dataset.'], links: [{ label: 'Understand output and recovery', href: '/recovery' }, { label: 'Extract multiple rows per page', href: '/dataset-jobs#row-containers' }] },
   ] },
   '/installation': { title: 'Installation', category: 'Start here', description: 'Choose a language, build the matching native engine, and check your import.', sections: [
-    { id: 'version', title: 'Development source and published packages', paragraphs: [sourceNotice, 'The package version is 1.0.0-alpha.1. Registry installation is appropriate for existing APIs; do not assume a registry artifact includes the new job API. Native build prerequisites include Rust, a C/C++ toolchain, CMake and the tools required by the TLS dependencies.'] },
+    { id: 'version', title: 'Development source and published packages', paragraphs: [sourceNotice, 'This reference describes source version 1.0.0-alpha.2 (Python 1.0.0a2). Registry artifacts may lag behind this source; check the installed version and release notes before using an API. Native build prerequisites include Rust, a C/C++ toolchain, CMake and the tools required by the TLS dependencies.'] },
     { id: 'rust', title: 'Rust and CLI', code: [{ label: 'From repository root', language: 'shell', code: 'cargo build --release --features cli\ncargo run --release --features cli -- --help' }, { label: 'Local application Cargo.toml', language: 'toml', code: '[dependencies]\ncrawlingo = { path = "../crawlingo" }\ntokio = { version = "1", features = ["full"] }\nserde_json = "1"' }], paragraphs: ['Change the path dependency to your checkout. Enable the browser feature only when you need Chromium rendering.'] },
     { id: 'python', title: 'Python', paragraphs: ['Use a virtual environment. Python 3.12 was used for the local binding check. The current PyO3 dependency does not support building against Python 3.14.'], code: [{ label: 'From repository root', language: 'shell', code: 'python -m venv .venv\n# Activate .venv using the command for your shell.\npython -m pip install maturin\ncd sdk/python\nmaturin develop\npython -c "from crawlingo import DatasetJob; print(DatasetJob)"' }] },
-    { id: 'node', title: 'Node.js and TypeScript', paragraphs: ['Build the native library before compiling TypeScript. The SDK has operating-system-specific native assets; rebuild for each target platform.'], code: [{ label: 'From repository root', language: 'shell', code: 'cd sdk/nodejs\nnpm install\nnpm run build\nnpm test' }], links: [{ label: 'Use the local Node.js package', href: '/sdk/nodejs' }] },
+    { id: 'node', title: 'Node.js and TypeScript', paragraphs: ['Build the native library before compiling TypeScript. The SDK has operating-system-specific native assets; rebuild for each target platform.'], code: [{ label: 'From repository root', language: 'shell', code: 'cd sdk/nodejs\nnpm ci\nnpm run build\nnpm test' }], links: [{ label: 'Use the local Node.js package', href: '/sdk/nodejs' }] },
     { id: 'browser', title: 'Optional Chromium rendering', paragraphs: ['The Rust browser feature requires a local Chrome or Chromium executable. Set CRAWLINGO_CHROME_PATH to its absolute path. Browser rendering has its own resource costs; the HTTP scale result does not cover browser workloads.'], code: [{ label: 'Rust feature', language: 'shell', code: 'cargo build --release --features browser,cli' }] },
   ] },
   '/dataset-jobs': { title: 'Dataset jobs', category: 'Build a dataset', description: 'The bulk API for fetching, validating, deduplicating and exporting records without collecting the entire dataset in memory.', sections: [
@@ -102,7 +104,7 @@ cargo build --release --features cli` }], links: [{ label: 'SDK installation ins
     { id: 'small', title: 'Extract one page', code: [{ label: 'Python', language: 'python', code: 'from crawlingo import Dataset\n\nresult = Dataset("https://example.com/").field("title", "h1").build()\nprint(result.to_dict())\nresult.to_json("page.json")' }], paragraphs: ['The Python Dataset.field wrapper currently accepts name, selector, selector_type, transform and default. Use JobField configuration for extract_type in bulk jobs.'], links: jobLink },
   ] },
   '/sdk/nodejs': { title: 'Node.js SDK', category: 'SDKs', description: 'A typed job configuration with asynchronous execution through the Rust native module.', sections: [
-    { id: 'setup', title: 'Build and link the local package', code: [{ label: 'SDK checkout', language: 'shell', code: 'cd sdk/nodejs\nnpm install\nnpm run build' }, { label: 'Your application', language: 'shell', code: 'npm install /absolute/path/to/crawlingo/sdk/nodejs' }], paragraphs: [sourceNotice, 'Replace the absolute path with your checkout. Build creates dist/ and copies the native assets needed by the package.'] },
+    { id: 'setup', title: 'Build and link the local package', code: [{ label: 'SDK checkout', language: 'shell', code: 'cd sdk/nodejs\nnpm ci\nnpm run build' }, { label: 'Your application', language: 'shell', code: 'npm install /absolute/path/to/crawlingo/sdk/nodejs' }], paragraphs: [sourceNotice, 'Replace the absolute path with your checkout. Build creates dist/ and copies the native assets needed by the package.'] },
     { id: 'job', title: 'Generate a dataset', code: [RUN_EXAMPLES[1]], paragraphs: ['Use an ES module or an async function for top-level await. DatasetJob.run() returns Promise<JobReport>; cancel() requests cancellation. Fields and report counters remain in Rust until the final summary crosses the binding.'] },
     { id: 'small', title: 'Extract one page', code: [{ label: 'TypeScript', language: 'typescript', code: 'import { Dataset } from "crawlingo";\n\nconst result = await new Dataset("https://example.com/")\n  .field("title", "h1")\n  .build();\nconsole.log(result.toDict());\nawait result.toJson("page.json");' }] },
     { id: 'types', title: 'Exported job types', bullets: ['JobConfig: input, extraction and resource controls.', 'JobField: selector, required/default values and validation.', 'JobReport: page, row, duplicate, shard and completion counters.'], links: jobLink },
@@ -129,7 +131,7 @@ Object.assign(DOCS, {
     { id: 'cli', title: 'Rust CLI flags', code: [{ label: 'CLI', language: 'shell', code: 'cargo run --release --features cli -- --rate-limit-rps 2 --timeout 30 dataset job.json' }], table: { headings: ['Flag', 'Environment variable'], rows: [['--config', 'CRAWLINGO_CONFIG'], ['--proxy', 'CRAWLINGO_PROXY'], ['--rate-limit-rps', 'CRAWLINGO_RATE_LIMIT_RPS'], ['--timeout', 'CRAWLINGO_TIMEOUT_SECONDS']] }, paragraphs: ['Use --help on the built CLI to see its supported subcommands and flags. The Python command-line wrapper is separate; the dataset command shown here belongs to the Rust CLI.'] },
   ] },
   '/page': { title: 'Page extraction', category: 'Reference', description: 'Inspect a page and choose selectors before defining a bulk job.', sections: [
-    { id: 'fetch', title: 'Fetch a page', code: [{ label: 'Python', language: 'python', code: 'from crawlingo import Page\n\npage = Page("https://example.com/")\nprint(page.status)\nprint(page.title())\nprint(page.css("h1").text())' }, { label: 'Node.js', language: 'typescript', code: 'import { Page } from "crawlingo";\n\nconst page = await Page.create("https://example.com/");\nconsole.log(page.status, page.title());\nconsole.log(page.css("h1").text());' }] },
+    { id: 'fetch', title: 'Fetch a page', code: [{ label: 'Python', language: 'python', code: 'from crawlingo import Page\n\npage = Page("https://example.com/")\nprint(page.status)\nprint(page.title())\nprint(page.css("h1").text())' }, { label: 'Node.js', language: 'typescript', code: 'import { Page } from "crawlingo";\n\nconst page = await Page.create("https://example.com/");\nconsole.log(page.status, page.title());\nconsole.log(page.css("h1").text);' }] },
     { id: 'scope', title: 'Find the record container', paragraphs: ['Inspect one representative page, then test missing fields and multiple rows. Prefer stable attributes and meaningful container selectors. A successful query on one page is not evidence that every page has the same structure.'] },
     { id: 'bulk', title: 'Move to a dataset job', paragraphs: ['Use DatasetJob when the URL list or record count becomes large. Page and collecting crawler APIs retain data in memory and are useful for inspection and smaller tasks.'], links: jobLink },
   ] },
@@ -221,14 +223,15 @@ Object.assign(DOCS, {
 } satisfies Record<string, Doc>);
 
 Object.assign(DOCS, OPERATION_DOCS, GETTING_STARTED_DOCS, DEVELOPER_GUIDES, API_DOCS, INTEGRATION_DOCS, RESEARCH_DOCS, PUBLIC_RESULTS);
+Object.assign(DOCS, SDK_REFERENCE_DOCS, REFERENCE_OPERATIONS);
 
 export const NAV_GROUPS = [
   { title: 'Getting started', paths: ['/overview', '/installation', '/quick-start', '/first-run', '/concepts', '/use-cases'] },
   { title: 'Build a dataset', paths: ['/dataset-design', '/research-datasets', '/developer-tutorial', '/dataset-jobs', '/examples', '/recovery', '/cookbook'] },
   { title: 'Integrations', paths: ['/integrations', '/integrations/playwright', '/integrations/data', '/integrations/workers'] },
-  { title: 'API reference', paths: ['/reference/dataset-job', '/reference/job-config', '/schema', '/report-reference', '/reference/session', '/reference/page'] },
+  { title: 'API reference', paths: ['/reference/implementation-status', '/reference/node', '/reference/python', '/reference/rust', '/reference/cli', '/reference/dataset-job', '/reference/job-config', '/schema', '/report-reference', '/reference/session', '/reference/page'] },
   { title: 'SDKs', paths: ['/sdk/python', '/sdk/nodejs', '/sdk/rust'] },
-  { title: 'Ship and operate', paths: ['/production-guide', '/deployment', '/publishing', '/docs-hosting'] },
+  { title: 'Ship and operate', paths: ['/production-guide', '/deployment', '/publishing', '/docs-hosting', '/reference/docs-release'] },
   { title: 'Engine capabilities', paths: ['/features', '/session', '/configuration', '/page', '/dataset', '/selectors', '/auto-match', '/crawl', '/watch', '/change-detection', '/authentication', '/advanced', '/tools/fetch-page'] },
   { title: 'Learn', paths: ['/architecture', '/real-world-results', '/benchmarks', '/faq'] },
   { title: 'Project', paths: ['/changelog', '/roadmap', '/sponsor'] },

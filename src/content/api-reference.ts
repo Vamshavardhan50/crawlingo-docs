@@ -98,7 +98,7 @@ let task = tokio::spawn(async move { running_job.run().await });
 job.cancel();
 let report = task.await??;` },
       ], links: [{ label: 'Production shutdown and recovery', href: '/production-guide' }] },
-      { id: 'errors', title: 'Errors and failure handling', paragraphs: ['Constructor and run failures throw in Python / Node.js and return Err in Rust. They include invalid configuration, inaccessible files, locked state and input changes. DatasetJob does not currently expose a portable structured error-code enum through the bindings; avoid treating message text as a stable machine API.'], table: { headings: ['Condition', 'Where to look', 'Next action'], rows: [
+      { id: 'errors', title: 'Errors and failure handling', paragraphs: ['Constructor and run failures throw in Python / Node.js and return Err in Rust. They include invalid configuration, inaccessible files, locked state and input changes. Node maps structured native failures into CrawlingoError subclasses and exposes code; Python conversion differs. Avoid treating message text as a stable machine API. See the language-specific reference for error details.'], table: { headings: ['Condition', 'Where to look', 'Next action'], rows: [
         ['Invalid config or unsupported format', 'Constructor exception / Err', 'Check required fields, accepted values and positive resource limits.'],
         ['Input file missing or output not writable', 'run exception / rejected promise / Err', 'Resolve paths against the worker’s current directory and check access.'],
         ['Another writer owns output_dir', 'run failure while opening state', 'Wait for the previous worker; use one owner per directory.'],
@@ -177,7 +177,7 @@ interface JobConfig {
         ['fingerprint_path(path)', 'fingerprintPath(path)', 'Location for stored selector fingerprints.'],
         ['auto_match_weights(weights)', 'autoMatchWeights(weights)', 'Dictionary / record of numeric matching weights.'],
       ] }, paragraphs: ['A transport profile does not guarantee access to a target site. Configure browser rendering only through a build and API that expose it.'], links: [{ label: 'Selector recovery scope', href: '/auto-match' }, { label: 'Authentication examples', href: '/authentication' }] },
-      { id: 'ownership', title: 'Ownership and binding differences', paragraphs: ['clone() returns another Session wrapper backed by the native clone operation. destroy() invokes native cleanup and returns None / void; avoid destroying a session while its jobs are running.', 'Python also provides helpers such as basic_auth, bearer_auth, from_config, metrics, page and dataset. The current Node Session class does not expose those helpers. Use headers for Node authentication and Page.create(url, { session }) for page inspection. Consult the source for additional Python helpers instead of translating names by assumption.'], links: [{ label: 'Page methods', href: '/reference/page' }, { label: 'Python SDK guide', href: '/sdk/python' }, { label: 'Node.js SDK guide', href: '/sdk/nodejs' }] },
+      { id: 'ownership', title: 'Ownership and binding differences', paragraphs: ['clone() returns another Session wrapper backed by the native clone operation. destroy() invokes native cleanup and returns None / void; avoid destroying a session while its jobs are running.', 'Both bindings load config: Python Session.from_config(path) and Node Session.fromConfig(path). Python additionally provides basic_auth, bearer_auth, metrics, page and dataset helpers. Node exposes retries, retryDelay, retryBackoff, getCookies, deleteCookie and clearCookies; the public Python wrapper does not yet expose those methods. Read the language-specific signatures.'], links: [{ label: 'Every Node Session member', href: '/reference/node/session' }, { label: 'Every Python Session member', href: '/reference/python/session' }, { label: 'Page methods', href: '/reference/page' }] },
     ],
   },
   '/reference/page': {
@@ -186,7 +186,7 @@ interface JobConfig {
     sections: [
       { id: 'create', title: 'Create a page', paragraphs: ['Python Page(url) loads lazily when content is accessed. Page.create(url) fetches immediately. Node.js uses await Page.create(url, options); its constructor accepts a native page object, not a URL.'], code: [
         { label: 'Python', language: 'python', code: 'from crawlingo import Page\n\npage = Page.create("https://example.com/", timeout=30)\nprint(page.status, page.title())\nprint(page.css("h1").text())' },
-        { label: 'Node.js', language: 'javascript', code: "import { Page } from 'crawlingo';\n\nconst page = await Page.create('https://example.com/', { timeout: 30 });\nconsole.log(page.status, page.title());\nconsole.log(page.css('h1').text());" },
+        { label: 'Node.js', language: 'javascript', code: "import { Page } from 'crawlingo';\n\nconst page = await Page.create('https://example.com/', { timeout: 30 });\nconsole.log(page.status, page.title());\nconsole.log(page.css('h1').text);" },
       ] },
       { id: 'options', title: 'Fetch options', table: { headings: ['Python argument', 'Node.js options key', 'Type / use'], rows: [
         ['url', 'url (first argument)', 'string: HTTP(S) page address.'],

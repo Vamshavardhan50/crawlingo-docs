@@ -1,6 +1,6 @@
 {
   "name": "docs",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -8,7 +8,9 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "check:docs": "node scripts/check-docs.cjs",
-    "lint": "npm run typecheck && npm run check:docs",
+    "check:api": "node scripts/check-api-snapshot.cjs",
+    "package:docs": "node scripts/package-docs.cjs",
+    "lint": "npm run typecheck && npm run check:docs && npm run check:api",
     "prebuild": "node scripts/generate-metadata.cjs",
     "export:guides": "node scripts/export-guides.cjs"
   },
