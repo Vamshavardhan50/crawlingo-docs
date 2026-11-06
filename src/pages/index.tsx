@@ -22,7 +22,7 @@ export default function Home() {
     <div className="landing-content">
       <section className="landing-hero">
         <div className="landing-intro">
-          <div className="home-kicker"><span className="status-dot" />Open source · 1.0.0-alpha.2</div>
+          <div className="home-kicker"><span className="status-dot" />Open source · Alpha SDKs</div>
           <h1>Web pages in.<br /><em>Useful datasets out.</em></h1>
           <p>Build research directories, document collections and datasets for analysis. Give Crawlingo your URLs and field rules; the Rust engine validates records, removes exact duplicates and exports JSONL or CSV.</p>
           <div className="hero-actions">
@@ -73,7 +73,12 @@ export default function Home() {
 
       <section className="landing-section integration-section" aria-labelledby="languages-title"><div><span className="eyebrow">Fits your application</span><h2 id="languages-title">Your language.<br />One dataset engine.</h2><p>Python for data workflows. Node.js for backend services. Rust for direct access to the engine.</p><p>Pass configuration into the native pipeline and receive a compact report. The records are written to disk while the job runs.</p><div className="sdk-links"><Link href="/sdk/python">Python SDK<ArrowUpRight size={13} /></Link><Link href="/sdk/nodejs">Node.js SDK<ArrowUpRight size={13} /></Link><Link href="/sdk/rust">Rust SDK<ArrowUpRight size={13} /></Link></div><Link className="text-link" href="/developer-tutorial">Follow the developer tutorial<ArrowRight size={14} /></Link></div><CodeBlock examples={RUN_EXAMPLES.slice(0, 3)} /></section>
 
-      <section className="landing-section measurement-card"><div><span className="eyebrow">Public-web evidence</span><h2>A research directory, measured.</h2><p>The Python PEP directory was collected over HTTPS on 19 October 2026. A second job fetched 20 linked documents. This was a paced sample, not a maximum-throughput test.</p></div><div className="measurement-values"><div><strong>744</strong><span>directory records · 1 page</span></div><div><strong>20</strong><span>linked document pages</span></div><div><strong>4.620s</strong><span>directory job time</span></div></div><Link href="/real-world-results">Read the method, checks and limitations<ArrowRight size={14} /></Link></section>
+      <section className="landing-section measurement-card">
+        <div><span className="eyebrow">Public dataset benchmark</span><h2>One million ranked domains in 7.02 seconds.</h2>
+          <p>On November 6, Crawlingo downloaded one public Tranco CSV snapshot over HTTPS, exported JSONL and checked every rank and domain against the source.</p></div>
+        <div className="measurement-values"><div><strong>1M</strong><span>unique domains verified</span></div><div><strong>4.14s</strong><span>HTTPS download</span></div><div><strong>7.02s</strong><span>total including verification</span></div></div>
+        <Link href="/benchmarks#tranco">Run the benchmark<ArrowRight size={14} /></Link>
+      </section>
 
       <section className="landing-section landing-faq" aria-labelledby="faq-title"><div className="section-heading"><span className="eyebrow">Before you begin</span><h2 id="faq-title">A few useful answers.</h2></div><div>{[
         ['Do I need to know Rust?', 'No. You can run the CLI or use the Python and Node.js SDKs. The published packages are alpha releases; some development features may require a matching source build and native build tools.'],
