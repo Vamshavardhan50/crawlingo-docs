@@ -15,7 +15,7 @@ export const INTEGRATION_DOCS: Record<string, Doc> = {
         ['Search / RAG tools', 'JSONL records with source metadata', 'Your downstream code cleans text, chunks, embeds and indexes it.'],
       ] }, links: [{ label: 'Playwright and Puppeteer', href: '/integrations/playwright' }, { label: 'pandas, DuckDB and Parquet', href: '/integrations/data' }, { label: 'Services and scheduled workers', href: '/integrations/workers' }] },
       { id: 'ownership', title: 'Keep the boundaries explicit', bullets: [
-        'Build the current SDK from source for DatasetJob. Older registry packages do not include the new job API.',
+        'DatasetJob is included in the 1.0.0-alpha.2 SDKs. Older registry releases do not include the same job API; unreleased features may require a source build.',
         'Give each job a stable input, configuration and output directory. Only one process may own that directory.',
         'Publish a dataset only after reviewing complete, cancelled, pages_failed and records_rejected.',
         'Use JSONL for incremental processing. Do not collect a million records into an application response.',
@@ -31,7 +31,7 @@ export const INTEGRATION_DOCS: Record<string, Doc> = {
         'Use this pattern when a listing needs JavaScript or interaction, but each destination page contains the fields you need in its HTTP response. The browser runs only for discovery. The dataset job owns fetching, field validation, deduplication and checkpoints.',
         'If the data exists only after JavaScript runs on each destination, this URL handoff is insufficient. Crawlingo will fetch the destination again without the Playwright page state. See the rendered-content section before choosing this design.',
       ] },
-      { id: 'install', title: '2. Prepare the tools', paragraphs: ['Build the matching Crawlingo SDK first. Install Playwright in the same Python environment or Node application. Browser installation is a separate step. The examples accept a listing URL and link selector so you can use a site you control.'], code: [
+      { id: 'install', title: '2. Prepare the tools', paragraphs: ['Install the matching Crawlingo alpha SDK. Install Playwright in the same Python environment or Node application. Browser installation is a separate step. The examples accept a listing URL and link selector so you can use a site you control.'], code: [
         { label: 'Python', language: 'shell', code: 'python -m pip install playwright\npython -m playwright install chromium' },
         { label: 'Node.js', language: 'shell', code: 'npm install playwright\nnpx playwright install chromium' },
       ], links: [{ label: 'Crawlingo source installation', href: '/installation' }] },

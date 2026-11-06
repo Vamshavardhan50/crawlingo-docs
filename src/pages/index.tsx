@@ -22,7 +22,7 @@ export default function Home() {
     <div className="landing-content">
       <section className="landing-hero">
         <div className="landing-intro">
-          <div className="home-kicker"><span className="status-dot" />Open source · Current development source</div>
+          <div className="home-kicker"><span className="status-dot" />Open source · 1.0.0-alpha.2</div>
           <h1>Web pages in.<br /><em>Useful datasets out.</em></h1>
           <p>Build research directories, document collections and datasets for analysis. Give Crawlingo your URLs and field rules; the Rust engine validates records, removes exact duplicates and exports JSONL or CSV.</p>
           <div className="hero-actions">
@@ -30,15 +30,15 @@ export default function Home() {
             <Link className="button" href="/api-reference">API Reference<ArrowUpRight size={15} /></Link>
           </div>
           <div className="language-line"><span>Rust engine</span><span>Python</span><span>Node.js</span><span>CLI</span></div>
-          <p className="availability-note">New dataset APIs require a source build. <Link href="/installation">Installation guide<ArrowUpRight size={12} /></Link> · <Link href="/research-datasets">Research dataset walkthrough<ArrowUpRight size={12} /></Link></p>
+          <p className="availability-note">Available as an alpha for Python, Node.js and Rust. <Link href="/installation">Installation guide<ArrowUpRight size={12} /></Link> · <Link href="/research-datasets">Research dataset walkthrough<ArrowUpRight size={12} /></Link></p>
         </div>
-        <div className="record-demo" aria-label="Illustration of the included product dataset example">
-          <div className="record-demo-heading"><span className="eyebrow">A small, real example</span><span className="demo-label">Product catalog</span></div>
-          <div className="source-preview"><div className="source-preview-label"><span className="status-dot" />catalog.html</div><div className="sample-product"><span className="product-mark">01</span><div><strong>Café mug</strong><small>SKU A-101</small></div><span>$12.50</span></div><div className="sample-product"><span className="product-mark">02</span><div><strong>Notebook</strong><small>SKU B-202</small></div><span>$6.00</span></div></div>
-          <div className="conversion-label"><ArrowDown size={18} /><span>Extract · validate · deduplicate</span></div>
-          <div className="output-preview"><div className="source-preview-label"><FileJson2 size={14} />Your dataset<span>JSONL / CSV</span></div><table><thead><tr><th>sku</th><th>name</th><th>price</th></tr></thead><tbody><tr><td>A-101</td><td>Café mug</td><td>12.5</td></tr><tr><td>B-202</td><td>Notebook</td><td>6</td></tr></tbody></table></div>
-          <div className="output-quality"><span><Check size={14} />2 accepted records</span><span>1 invalid row reported separately</span></div>
-          <Link className="demo-example-link" href="/examples">Run this example yourself<ArrowRight size={14} /></Link>
+        <div className="record-demo" aria-label="Sample output from the Python PEP directory">
+          <div className="record-demo-heading"><span className="eyebrow">A real public dataset</span><span className="demo-label">Python PEP directory</span></div>
+          <div className="source-preview"><div className="source-preview-label"><span className="status-dot" />peps.python.org/numerical/</div><div className="sample-product"><span className="product-mark">01</span><div><strong>One public index page</strong><small>Fetched over HTTPS · paced at 1 request / second</small></div></div></div>
+          <div className="conversion-label"><ArrowDown size={18} /><span>Extract each table row into a record</span></div>
+          <div className="output-preview" tabIndex={0} role="region" aria-label="Sample recorded PEP dataset"><div className="source-preview-label"><FileJson2 size={14} />Sample JSONL output<span>3 recorded rows</span></div><table><thead><tr><th>PEP</th><th>Title</th><th>Classification</th></tr></thead><tbody><tr><td>1</td><td>PEP Purpose and Guidelines</td><td>Process, Active</td></tr><tr><td>2</td><td>Procedure for Adding New Modules</td><td>Process, Active</td></tr><tr><td>3</td><td>Guidelines for Handling Bug Reports</td><td>Process, Withdrawn</td></tr></tbody></table></div>
+          <div className="output-quality"><span><Check size={14} />Earlier measured run: 744 rows verified</span><span>19 Oct 2026 · 4.620 seconds</span></div>
+          <Link className="demo-example-link" href="/real-world-results">See method, evidence and limitations<ArrowRight size={14} /></Link>
         </div>
       </section>
 
@@ -46,7 +46,7 @@ export default function Home() {
         <div className="section-heading"><span className="eyebrow">Start where you are</span><h2 id="choose-path">One tool. Two ways to get started.</h2><p>Learn the workflow first, or go straight to building it into your application.</p></div>
         <div className="audience-grid">
           <div className="audience-card"><BookOpen size={26} /><span className="audience-label">For new users</span><h3>I want to understand and use the data.</h3><p>Learn what a dataset is, what files to prepare and how to review the result. Follow the local catalog example one step at a time.</p><ol><li><Link href="/overview">Understand what Crawlingo does<ArrowUpRight size={13} /></Link></li><li><Link href="/first-run">Complete a guided first run<ArrowUpRight size={13} /></Link></li><li><Link href="/report-reference">Read your output and errors<ArrowUpRight size={13} /></Link></li></ol></div>
-          <div className="audience-card"><Code2 size={26} /><span className="audience-label">For developers</span><h3>I want to build a dataset workflow.</h3><p>Define a schema, integrate an SDK and operate a bounded Rust pipeline. Follow the contract from source URLs to committed output.</p><ol><li><Link href="/installation">Build the SDK for your language<ArrowUpRight size={13} /></Link></li><li><Link href="/developer-tutorial">Build an end-to-end workflow<ArrowUpRight size={13} /></Link></li><li><Link href="/production-guide">Operate and scale the job<ArrowUpRight size={13} /></Link></li></ol></div>
+          <div className="audience-card"><Code2 size={26} /><span className="audience-label">For developers</span><h3>I want to build a dataset workflow.</h3><p>Define a schema, integrate an SDK and operate a bounded Rust pipeline. Follow the contract from source URLs to committed output.</p><ol><li><Link href="/installation">Install the SDK for your language<ArrowUpRight size={13} /></Link></li><li><Link href="/developer-tutorial">Build an end-to-end workflow<ArrowUpRight size={13} /></Link></li><li><Link href="/production-guide">Operate and scale the job<ArrowUpRight size={13} /></Link></li></ol></div>
         </div>
         <p className="section-footnote">Crawlingo is currently a library and command-line tool. Initial setup and extraction rules require technical work.</p>
       </section>
@@ -73,10 +73,10 @@ export default function Home() {
 
       <section className="landing-section integration-section" aria-labelledby="languages-title"><div><span className="eyebrow">Fits your application</span><h2 id="languages-title">Your language.<br />One dataset engine.</h2><p>Python for data workflows. Node.js for backend services. Rust for direct access to the engine.</p><p>Pass configuration into the native pipeline and receive a compact report. The records are written to disk while the job runs.</p><div className="sdk-links"><Link href="/sdk/python">Python SDK<ArrowUpRight size={13} /></Link><Link href="/sdk/nodejs">Node.js SDK<ArrowUpRight size={13} /></Link><Link href="/sdk/rust">Rust SDK<ArrowUpRight size={13} /></Link></div><Link className="text-link" href="/developer-tutorial">Follow the developer tutorial<ArrowRight size={14} /></Link></div><CodeBlock examples={RUN_EXAMPLES.slice(0, 3)} /></section>
 
-      <section className="landing-section measurement-card"><div><span className="eyebrow">Measured, with context</span><h2>A million-record acceptance run.</h2><p>Small UTF-8 pages over local HTTP. Windows, release build, 50 concurrent requests. Every exported record checked; resume performed no refetching.</p></div><div className="measurement-values"><div><strong>1M</strong><span>pages & records verified</span></div><div><strong>0</strong><span>failed or rejected items</span></div><div><strong>181.5</strong><span>MiB peak working set</span></div></div><Link href="/benchmarks">Read the workload, results and limitations<ArrowRight size={14} /></Link></section>
+      <section className="landing-section measurement-card"><div><span className="eyebrow">Public-web evidence</span><h2>A research directory, measured.</h2><p>The Python PEP directory was collected over HTTPS on 19 October 2026. A second job fetched 20 linked documents. This was a paced sample, not a maximum-throughput test.</p></div><div className="measurement-values"><div><strong>744</strong><span>directory records · 1 page</span></div><div><strong>20</strong><span>linked document pages</span></div><div><strong>4.620s</strong><span>directory job time</span></div></div><Link href="/real-world-results">Read the method, checks and limitations<ArrowRight size={14} /></Link></section>
 
       <section className="landing-section landing-faq" aria-labelledby="faq-title"><div className="section-heading"><span className="eyebrow">Before you begin</span><h2 id="faq-title">A few useful answers.</h2></div><div>{[
-        ['Do I need to know Rust?', 'No. You can run the CLI or use the Python and Node.js SDKs. The current development APIs need a matching source build, which requires native build tools. The guided first run walks through the files and commands.'],
+        ['Do I need to know Rust?', 'No. You can run the CLI or use the Python and Node.js SDKs. The published packages are alpha releases; some development features may require a matching source build and native build tools.'],
         ['Can I use it without writing code?', 'The current product is a library and command-line tool, with no hosted no-code dashboard. You can use the supplied configuration once it is built; adapting selectors and integrating a workflow require technical work.'],
         ['Does it automatically understand every website?', 'You define explicit extraction rules. Review selectors and output against representative pages. JavaScript rendering and selector recovery have separate scopes; bulk jobs do not silently repair selectors.'],
         ['Can I stop and resume a large job?', 'Yes, using the same input, configuration and local output directory with one writer. An unfinished batch may be replayed. Keep state and shards together, and resume after a hard crash before consuming final output.'],
